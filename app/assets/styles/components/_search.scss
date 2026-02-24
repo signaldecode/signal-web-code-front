@@ -192,7 +192,11 @@
 
   &__main {
     flex: 1;
-    padding-top: 80px;
+    padding-top: $header-total-height;
+
+    @include mobile {
+      padding-top: $header-total-height-mobile;
+    }
   }
 
   &__container {

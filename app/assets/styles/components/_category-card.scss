@@ -8,7 +8,11 @@
 @use '../tokens/breakpoints' as *;
 
 .category-card {
-  width: 94px;
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   @include tablet {
     width: 100%;
@@ -74,6 +78,20 @@
     text-align: center;
     letter-spacing: -0.45px;
     word-break: keep-all;
+    position: relative;
+    transition: color 0.3s ease;
+
+    // 밑줄 효과
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background-color: $Primary-color;
+      transition: width 0.3s ease;
+    }
 
     @include mobile {
       @include typo-title-6;
@@ -83,6 +101,15 @@
     @include mobile-xs {
       font-size: $Body-body-4-Font-size;
       letter-spacing: -0.2px;
+    }
+  }
+
+  // Hover 효과
+  &__link:hover &__label {
+    color: $Primary-color;
+
+    &::after {
+      width: 100%;
     }
   }
 }

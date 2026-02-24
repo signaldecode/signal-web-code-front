@@ -234,11 +234,11 @@
 
 .notice-detail-page {
   @include container;
-  padding-top: calc(80px + 101px);
+  padding-top: calc(#{$header-total-height} + #{$padding-12});
   padding-bottom: $padding-13;
 
   @include mobile {
-    padding-top: calc(60px + 52px);
+    padding-top: calc(#{$header-total-height-mobile} + #{$padding-11});
     padding-bottom: $padding-8;
   }
 

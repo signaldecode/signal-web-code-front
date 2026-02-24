@@ -11,7 +11,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Server-only (클라이언트에 노출되지 않음)
-    apiBaseUrl: process.env.API_BASE_URL || '', // API_BASE_URL 환경변수 사용 (서버 프록시)
+    apiBaseUrl: process.env.API_BASE_URL || '',
+    instagramAccessToken: process.env.INSTAGRAM_ACCESS_TOKEN || '',
 
     // Public (클라이언트에 노출)
     public: {

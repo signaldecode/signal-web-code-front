@@ -23,6 +23,17 @@ $padding-13: 160px;
 $padding-hero-arrow: 68px;
 $padding-section: 80px;
 
+// Header heights
+$header-top-bar-height: 40px;
+$header-top-bar-height-mobile: 32px;
+$header-main-height: 70px;
+$header-main-height-mobile: 56px;
+$header-total-height: $header-top-bar-height + $header-main-height; // 110px
+$header-total-height-mobile: $header-top-bar-height-mobile + $header-main-height-mobile; // 88px
+
+// Hero aspect ratio (PC와 모바일 동일 비율)
+$hero-aspect-ratio: 16 / 9;
+
 // Component-specific sizes (Figma Sync)
 $size-grade-summary-width: 420px;
 $size-grade-icon-sm: 33px;

@@ -1,4 +1,5 @@
 <script setup>
+import mainData from '~/data/main.json'
 import couponData from '~/data/coupon-download.json'
 
 // SEO
@@ -163,8 +164,9 @@ const handleDownloadAll = async () => {
 </script>
 
 <template>
-  <div class="page-coupons">
-    <main class="coupon-download-page">
+  <div class="layout-page">
+    <div class="layout-page__main">
+      <main class="coupon-download-page">
       <div class="coupon-download-page__inner">
         <header class="coupon-download-page__header">
           <h1 class="coupon-download-page__title">{{ couponData.page.title }}</h1>
@@ -300,7 +302,10 @@ const handleDownloadAll = async () => {
           </div>
         </section>
       </div>
-    </main>
+      </main>
+    </div>
+
+    <Footer :data="mainData.footer" />
 
     <!-- 로그인 필요 모달 -->
     <LoginRequiredModal

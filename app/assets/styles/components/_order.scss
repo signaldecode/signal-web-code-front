@@ -11,15 +11,13 @@
 // Order Page Layout
 // --------------------------------------------
 
-$header-height: 80px;
-
 .order-page {
   @include container;
-  padding-top: calc(#{$header-height} + #{$padding-11});
+  padding-top: calc(#{$header-total-height} + #{$padding-11});
   padding-bottom: $padding-12;
 
   @include mobile {
-    padding-top: calc(60px + #{$padding-8});
+    padding-top: calc(#{$header-total-height-mobile} + #{$padding-8});
     padding-bottom: $padding-10;
   }
 
@@ -282,7 +280,7 @@ $header-height: 80px;
 
 .order-summary-aside {
   position: sticky;
-  top: calc(#{$header-height} + #{$padding-6});
+  top: calc(#{$header-total-height} + #{$padding-6});
   width: 408px;
   padding: $padding-9;
   background: $Bg-Primary-bg-color;
@@ -619,11 +617,11 @@ $header-height: 80px;
   width: 100%;
   padding-left: $container-padding;
   padding-right: $container-padding;
-  padding-top: calc(#{$header-height} + #{$padding-11});
+  padding-top: calc(#{$header-total-height} + #{$padding-11});
   padding-bottom: $padding-12;
 
   @include mobile {
-    padding-top: calc(60px + #{$padding-8});
+    padding-top: calc(#{$header-total-height-mobile} + #{$padding-8});
     padding-bottom: $padding-10;
     padding-left: $padding-5;
     padding-right: $padding-5;
@@ -805,7 +803,7 @@ $header-height: 80px;
   width: 100%;
   padding-left: $container-padding;
   padding-right: $container-padding;
-  padding-top: calc(#{$header-height} + #{$padding-11});
+  padding-top: calc(#{$header-total-height} + #{$padding-11});
   padding-bottom: $padding-12;
   min-height: 60vh;
   display: flex;
@@ -813,7 +811,7 @@ $header-height: 80px;
   justify-content: center;
 
   @include mobile {
-    padding-top: calc(60px + #{$padding-8});
+    padding-top: calc(#{$header-total-height-mobile} + #{$padding-8});
     padding-bottom: $padding-10;
     padding-left: $padding-5;
     padding-right: $padding-5;

@@ -54,13 +54,13 @@
   }
 
   &__top-link {
-    @include typo-body-2;
+    @include typo-body-3;
     color: $Primary-white-color;
     text-decoration: none;
     transition: opacity 0.2s ease;
 
     @include mobile {
-      font-size: 12px;
+      font-size: 11px;
     }
 
     &:hover {
@@ -150,7 +150,7 @@
     color: $Text-Primary-text-color;
     transition: color 0.2s ease;
 
-    @include mobile {
+    @include tablet {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -178,7 +178,7 @@
   }
 
   &__nav {
-    @include mobile {
+    @include tablet {
       display: none;
     }
   }
@@ -398,8 +398,12 @@
     width: 80%;
     max-width: 320px;
     background: $Primary-white-color;
-    padding: 104px $padding-6 $padding-6; // 상단바(32px) + 메인헤더(56px) + 여백
+    padding: 126px $padding-6 $padding-6; // 상단바(40px) + 메인헤더(70px) + 여백
     overflow-y: auto;
+
+    @include mobile {
+      padding: 104px $padding-6 $padding-6; // 상단바(32px) + 메인헤더(56px) + 여백
+    }
   }
 
   &__list {

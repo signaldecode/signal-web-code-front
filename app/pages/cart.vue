@@ -261,8 +261,9 @@ const submitLabel = computed(() => {
 </script>
 
 <template>
-  <div class="page-cart">
-    <main class="cart-page">
+  <div class="layout-page">
+    <div class="layout-page__main">
+      <main class="cart-page">
       <div class="cart-page__content">
         <div class="cart-page__main">
           <section class="cart-section">
@@ -353,7 +354,8 @@ const submitLabel = computed(() => {
 
         <p v-if="bestPending" class="cart-reco__loading">추천상품을 불러오는 중...</p>
       </section>
-    </main>
+      </main>
+    </div>
 
     <Footer :data="mainData.footer" />
 

@@ -13,19 +13,13 @@
 
 .section-hero {
   position: relative;
-  height: 800px;
+  width: 100%;
+  aspect-ratio: $hero-aspect-ratio;
+  margin-top: $header-total-height;
   overflow: hidden;
 
-  @include tablet {
-    height: 600px;
-  }
-
   @include mobile {
-    height: 500px;
-  }
-
-  @include mobile-xs {
-    height: 400px;
+    margin-top: $header-total-height-mobile;
   }
 
   &__slider {
@@ -191,7 +185,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: $padding-8;
+    gap: $padding-1;
 
     @include tablet {
       flex-wrap: nowrap;

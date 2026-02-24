@@ -187,13 +187,13 @@
 
   &__inner {
     position: relative;
-    height: 240px;
+    aspect-ratio: 5.5 / 1;
     border-radius: 16px;
     overflow: hidden;
     background: $Bg-Secondary-bg-color;
 
     @include mobile {
-      height: 180px;
+      aspect-ratio: 4 / 1;
       border-radius: 8px;
     }
   }
