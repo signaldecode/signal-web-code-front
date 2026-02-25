@@ -37,13 +37,18 @@ const { redirectToNaver, redirectToGoogle, setRedirectPath } = useSocialAuth();
 
 const handleSubmit = async () => {
   try {
-    const result = await post("/auth/login", {
-      email: form.id,
-      password: form.password,
+    // 내부 API를 통해 로그인 + 유저 정보를 한 번에 가져옴 (네트워크 탭에 /me 노출 안됨)
+    const result = await $fetch("/api/_internal/login", {
+      method: "POST",
+      body: {
+        email: form.id,
+        password: form.password,
+      },
     });
 
     if (result.success) {
-      await authStore.login();
+      // 로그인 응답에서 유저 정보를 직접 설정
+      await authStore.login(result.user);
 
       // 비회원 장바구니를 회원 장바구니로 머지
       try {

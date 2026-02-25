@@ -142,7 +142,7 @@ const handleNext = async () => {
       const result = await socialSignupComplete(tempToken, agreementsArray)
 
       if (result.success) {
-        await authStore.login()
+        await authStore.login(result.user)
         signupStore.reset()
         try { await mergeCart() } catch (e) { console.warn('Failed to merge cart:', e) }
         router.replace('/')

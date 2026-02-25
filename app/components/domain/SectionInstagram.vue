@@ -23,27 +23,23 @@ const props = defineProps({
   }
 })
 
-// Instagram API 연동
-const { posts: instagramPosts, fetchInstagramFeed } = useInstagram()
+// Instagram API 연동 (세팅만 - 실제 호출은 비활성화)
+// const { posts: instagramPosts, fetchInstagramFeed } = useInstagram()
 
 // API 데이터 또는 props 또는 fallback 사용
 const displayImages = computed(() => {
-  if (instagramPosts.value.length > 0) {
-    return instagramPosts.value.map(post => ({
-      image: post.image,
-      href: post.href,
-      imageAlt: post.caption || 'Instagram post'
-    }))
-  }
+  // Instagram API 연동 시 아래 주석 해제
+  // if (instagramPosts.value.length > 0) {
+  //   return instagramPosts.value.map(post => ({
+  //     image: post.image,
+  //     href: post.href,
+  //     imageAlt: post.caption || 'Instagram post'
+  //   }))
+  // }
   if (props.images.length > 0) {
     return props.images
   }
   return fallbackImages
-})
-
-onMounted(() => {
-  // Instagram API 호출 (토큰 설정되어 있으면 실행)
-  fetchInstagramFeed(12)
 })
 
 const currentIndex = ref(0)

@@ -62,12 +62,16 @@ export const useSocialAuth = () => {
   };
 
   /**
-   * 네이버 콜백 처리 - 인가코드를 백엔드에 전달
+   * 네이버 콜백 처리 - 내부 API를 통해 로그인 + 유저 정보 반환
+   * 네트워크 탭에 /me 노출 안됨
    * @param {string} code - 인가 코드
    * @param {string} state - CSRF state
    */
   const naverLogin = async (code, state) => {
-    return await post("/auth/oauth2/naver", { code, state });
+    return await $fetch("/api/_internal/oauth/naver", {
+      method: "POST",
+      body: { code, state },
+    });
   };
 
   /**
@@ -80,10 +84,14 @@ export const useSocialAuth = () => {
   };
 
   /**
-   * 구글 콜백 처리 - 인가코드를 백엔드에 전달
+   * 구글 콜백 처리 - 내부 API를 통해 로그인 + 유저 정보 반환
+   * 네트워크 탭에 /me 노출 안됨
    */
   const googleLogin = async (code) => {
-    return await post("/auth/oauth2/google", { code });
+    return await $fetch("/api/_internal/oauth/google", {
+      method: "POST",
+      body: { code },
+    });
   };
 
   /**
@@ -152,29 +160,38 @@ export const useSocialAuth = () => {
   };
 
   /**
-   * 소셜 회원가입 완료 - 임시 토큰 + 약관 동의 내역으로 가입 처리
+   * 소셜 회원가입 완료 - 내부 API를 통해 가입 + 유저 정보 반환
+   * 네트워크 탭에 /me 노출 안됨
    * @param {string} signupToken - 백엔드 발급 임시 토큰
    * @param {Array} agreements - [{ policyId, agreed }]
    */
   const socialSignupComplete = async (signupToken, agreements) => {
-    return await post("/auth/oauth2/signup", {
-      signupToken,
-      agreements,
+    return await $fetch("/api/_internal/oauth/signup", {
+      method: "POST",
+      body: {
+        signupToken,
+        agreements,
+      },
     });
   };
 
   /**
    * 소셜 계정 연동 (동일 이메일 일반 가입 유저 → 비밀번호 확인 후 연동)
+   * 내부 API를 통해 연동 + 유저 정보 반환 (네트워크 탭에 /me 노출 안됨)
    * @param {string} linkToken - AUTH_013 응답에서 받은 연동 토큰
    * @param {string} provider - 소셜 제공자 (naver, google)
    * @param {string} email - 기존 계정 이메일
    * @param {string} password - 기존 계정 비밀번호
    */
   const linkAccount = async (linkToken, provider, email, password) => {
-    return await post(`/auth/oauth2/${provider}/link`, {
-      linkToken,
-      email,
-      password,
+    return await $fetch("/api/_internal/oauth/link", {
+      method: "POST",
+      body: {
+        provider,
+        linkToken,
+        email,
+        password,
+      },
     });
   };
 

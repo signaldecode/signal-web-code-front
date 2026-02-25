@@ -9,6 +9,7 @@ export const useCart = () => {
   const items = useState('cart-items', () => [])
   const pending = useState('cart-pending', () => false)
   const error = useState('cart-error', () => null)
+  const isLoaded = useState('cart-loaded', () => false)
 
   const count = computed(() => items.value.length)
 
@@ -54,7 +55,17 @@ export const useCart = () => {
   // 엔드포인트: /api 프록시 또는 apiBaseUrl에 /api/v1이 포함되어 있으므로 /cart만 사용
   const cartEndpoint = '/cart'
 
-  const fetchCart = async () => {
+  const fetchCart = async (force = false) => {
+    // 이미 로드되었고 강제 갱신이 아니면 스킵
+    if (isLoaded.value && !force) {
+      return items.value
+    }
+
+    // 이미 로딩 중이면 스킵 (중복 호출 방지)
+    if (pending.value) {
+      return items.value
+    }
+
     pending.value = true
     error.value = null
     try {
@@ -68,6 +79,7 @@ export const useCart = () => {
       const data = res?.data ?? res
       const nextItems = data?.items ?? data?.cartItems ?? data?.content ?? []
       items.value = Array.isArray(nextItems) ? nextItems : []
+      isLoaded.value = true
 
       return items.value
     } catch (e) {
@@ -116,9 +128,10 @@ export const useCart = () => {
       const nextItems = data?.items ?? data?.cartItems ?? data?.content ?? []
       if (Array.isArray(nextItems) && nextItems.length > 0) {
         items.value = nextItems
+        isLoaded.value = true
       } else {
-        // 응답에 items가 없으면 다시 fetch
-        await fetchCart()
+        // 응답에 items가 없으면 다시 fetch (강제 갱신)
+        await fetchCart(true)
       }
 
       return res
@@ -243,7 +256,7 @@ export const useCart = () => {
 
       if (!sessionId) {
         // 세션 ID가 없으면 머지할 장바구니가 없음
-        await fetchCart()
+        await fetchCart(true)
         return true
       }
 
@@ -255,15 +268,15 @@ export const useCart = () => {
         }
       })
 
-      // 머지 후 장바구니 다시 조회
-      await fetchCart()
+      // 머지 후 장바구니 다시 조회 (강제 갱신)
+      await fetchCart(true)
 
       return true
     } catch (e) {
       error.value = e?.data?.message || e?.message || '장바구니 머지에 실패했습니다.'
-      // 머지 실패해도 장바구니 조회는 시도
+      // 머지 실패해도 장바구니 조회는 시도 (강제 갱신)
       try {
-        await fetchCart()
+        await fetchCart(true)
       } catch {}
       throw e
     } finally {
@@ -303,6 +316,7 @@ export const useCart = () => {
     count,
     pending,
     error,
+    isLoaded,
     fetchCart,
     addToCart,
     updateQuantity,

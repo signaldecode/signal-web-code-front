@@ -1,5 +1,9 @@
 export default defineNuxtPlugin(async () => {
   const cart = useCart()
+
+  // 이미 로드되었으면 스킵 (중복 호출 방지)
+  if (cart.isLoaded.value) return
+
   try {
     await cart.fetchCart()
   } catch {

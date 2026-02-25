@@ -3,7 +3,7 @@ import mypageData from '~/data/mypage.json'
 import { formatPhoneNumber } from '~/utils/validators'
 
 const profileData = mypageData.pages.profile
-const { get, post, patch, del } = useApi()
+const { post } = useApi()
 const authStore = useAuthStore()
 // const { redirectToNaverLink } = useSocialAuth()
 const { openPostcode } = usePostcode()
@@ -56,11 +56,11 @@ const isSocialUser = ref(false)
 // 회원탈퇴 모달
 const showWithdrawModal = ref(false)
 
-// 유저 정보 불러오기
+// 유저 정보 불러오기 (내부 API 사용 - 네트워크 탭에 /me 노출 안됨)
 const fetchUserInfo = async () => {
   try {
     isLoading.value = true
-    const res = await get('/users/me')
+    const res = await $fetch('/api/_internal/me')
     if (res.success && res.data) {
       const user = res.data
 
@@ -205,10 +205,17 @@ const handleSubmit = async () => {
       }
     })
 
-    const res = await patch('/users/me', payload)
+    // 내부 API 사용 - 네트워크 탭에 /me 노출 안됨
+    const res = await $fetch('/api/_internal/me', {
+      method: 'PATCH',
+      body: payload
+    })
 
     if (res.success) {
-      authStore.fetchUser()
+      // 업데이트된 유저 정보를 authStore에 반영
+      if (res.data) {
+        authStore.setUser(res.data)
+      }
       alert(profileData.messages.updateSuccess)
     }
   } catch (error) {
@@ -238,10 +245,14 @@ const handlePasswordSubmit = async () => {
   }
 
   try {
-    const res = await patch('/users/me/password', {
-      currentPassword: passwordForm.current,
-      newPassword: passwordForm.new,
-      newPasswordConfirm: passwordForm.confirm
+    // 내부 API 사용 - 네트워크 탭에 /me 노출 안됨
+    const res = await $fetch('/api/_internal/me/password', {
+      method: 'PATCH',
+      body: {
+        currentPassword: passwordForm.current,
+        newPassword: passwordForm.new,
+        newPasswordConfirm: passwordForm.confirm
+      }
     })
 
     if (res.success) {
@@ -260,7 +271,10 @@ const openWithdrawModal = () => {
 
 const handleWithdraw = async () => {
   try {
-    const res = await del('/users/me')
+    // 내부 API 사용 - 네트워크 탭에 /me 노출 안됨
+    const res = await $fetch('/api/_internal/me', {
+      method: 'DELETE'
+    })
 
     if (res.success) {
       alert(profileData.withdrawModal.messages.success)

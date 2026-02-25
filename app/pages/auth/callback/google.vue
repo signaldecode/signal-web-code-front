@@ -48,7 +48,7 @@ const handleLinkConfirm = async () => {
     );
 
     if (result.success) {
-      await authStore.login();
+      await authStore.login(result.user);
       showLinkModal.value = false;
       try {
         await mergeCart();
@@ -127,8 +127,8 @@ onMounted(async () => {
       return;
     }
 
-    // 기존 유저 → 바로 로그인
-    await authStore.login();
+    // 기존 유저 → 바로 로그인 (유저 정보 포함)
+    await authStore.login(result.user);
     try {
       await mergeCart();
     } catch (e) {
