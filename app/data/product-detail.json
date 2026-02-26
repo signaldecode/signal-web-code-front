@@ -18,11 +18,18 @@
     "cartLabel": "장바구니",
     "buyLabel": "바로 구매",
     "removeLabel": "옵션 삭제",
-    "promotionEndSuffix": "까지"
+    "promotionEndSuffix": "까지",
+    "couponTitle": "지금 사용 가능한 쿠폰이 있어요!",
+    "couponDownload": "다운로드",
+    "couponDownloaded": "받기 완료",
+    "couponUnit": "원",
+    "couponPercent": "%",
+    "couponOff": "할인"
   },
   "tabs": [
     { "label": "상세정보", "value": "detail" },
-    { "label": "상품정보고시", "value": "info" },
+    { "label": "이용 방법", "value": "info" },
+    { "label": "FAQ", "value": "faq" },
     { "label": "리뷰", "value": "reviews" },
     { "label": "Q&A", "value": "qna" }
   ],
@@ -32,13 +39,17 @@
     "lessLabel": "상세정보 접기"
   },
   "info": {
-    "title": "상품정보고시",
+    "title": "이용 방법",
     "specs": [
       { "label": "제조사", "value": "theon" },
       { "label": "제조국", "value": "한국" },
       { "label": "주의사항", "value": "염소계 표백제 주의" },
       { "label": "색상", "value": "블랙 / 화이트" }
     ]
+  },
+  "faq": {
+    "title": "자주 묻는 질문",
+    "emptyMessage": "등록된 FAQ가 없습니다."
   },
   "reviews": {
     "title": "상품리뷰",

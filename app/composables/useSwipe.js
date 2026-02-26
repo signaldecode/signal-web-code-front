@@ -1,5 +1,6 @@
 /**
  * 가로 스와이프 Composable
+ * - 마우스 및 터치 모두 지원
  * - 수평 스와이프 시 수직 스크롤 방지 (preventDefault)
  * - 대각선 터치도 안정적으로 처리 (각도 판별)
  * - 적은 움직임에서는 아무 동작도 하지 않음 (threshold)
@@ -26,6 +27,7 @@ export const useSwipe = (options = {}) => {
   // 방향 판별 최소 이동 거리
   const directionLockDistance = 10
 
+  // === Touch Events ===
   const onTouchStart = (e) => {
     const touch = e.touches[0]
     startX = touch.clientX
@@ -80,6 +82,61 @@ export const useSwipe = (options = {}) => {
     direction = null
   }
 
+  // === Mouse Events ===
+  const onMouseDown = (e) => {
+    startX = e.clientX
+    startY = e.clientY
+    isTracking = true
+    direction = null
+    e.preventDefault() // 텍스트 선택 방지
+  }
+
+  const onMouseMove = (e) => {
+    if (!isTracking) return
+
+    const deltaX = e.clientX - startX
+    const deltaY = e.clientY - startY
+    const absX = Math.abs(deltaX)
+    const absY = Math.abs(deltaY)
+
+    // 방향 미정 상태에서 최소 이동 이후 방향 결정
+    if (!direction) {
+      if (absX < directionLockDistance && absY < directionLockDistance) return
+
+      const angle = Math.atan2(absY, absX) * (180 / Math.PI)
+      direction = angle <= angleLimit ? 'horizontal' : 'vertical'
+    }
+  }
+
+  const onMouseUp = (e) => {
+    if (!isTracking) return
+    isTracking = false
+
+    if (direction !== 'horizontal') {
+      direction = null
+      return
+    }
+
+    const deltaX = e.clientX - startX
+
+    if (Math.abs(deltaX) >= threshold) {
+      if (deltaX < 0) {
+        onSwipeLeft()
+      } else {
+        onSwipeRight()
+      }
+    }
+
+    direction = null
+  }
+
+  const onMouseLeave = () => {
+    if (isTracking) {
+      isTracking = false
+      direction = null
+    }
+  }
+
   /**
    * 템플릿에서 바인딩용 이벤트 객체
    * v-on="swipeEvents" 또는 개별 @touchstart 등으로 사용
@@ -87,13 +144,21 @@ export const useSwipe = (options = {}) => {
   const swipeEvents = {
     touchstart: onTouchStart,
     touchmove: onTouchMove,
-    touchend: onTouchEnd
+    touchend: onTouchEnd,
+    mousedown: onMouseDown,
+    mousemove: onMouseMove,
+    mouseup: onMouseUp,
+    mouseleave: onMouseLeave
   }
 
   return {
     onTouchStart,
     onTouchMove,
     onTouchEnd,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onMouseLeave,
     swipeEvents
   }
 }

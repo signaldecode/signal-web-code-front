@@ -2,6 +2,8 @@
 // Design Tokens - Spacing (Figma Sync)
 // ============================================
 
+@use 'sass:math';
+
 // --------------------------------------------
 // Figma Variables (Export Variables 플러그인)
 // --------------------------------------------
@@ -31,8 +33,9 @@ $header-main-height-mobile: 56px;
 $header-total-height: $header-top-bar-height + $header-main-height; // 110px
 $header-total-height-mobile: $header-top-bar-height-mobile + $header-main-height-mobile; // 88px
 
-// Hero aspect ratio (PC와 모바일 동일 비율)
-$hero-aspect-ratio: 16 / 9;
+// Hero aspect ratio
+$hero-aspect-ratio: math.div(16, 7);
+$hero-aspect-ratio-mobile: math.div(16, 9);
 
 // Component-specific sizes (Figma Sync)
 $size-grade-summary-width: 420px;

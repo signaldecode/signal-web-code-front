@@ -60,7 +60,7 @@
 .product-detail-hero {
   max-width: 1320px;
   margin: 0 auto;
-  padding: $padding-12 20px;
+  padding: $padding-11 $padding-5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -549,6 +549,158 @@
       border-color: $Black-Primary-black-800;
     }
   }
+
+  // 쿠폰 스와이퍼
+  &__coupons {
+    margin-top: $padding-4;
+    width: 100%;
+  }
+
+  &__coupons-title {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-3;
+    font-weight: 500;
+  }
+
+  &__coupons-swiper {
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  &__coupons-track {
+    display: flex;
+    transition: transform 0.3s ease;
+  }
+
+  &__coupon-card {
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+    gap: $padding-3;
+    padding: $padding-4;
+    background: linear-gradient(135deg, var(--theme-primary-700) 0%, var(--theme-primary-900) 100%);
+    border-radius: 12px;
+    min-height: 80px;
+
+    @include mobile {
+      padding: $padding-3;
+      gap: $padding-2;
+      min-height: 70px;
+    }
+  }
+
+  &__coupon-discount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding-right: $padding-3;
+    border-right: 1px dashed rgba($Primary-white-color, 0.3);
+
+    @include mobile {
+      min-width: 60px;
+      padding-right: $padding-2;
+    }
+  }
+
+  &__coupon-value {
+    @include typo-headline-3;
+    color: $Primary-white-color;
+    font-weight: 700;
+    line-height: 1.2;
+
+    @include mobile {
+      @include typo-title-3;
+    }
+  }
+
+  &__coupon-off {
+    @include typo-body-4;
+    color: rgba($Primary-white-color, 0.8);
+  }
+
+  &__coupon-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-1;
+    min-width: 0;
+  }
+
+  &__coupon-name {
+    @include typo-title-6;
+    color: $Primary-white-color;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__coupon-condition {
+    @include typo-body-4;
+    color: rgba($Primary-white-color, 0.7);
+  }
+
+  &__coupon-download {
+    flex-shrink: 0;
+    padding: $padding-2 $padding-3;
+    background: $Primary-white-color;
+    border: none;
+    border-radius: 20px;
+    @include typo-body-3;
+    color: $Primary-color;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+
+    @include mobile {
+      padding: $padding-1 $padding-2;
+      @include typo-body-4;
+    }
+
+    &:hover:not(:disabled) {
+      transform: scale(1.05);
+    }
+
+    &--done {
+      background: rgba($Primary-white-color, 0.3);
+      color: $Primary-white-color;
+      cursor: default;
+    }
+  }
+
+  &__coupons-dots {
+    display: flex;
+    justify-content: center;
+    gap: $padding-2;
+    margin-top: $padding-3;
+  }
+
+  &__coupons-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: $Border-Border-line-200;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+
+    &:hover {
+      background: $Border-Border-line-300;
+    }
+
+    &--active {
+      background: $Primary-color;
+      transform: scale(1.2);
+    }
+  }
 }
 
 // --------------------------------------------
@@ -557,10 +709,10 @@
 
 .product-detail-tabs {
   position: sticky;
-  top: 80px;
+  top: $header-total-height;
   z-index: 10;
   @include mobile {
-    top: 60px;
+    top: $header-total-height-mobile;
   }
 
   &__inner {
@@ -773,6 +925,34 @@
       @include typo-body-4;
       padding: $padding-3 $padding-4;
     }
+  }
+}
+
+// --------------------------------------------
+// Product Detail FAQ
+// --------------------------------------------
+
+.product-detail-faq {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-6;
+  }
+
+  &__title {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    font-weight: 600;
   }
 }
 

@@ -19,6 +19,7 @@
   overflow: hidden;
 
   @include mobile {
+    aspect-ratio: $hero-aspect-ratio-mobile;
     margin-top: $header-total-height-mobile;
   }
 

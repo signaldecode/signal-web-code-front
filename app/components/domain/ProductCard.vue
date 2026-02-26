@@ -64,6 +64,8 @@ const discountRate = computed(() => {
       <div class="product-card__info">
         <h3 class="product-card__name">{{ product.name }}</h3>
 
+        <p v-if="product.summary" class="product-card__summary">{{ product.summary }}</p>
+        <div v-else class="product-card__promotion">{{ product.promotionName }}</div>
         <div class="product-card__divider"></div>
 
         <div class="product-card__price-wrap">

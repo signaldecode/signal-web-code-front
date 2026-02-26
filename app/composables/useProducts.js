@@ -85,6 +85,8 @@ export const useProducts = (initialOptions = {}) => {
       isBest: product.tags?.some(tag => tag.toUpperCase() === 'BEST'),
       isNew: product.tags?.some(tag => tag.toUpperCase() === 'NEW'),
       name: product.name,
+      summary: product.summary,
+      promotionName: product.promotionName,
       price: product.sellingPrice || product.regularPrice,
       originalPrice: hasDiscount ? product.regularPrice : null,
       discountRate: product.discountRate || 0,

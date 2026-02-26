@@ -56,9 +56,17 @@ useSeoMeta({
 // Active Tab
 const activeTab = ref('detail')
 
+// FAQ API
+const { faqs, pending: faqPending, fetchFaqs } = useFaqs()
+
+// FAQ 데이터 로드
+onMounted(() => {
+  fetchFaqs({ categoryId: 1, page: 0, size: 10 }).catch(() => {})
+})
+
 // Scroll spy for tabs
 onMounted(() => {
-  const sections = ['detail', 'info', 'reviews', 'qna']
+  const sections = ['detail', 'info', 'faq', 'reviews', 'qna']
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -235,6 +243,35 @@ const handleQnaSubmitted = async () => {
   // Q&A 목록 새로고침
   await refreshProductDetail()
 }
+
+// 더미 쿠폰 데이터 (UI 확인용)
+const dummyCoupons = [
+  {
+    id: 1,
+    name: '신규회원 웰컴 쿠폰',
+    discountType: 'PERCENTAGE',
+    discountValue: 10,
+    minOrderAmount: 30000
+  },
+  {
+    id: 2,
+    name: '첫 구매 감사 쿠폰',
+    discountType: 'AMOUNT',
+    discountValue: 5000,
+    minOrderAmount: 50000
+  },
+  {
+    id: 3,
+    name: '앱 다운로드 특별 쿠폰',
+    discountType: 'PERCENTAGE',
+    discountValue: 15,
+    minOrderAmount: null
+  }
+]
+
+const handleDownloadCoupon = (coupon) => {
+  success(`${coupon.name} 쿠폰이 다운로드되었습니다.`)
+}
 </script>
 
 <template>
@@ -247,9 +284,11 @@ const handleQnaSubmitted = async () => {
           :product="product"
           :labels="detailData.hero"
           :wishlisted="isWishlisted"
+          :coupons="dummyCoupons"
           @add-to-cart="handleAddToCart"
           @buy-now="handleBuyNow"
           @toggle-wishlist="handleToggleWishlist"
+          @download-coupon="handleDownloadCoupon"
         />
 
         <!-- Sticky Tabs -->
@@ -266,10 +305,17 @@ const handleQnaSubmitted = async () => {
           :labels="detailData.content"
         />
 
-        <!-- Product Info (상품정보고시) -->
+        <!-- Product Info (이용 방법) -->
         <ProductDetailInfo
           :specs="product.specs?.length ? product.specs : detailData.info.specs"
           :labels="detailData.info"
+        />
+
+        <!-- FAQ -->
+        <ProductDetailFaq
+          :faqs="faqs"
+          :labels="detailData.faq"
+          :loading="faqPending"
         />
 
         <!-- Reviews -->

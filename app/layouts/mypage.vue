@@ -86,5 +86,9 @@ const groups = computed(() => {
       redirect-path="/mypage"
       go-back-on-cancel
     />
+
+    <ClientOnly>
+      <TopButton :aria-label="mainData.topButton?.ariaLabel" />
+    </ClientOnly>
   </div>
 </template>

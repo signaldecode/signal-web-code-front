@@ -50,6 +50,8 @@ export const useSearch = () => {
     imageAlt: product.name,
     tags: product.tags || [],
     name: product.name,
+    summary: product.summary,
+    promotionName: product.promotionName,
     subtitle: '',
     price: product.salePrice || product.regularPrice,
     originalPrice: product.salePrice ? product.regularPrice : null,

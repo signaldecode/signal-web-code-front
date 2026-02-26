@@ -13,10 +13,14 @@ const props = defineProps({
   wishlisted: {
     type: Boolean,
     default: false
+  },
+  coupons: {
+    type: Array,
+    default: () => []
   }
 })
 
-const emit = defineEmits(['addToCart', 'buyNow', 'toggleWishlist'])
+const emit = defineEmits(['addToCart', 'buyNow', 'toggleWishlist', 'downloadCoupon'])
 
 const { shippingPolicy, baseShippingFee, freeShippingAmount } = useShopInfo()
 const { warning, info } = useToast()
@@ -132,6 +136,54 @@ const { swipeEvents: gallerySwipeEvents } = useSwipe({
   onSwipeLeft: () => nextImage(),
   onSwipeRight: () => prevImage()
 })
+
+// 쿠폰 스와이퍼
+const currentCouponIndex = ref(0)
+const downloadedCoupons = ref(new Set())
+
+const prevCoupon = () => {
+  if (props.coupons.length === 0) return
+  if (currentCouponIndex.value === 0) {
+    currentCouponIndex.value = props.coupons.length - 1
+  } else {
+    currentCouponIndex.value--
+  }
+}
+
+const nextCoupon = () => {
+  if (props.coupons.length === 0) return
+  if (currentCouponIndex.value === props.coupons.length - 1) {
+    currentCouponIndex.value = 0
+  } else {
+    currentCouponIndex.value++
+  }
+}
+
+const goToCoupon = (index) => {
+  currentCouponIndex.value = index
+}
+
+const { swipeEvents: couponSwipeEvents } = useSwipe({
+  onSwipeLeft: () => nextCoupon(),
+  onSwipeRight: () => prevCoupon()
+})
+
+const downloadCoupon = (coupon) => {
+  if (downloadedCoupons.value.has(coupon.id)) return
+  downloadedCoupons.value.add(coupon.id)
+  emit('downloadCoupon', coupon)
+}
+
+const isCouponDownloaded = (couponId) => {
+  return downloadedCoupons.value.has(couponId)
+}
+
+const formatCouponDiscount = (coupon) => {
+  if (coupon.discountType === 'PERCENTAGE') {
+    return `${coupon.discountValue}%`
+  }
+  return `${coupon.discountValue?.toLocaleString()}원`
+}
 
 const toggleWishlist = () => {
   isWishlisted.value = !isWishlisted.value
@@ -358,6 +410,56 @@ defineExpose({
         >
           {{ labels.buyLabel }}
         </BaseButton>
+      </div>
+
+      <!-- Coupons Swiper -->
+      <div v-if="coupons.length > 0" class="product-detail-hero__coupons">
+        <p class="product-detail-hero__coupons-title">{{ labels.couponTitle }}</p>
+        <div
+          class="product-detail-hero__coupons-swiper"
+          v-on="couponSwipeEvents"
+        >
+          <div
+            class="product-detail-hero__coupons-track"
+            :style="{ transform: `translateX(-${currentCouponIndex * 100}%)` }"
+          >
+            <div
+              v-for="coupon in coupons"
+              :key="coupon.id"
+              class="product-detail-hero__coupon-card"
+            >
+              <div class="product-detail-hero__coupon-discount">
+                <span class="product-detail-hero__coupon-value">{{ formatCouponDiscount(coupon) }}</span>
+                <span class="product-detail-hero__coupon-off">{{ labels.couponOff }}</span>
+              </div>
+              <div class="product-detail-hero__coupon-info">
+                <span class="product-detail-hero__coupon-name">{{ coupon.name }}</span>
+                <span v-if="coupon.minOrderAmount" class="product-detail-hero__coupon-condition">
+                  {{ coupon.minOrderAmount?.toLocaleString() }}원 이상 구매 시
+                </span>
+              </div>
+              <button
+                class="product-detail-hero__coupon-download"
+                :class="{ 'product-detail-hero__coupon-download--done': isCouponDownloaded(coupon.id) }"
+                :disabled="isCouponDownloaded(coupon.id)"
+                @click="downloadCoupon(coupon)"
+              >
+                {{ isCouponDownloaded(coupon.id) ? labels.couponDownloaded : labels.couponDownload }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Dots -->
+        <div v-if="coupons.length > 1" class="product-detail-hero__coupons-dots">
+          <button
+            v-for="(_, index) in coupons"
+            :key="index"
+            class="product-detail-hero__coupons-dot"
+            :class="{ 'product-detail-hero__coupons-dot--active': currentCouponIndex === index }"
+            :aria-label="`쿠폰 ${index + 1}`"
+            @click="goToCoupon(index)"
+          />
+        </div>
       </div>
     </div>
   </section>

@@ -73,11 +73,42 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-all;
-    height: 48px;
+    // height: 48px;
 
     @include mobile {
       @include typo-title-6;
       height: 40px;
+    }
+  }
+
+  &__summary {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-all;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  &__promotion {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-all;
+    animation: blink-promotion 0.8s ease-in-out 2;
+
+    @include mobile {
+      @include typo-body-4;
     }
   }
 
@@ -191,6 +222,18 @@
     @include mobile {
       @include typo-body-4;
     }
+  }
+}
+
+// --------------------------------------------
+// Promotion Blink Animation (2 times)
+// --------------------------------------------
+@keyframes blink-promotion {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
   }
 }
 

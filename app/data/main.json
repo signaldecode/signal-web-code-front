@@ -32,6 +32,9 @@
       { "label": "고객센터", "href": "/support" }
     ]
   },
+  "topButton": {
+    "ariaLabel": "맨 위로 이동"
+  },
   "hero": {
     "arrowLabels": {
       "prev": "이전 슬라이드",
