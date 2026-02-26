@@ -1,7 +1,7 @@
 <script setup>
 import popupData from '~/data/popup.json'
 
-defineProps({
+const props = defineProps({
   popups: {
     type: Array,
     default: () => []
@@ -11,6 +11,17 @@ defineProps({
 const emit = defineEmits(['dismiss'])
 
 const labels = popupData.floating
+
+// 최대 3개까지만 표시
+const visiblePopups = computed(() => props.popups.slice(0, 3))
+
+// 팝업 개수에 따른 클래스
+const wrapClass = computed(() => ({
+  'popup-floating-wrap': true,
+  'popup-floating-wrap--single': visiblePopups.value.length === 1,
+  'popup-floating-wrap--double': visiblePopups.value.length === 2,
+  'popup-floating-wrap--triple': visiblePopups.value.length === 3
+}))
 
 const getCloseOption = (popup) => {
   return (popup.closeOption || 'TODAY').toUpperCase()
@@ -29,9 +40,9 @@ const handleClick = (popup) => {
 
 <template>
   <Teleport to="body">
-    <TransitionGroup name="popup-floating" tag="div" class="popup-floating-wrap">
+    <TransitionGroup name="popup-floating" tag="div" :class="wrapClass">
       <div
-        v-for="popup in popups"
+        v-for="popup in visiblePopups"
         :key="popup.id"
         class="popup-floating"
       >

@@ -20,6 +20,42 @@
   @include mobile {
     bottom: space(16);
     right: space(16);
+    gap: space(8);
+  }
+
+  // 1개일 때 (기본)
+  &--single {
+    .popup-floating {
+      width: 200px;
+
+      @include mobile {
+        width: 160px;
+      }
+    }
+  }
+
+  // 2개일 때
+  &--double {
+    .popup-floating {
+      width: 180px;
+
+      @include mobile {
+        width: 140px;
+      }
+    }
+  }
+
+  // 3개일 때
+  &--triple {
+    gap: space(8);
+
+    .popup-floating {
+      width: 160px;
+
+      @include mobile {
+        width: 120px;
+      }
+    }
   }
 }
 
