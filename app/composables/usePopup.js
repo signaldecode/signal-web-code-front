@@ -5,10 +5,11 @@
 export const usePopup = () => {
   const { get } = useApi()
 
-  const centerPopups = ref([])
-  const floatingPopups = ref([])
-  const pending = ref(false)
-  const error = ref(null)
+  // useState로 SSR/CSR 상태 공유
+  const centerPopups = useState('popup-center', () => [])
+  const floatingPopups = useState('popup-floating', () => [])
+  const pending = useState('popup-pending', () => false)
+  const error = useState('popup-error', () => null)
 
   /**
    * 날짜 문자열 (YYYY-MM-DD)

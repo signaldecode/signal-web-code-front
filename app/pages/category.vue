@@ -43,6 +43,24 @@ const tabs = computed(() => {
   return [allTab]
 })
 
+// 현재 선택된 대분류의 소분류 목록
+const subcategories = computed(() => {
+  if (activeTab.value === 'all') return []
+  const selectedCategory = apiCategories.value.find(
+    cat => String(cat.id) === activeTab.value
+  )
+  return selectedCategory?.children || []
+})
+
+// 선택된 소분류 ID
+const activeSubcategory = ref(null)
+
+// 소분류 선택 핸들러
+const handleSubcategoryClick = (subcatId) => {
+  activeSubcategory.value = subcatId
+  setCategory(subcatId)
+}
+
 // URL에서 탭 값 가져오기
 const getTabFromUrl = () => {
   return route.query.tab ? String(route.query.tab) : 'all'
@@ -55,6 +73,7 @@ const sortValue = ref('latest')
 // 탭 변경 핸들러 - URL 업데이트
 const handleTabChange = (tabValue) => {
   activeTab.value = tabValue
+  activeSubcategory.value = null // 대분류 변경 시 소분류 초기화
   const query = tabValue === 'all' ? {} : { tab: tabValue }
   router.replace({ query })
 
@@ -133,6 +152,22 @@ const totalPages = computed(() => pagination.value.totalPages)
     v-model:current-page="currentPage"
     @tab-change="handleTabChange"
   >
+    <!-- 소분류 카테고리 -->
+    <template #subcategories>
+      <div v-if="subcategories.length" class="category-subcategories">
+        <button
+          v-for="subcat in subcategories"
+          :key="subcat.id"
+          type="button"
+          class="category-subcategories__item"
+          :class="{ 'category-subcategories__item--active': activeSubcategory === subcat.id }"
+          @click="handleSubcategoryClick(subcat.id)"
+        >
+          {{ subcat.label }}
+        </button>
+      </div>
+    </template>
+
     <template v-if="paginatedProducts.length > 0">
       <ProductCard
         v-for="product in paginatedProducts"

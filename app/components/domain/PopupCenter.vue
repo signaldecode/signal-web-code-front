@@ -1,7 +1,7 @@
 <script setup>
 import popupData from '~/data/popup.json'
 
-defineProps({
+const props = defineProps({
   popups: {
     type: Array,
     default: () => []
@@ -11,6 +11,30 @@ defineProps({
 const emit = defineEmits(['dismiss'])
 
 const labels = popupData.center
+
+// 안전한 배열 참조
+const safePopups = computed(() => props.popups || [])
+
+// 팝업 열릴 때 body 스크롤 잠금
+watch(
+  () => safePopups.value.length > 0,
+  (isOpen) => {
+    if (!import.meta.client) return
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  },
+  { immediate: true }
+)
+
+// 컴포넌트 언마운트 시 스크롤 복원
+onUnmounted(() => {
+  if (import.meta.client) {
+    document.body.style.overflow = ''
+  }
+})
 
 const handleHide = (popup) => {
   if (!popup) return
@@ -42,26 +66,26 @@ const hideLabel = (popup) => {
   <Teleport to="body">
     <Transition name="popup-center">
       <div
-        v-if="popups.length"
+        v-if="safePopups.length"
         class="popup-center"
         role="dialog"
         aria-modal="true"
-        :aria-label="popups[0].name"
+        :aria-label="safePopups[0].name"
       >
-        <div class="popup-center__backdrop" @click="handleClose(popups[0])" />
+        <div class="popup-center__backdrop" />
         <div class="popup-center__container">
           <div class="popup-center__body">
             <a
-              v-if="popups[0].linkUrl"
-              :href="popups[0].linkUrl"
-              :target="popups[0].linkTarget || '_blank'"
+              v-if="safePopups[0].linkUrl"
+              :href="safePopups[0].linkUrl"
+              :target="safePopups[0].linkTarget || '_blank'"
               rel="noopener noreferrer"
               class="popup-center__link"
-              @click.prevent="handleImageClick(popups[0])"
+              @click.prevent="handleImageClick(safePopups[0])"
             >
               <NuxtImg
-                :src="popups[0].image"
-                :alt="popups[0].name"
+                :src="safePopups[0].image"
+                :alt="safePopups[0].name"
                 class="popup-center__image"
                 format="webp"
                 width="480"
@@ -71,8 +95,8 @@ const hideLabel = (popup) => {
             </a>
             <NuxtImg
               v-else
-              :src="popups[0].image"
-              :alt="popups[0].name"
+              :src="safePopups[0].image"
+              :alt="safePopups[0].name"
               class="popup-center__image"
               format="webp"
               loading="eager"
@@ -82,14 +106,14 @@ const hideLabel = (popup) => {
             <button
               type="button"
               class="popup-center__hide"
-              @click="handleHide(popups[0])"
+              @click="handleHide(safePopups[0])"
             >
-              {{ hideLabel(popups[0]) }}
+              {{ hideLabel(safePopups[0]) }}
             </button>
             <button
               type="button"
               class="popup-center__close"
-              @click="handleClose(popups[0])"
+              @click="handleClose(safePopups[0])"
             >
               {{ labels.close }}
             </button>

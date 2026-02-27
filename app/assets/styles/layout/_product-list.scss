@@ -187,3 +187,37 @@
     background-position: -200% 0;
   }
 }
+
+// ============================================
+// Category Subcategories (소분류 카테고리)
+// ============================================
+.category-subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding-3 $padding-5;
+  margin-bottom: $padding-6;
+
+  @include mobile {
+    gap: $padding-2 $padding-4;
+    margin-bottom: $padding-4;
+  }
+
+  &__item {
+    @include typo-title-5;
+    color: $Text-Secondary-text-color;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $Primary-color;
+    }
+
+    &--active {
+      color: $Primary-color;
+      font-weight: 600;
+    }
+  }
+}

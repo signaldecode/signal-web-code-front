@@ -28,11 +28,14 @@ export const useSections = () => {
 
     // 이미 데이터가 있으면 스킵
     if (sectionData.value[keyword]) {
+      console.log(`[useSections] ${keyword}: 캐시된 데이터 사용`)
       return sectionData.value[keyword]
     }
 
     try {
       const url = buildUrl(`/sections/${keyword}`)
+      console.log(`[useSections] ${keyword}: API 호출 시작`, url)
+
       const response = await $fetch(url, {
         method: 'GET',
         query: { limit },
@@ -44,7 +47,11 @@ export const useSections = () => {
 
       return data
     } catch (err) {
-      console.error(`[useSections] 에러 [${keyword}]:`, err)
+      const status = err?.response?.status || err?.status || err?.statusCode
+      console.log(`[useSections] ${keyword}: API 에러 (${status})`)
+      if (status !== 401) {
+        console.error(`[useSections] 에러 [${keyword}]:`, err)
+      }
       return null
     }
   }
@@ -96,18 +103,28 @@ export const useSections = () => {
   }
 
   // 리뷰 데이터 변환 함수
-  const transformReview = (review) => ({
-    id: review.id,
-    productId: review.productId,
-    productName: review.productName,
-    productImage: review.productImageUrl,
-    rating: review.rating,
-    content: review.content,
-    images: review.imageUrls || [],
-    author: review.authorName,
-    date: review.createdAt,
-    helpful: review.helpfulCount || 0
-  })
+  const transformReview = (review) => {
+    // 이미지 배열 추출 (다양한 필드명 지원)
+    const rawImages = review.imageUrls || review.images || review.reviewImageUrls || []
+    // 이미지가 객체 배열인 경우 url 추출, 문자열 배열이면 그대로 사용
+    const images = rawImages.map(img => typeof img === 'string' ? img : (img?.url || img?.imageUrl || ''))
+      .filter(Boolean)
+
+    return {
+      id: review.id,
+      productId: review.productId,
+      productName: review.productName,
+      productImage: review.productImageUrl,
+      rating: review.rating,
+      content: review.content,
+      images,
+      // 작성자: authorName, username, author 등 다양한 필드명 지원
+      username: review.authorName || review.username || review.author || '',
+      author: review.authorName || review.username || review.author || '',
+      date: review.createdAt,
+      helpful: review.helpfulCount || 0
+    }
+  }
 
   // 배너 데이터 변환 함수
   const transformBanner = (banner) => ({

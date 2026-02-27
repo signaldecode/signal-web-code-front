@@ -57,10 +57,8 @@ const categoryItems = computed(() =>
   apiCategoryItems.value?.length ? apiCategoryItems.value : mainData.categories.items
 )
 
-// Best 상품 (섹션 API 또는 JSON 폴백)
-const bestItems = computed(() =>
-  bestProducts.value?.length ? bestProducts.value : mainData.bestItems.products
-)
+// Best 상품 (섹션 API only - JSON에 products 없음)
+const bestItems = computed(() => bestProducts.value || [])
 
 // Best 섹션 데이터 (API 메타 + 폴백)
 const bestData = computed(() => ({
@@ -79,10 +77,8 @@ const newData = computed(() => ({
   arrowLabels: mainData.newItems.arrowLabels
 }))
 
-// 추천 상품 (섹션 API 또는 JSON 폴백)
-const mdPickProducts = computed(() =>
-  recommendProducts.value?.length ? recommendProducts.value : mainData.mdPick.products
-)
+// 추천 상품 (섹션 API only - JSON에 products 없음)
+const mdPickProducts = computed(() => recommendProducts.value || [])
 
 // Recommend 섹션 데이터 (API 메타 + 폴백)
 const mdPickData = computed(() => ({
@@ -101,10 +97,9 @@ const reviewData = computed(() => ({
   subtitle: reviewMeta.value?.subtitle || reviewMeta.value?.description || mainData.reviews.subtitle
 }))
 
-// 카테고리별 상품 폴백 (API 실패 시)
+// 카테고리별 상품 폴백 (API 실패 시 - best + recommend 합침)
 const fallbackCategoryProducts = computed(() => {
-  const combined = [...(bestProducts.value || []), ...(recommendProducts.value || [])]
-  return combined.length ? combined : mainData.categoryItems.products
+  return [...(bestProducts.value || []), ...(recommendProducts.value || [])]
 })
 
 // 슬라이드 배너 (API only)
@@ -119,35 +114,47 @@ const fullBanner = computed(() => apiFullBanners.value?.[0] || null)
 // 리뷰 (섹션 API)
 const reviews = computed(() => sectionReviews.value || [])
 
+// 활성 섹션 목록 (안전한 배열 반환)
+const activeSections = computed(() => {
+  return Array.isArray(sections.value) ? sections.value : []
+})
+
 // 팝업
 const { centerPopups, floatingPopups, fetchPopups, dismissPopup } = usePopup()
 
-// 섹션별 활성화 여부 확인
-const isSectionActive = (keyword) => {
-  return sections.value?.some(s => s.keyword === keyword) || false
+// 섹션 데이터 로드 함수
+const loadSections = async () => {
+  if (sectionsLoaded.value) return
+  if (!sections.value?.length) return
+
+  sectionsLoaded.value = true
+  console.log('[index] 섹션 로드 시작:', sections.value.map(s => s.keyword))
+
+  await Promise.all([
+    fetchSections(sections.value),
+    fetchCategories()
+  ])
 }
 
-// sections가 로드되면 섹션 데이터 및 카테고리 조회
+// 클라이언트에서 섹션 데이터 로드 (SSR에서 401 방지)
+onMounted(async () => {
+  // 섹션 데이터 로드
+  await loadSections()
+
+  // 팝업 로드
+  fetchPopups()
+})
+
+// sections가 변경되면 클라이언트에서 데이터 로드 (shopInfo 로드 후 트리거)
 watch(
   () => sections.value,
   async (sectionList) => {
-    if (sectionList?.length && !sectionsLoaded.value) {
-      sectionsLoaded.value = true
-
-      // 섹션 데이터와 카테고리 병렬 로드
-      await Promise.all([
-        fetchSections(sectionList),
-        fetchCategories()
-      ])
+    if (import.meta.client && sectionList?.length) {
+      await loadSections()
     }
   },
   { immediate: true }
 )
-
-onMounted(() => {
-  // 팝업 로드
-  fetchPopups()
-})
 </script>
 
 <template>
@@ -172,87 +179,96 @@ onMounted(() => {
     </ClientOnly>
 
     <main>
+      <!-- 카테고리 (항상 표시) -->
       <SectionCategories
         :data="mainData.categories"
         :categories="categoryItems"
       />
 
-      <!-- Best 상품 (섹션 API) -->
-      <SectionBestItems
-        v-if="isSectionActive('best')"
-        :data="bestData"
-        :products="bestItems"
-      />
-
-      <!-- 신상품 (섹션 API) -->
-      <SectionBestItems
-        v-if="isSectionActive('new')"
-        :data="newData"
-        :products="newItems"
-      />
-
-      <!-- 추천 상품 (섹션 API) -->
-      <SectionMdPick
-        v-if="isSectionActive('recommend')"
-        :data="mdPickData"
-        :products="mdPickProducts"
-      />
-
-      <!-- Full 배너 (클라이언트 전용) -->
-      <ClientOnly>
-        <BannerFull v-if="fullBanner" :banner="fullBanner" />
-      </ClientOnly>
-
-      <SectionCategoryItems
-        v-if="isSectionActive('category')"
-        :data="mainData.categoryItems"
-        :categories="categoryItems"
-        :fallback-products="fallbackCategoryProducts"
-      />
-
-      <!-- Slide 배너 (클라이언트 전용) -->
-      <ClientOnly>
-        <BannerSlide
-          v-if="slideBanners.length"
-          :banners="slideBanners"
-          :auto-play="true"
-          :interval="5000"
+      <!-- 섹션 동적 렌더링 (shop-info sections 순서대로) -->
+      <template v-for="section in activeSections" :key="section.keyword">
+        <!-- Best 상품 -->
+        <SectionBestItems
+          v-if="section.keyword === 'best' && bestItems.length"
+          :data="bestData"
+          :products="bestItems"
         />
-      </ClientOnly>
 
-      <!-- Half 배너 (섹션 API) -->
-      <ClientOnly>
-        <SectionHalfBanners
-          v-if="isSectionActive('half_banner') && halfBanners.length"
-          :banners="halfBanners"
-          :button-label="mainData.banners.halfLabels.buttonLabel"
+        <!-- 신상품 -->
+        <SectionBestItems
+          v-if="section.keyword === 'new' && newItems.length"
+          :data="newData"
+          :products="newItems"
         />
-      </ClientOnly>
 
-      <!-- 리뷰 섹션 (섹션 API) -->
-      <ClientOnly>
-        <SectionReviews
-          v-if="isSectionActive('review') && reviews.length"
-          :data="reviewData"
-          :reviews="reviews"
+        <!-- 추천 상품 -->
+        <SectionMdPick
+          v-if="section.keyword === 'recommend' && mdPickProducts.length"
+          :data="mdPickData"
+          :products="mdPickProducts"
         />
-      </ClientOnly>
 
-      <SectionInstagram
-        :data="mainData.instagram"
-        :images="mainData.instagram.items"
-      />
+        <!-- 카테고리별 상품 -->
+        <SectionCategoryItems
+          v-if="section.keyword === 'category'"
+          :data="mainData.categoryItems"
+          :categories="categoryItems"
+          :fallback-products="fallbackCategoryProducts"
+        />
+
+        <!-- Full 배너 -->
+        <ClientOnly v-if="section.keyword === 'full_banner'">
+          <BannerFull v-if="fullBanner" :banner="fullBanner" />
+        </ClientOnly>
+
+        <!-- Slide 배너 -->
+        <ClientOnly v-if="section.keyword === 'slide_banner'">
+          <BannerSlide
+            v-if="slideBanners.length"
+            :banners="slideBanners"
+            :auto-play="true"
+            :interval="5000"
+          />
+        </ClientOnly>
+
+        <!-- Half 배너 -->
+        <ClientOnly v-if="section.keyword === 'half_banner'">
+          <SectionHalfBanners
+            v-if="halfBanners.length"
+            :banners="halfBanners"
+            :button-label="mainData.banners.halfLabels.buttonLabel"
+          />
+        </ClientOnly>
+
+        <!-- 리뷰 섹션 -->
+        <ClientOnly v-if="section.keyword === 'review'">
+          <SectionReviews
+            v-if="reviews.length"
+            :data="reviewData"
+            :reviews="reviews"
+          />
+        </ClientOnly>
+
+        <!-- 인스타그램 -->
+        <SectionInstagram
+          v-if="section.keyword === 'instagram'"
+          :data="mainData.instagram"
+          :images="mainData.instagram.items"
+        />
+      </template>
     </main>
 
     <Footer :data="mainData.footer" />
 
-    <PopupCenter
-      :popups="centerPopups"
-      @dismiss="dismissPopup"
-    />
-    <PopupFloating
-      :popups="floatingPopups"
-      @dismiss="dismissPopup"
-    />
+    <ClientOnly>
+      <PopupCenter
+        :popups="centerPopups"
+        @dismiss="dismissPopup"
+      />
+      <PopupFloating
+        :popups="floatingPopups"
+        @dismiss="dismissPopup"
+      />
+    </ClientOnly>
   </div>
 </template>

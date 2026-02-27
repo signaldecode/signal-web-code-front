@@ -13,7 +13,7 @@ const emit = defineEmits(['dismiss'])
 const labels = popupData.floating
 
 // 최대 3개까지만 표시
-const visiblePopups = computed(() => props.popups.slice(0, 3))
+const visiblePopups = computed(() => (props.popups || []).slice(0, 3))
 
 // 팝업 개수에 따른 클래스
 const wrapClass = computed(() => ({

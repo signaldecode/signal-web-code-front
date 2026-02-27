@@ -261,6 +261,7 @@ const handleDownloadAll = async () => {
         </template>
 
         <!-- 등급별 쿠폰팩 -->
+         <!--
         <section class="coupon-download-page__grade-packs">
           <h2 class="coupon-download-page__grade-title">{{ couponData.gradePacks.title }}</h2>
           <div class="coupon-download-page__grade-grid">
@@ -301,6 +302,7 @@ const handleDownloadAll = async () => {
             </article>
           </div>
         </section>
+      -->
       </div>
       </main>
     </div>

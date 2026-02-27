@@ -67,7 +67,7 @@ export const useShopInfo = () => {
   const refresh = () => fetchShopInfo(true)
 
   /**
-   * 카테고리 목록 조회
+   * 카테고리 목록 조회 (children 포함)
    */
   const fetchCategories = async () => {
     // 이미 데이터가 있으면 스킵
@@ -76,7 +76,7 @@ export const useShopInfo = () => {
     }
 
     try {
-      const url = buildUrl('/main/categories')
+      const url = buildUrl('/categories')
       const response = await $fetch(url, {
         method: 'GET',
         credentials: 'include'
@@ -92,14 +92,20 @@ export const useShopInfo = () => {
     }
   }
 
-  // 카테고리를 UI용으로 변환
+  // 카테고리를 UI용으로 변환 (children 포함)
   const categoryItems = computed(() => {
     return categories.value.map(cat => ({
       id: cat.id,
       label: cat.name,
       href: `/category?tab=${cat.id}`,
-      image: `/images/categories/category-${cat.sortOrder + 1}.png`,
-      imageAlt: `${cat.name} 카테고리`
+      image: cat.imageUrl || `/images/categories/category-${cat.sortOrder + 1}.png`,
+      imageAlt: `${cat.name} 카테고리`,
+      children: (cat.children || []).map(child => ({
+        id: child.id,
+        label: child.name,
+        href: `/category?tab=${child.id}`,
+        sortOrder: child.sortOrder
+      })).sort((a, b) => a.sortOrder - b.sortOrder)
     }))
   })
 

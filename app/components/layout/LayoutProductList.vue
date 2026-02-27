@@ -74,6 +74,9 @@ defineExpose({
           @update:model-value="handleTabChange"
         />
 
+        <!-- 소분류 슬롯 -->
+        <slot name="subcategories" />
+
         <div class="layout-product-list__toolbar">
           <p class="layout-product-list__count">
             {{ labels.totalLabel }}
