@@ -6,12 +6,24 @@
  */
 export const useShopInfo = () => {
   const { get } = useApi()
+  const config = useRuntimeConfig()
+
+  // API URL 빌드
+  const buildUrl = (endpoint) => {
+    if (import.meta.server) {
+      return `${config.apiBaseUrl}${endpoint}`
+    }
+    return `${config.public.apiBase}${endpoint}`
+  }
 
   // 전역 상태 (앱 전체에서 공유)
   const shopInfo = useState('shop-info', () => null)
   const isLoaded = useState('shop-info-loaded', () => false)
   const pending = useState('shop-info-pending', () => false)
   const error = useState('shop-info-error', () => null)
+
+  // 카테고리 상태
+  const categories = useState('categories', () => [])
 
   /**
    * 쇼핑몰 정보 조회
@@ -41,7 +53,7 @@ export const useShopInfo = () => {
 
       return data
     } catch (err) {
-      console.error('Failed to fetch shop info:', err)
+      console.error('[useShopInfo] shop-info 로드 실패:', err)
       error.value = err.data?.message || err.message || '쇼핑몰 정보를 불러오는데 실패했습니다.'
       return null
     } finally {
@@ -53,6 +65,43 @@ export const useShopInfo = () => {
    * 강제 새로고침
    */
   const refresh = () => fetchShopInfo(true)
+
+  /**
+   * 카테고리 목록 조회
+   */
+  const fetchCategories = async () => {
+    // 이미 데이터가 있으면 스킵
+    if (categories.value?.length) {
+      return categories.value
+    }
+
+    try {
+      const url = buildUrl('/main/categories')
+      const response = await $fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      const data = response.data || response
+      categories.value = Array.isArray(data) ? data : []
+
+      return categories.value
+    } catch (err) {
+      console.error('Failed to fetch categories:', err)
+      return []
+    }
+  }
+
+  // 카테고리를 UI용으로 변환
+  const categoryItems = computed(() => {
+    return categories.value.map(cat => ({
+      id: cat.id,
+      label: cat.name,
+      href: `/category?tab=${cat.id}`,
+      image: `/images/categories/category-${cat.sortOrder + 1}.png`,
+      imageAlt: `${cat.name} 카테고리`
+    }))
+  })
 
   // ============================================
   // Computed Getters (편의용)
@@ -83,14 +132,30 @@ export const useShopInfo = () => {
   // SEO 정보
   const seoInfo = computed(() => shopInfo.value?.seoInfo || {})
 
-  // SNS 정보
-  const snsInfo = computed(() => shopInfo.value?.snsInfo || [])
+  // SNS 정보 (배열 또는 객체 형태 모두 지원)
+  const snsInfo = computed(() => {
+    const info = shopInfo.value?.snsInfo
+    if (!info) return []
+    // 배열 형태: [{ type: 'blog', url: '...' }]
+    if (Array.isArray(info)) return info
+    // 객체 형태: { blog: 'url', youtube: 'url' } - 그대로 반환
+    if (typeof info === 'object') return info
+    return []
+  })
 
   // 테마
   const theme = computed(() => shopInfo.value?.theme || 'green')
 
   // 헤더 메뉴
   const headerMenu = computed(() => shopInfo.value?.headerMenu || [])
+
+  // 메인 섹션 목록 (sortOrder로 정렬, isActive 없으면 활성화로 간주)
+  const sections = computed(() => {
+    const sectionList = shopInfo.value?.sections || []
+    return [...sectionList]
+      .filter(s => s.isActive !== false) // isActive가 명시적으로 false가 아니면 포함
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+  })
 
   // 배송 정책
   const shippingPolicy = computed(() => shopInfo.value?.shippingPolicy || {})
@@ -107,9 +172,11 @@ export const useShopInfo = () => {
     isLoaded,
     pending,
     error,
+    categories,
 
     // 메서드
     fetchShopInfo,
+    fetchCategories,
     refresh,
 
     // Getters
@@ -125,8 +192,10 @@ export const useShopInfo = () => {
     snsInfo,
     theme,
     headerMenu,
+    sections,
     shippingPolicy,
     freeShippingAmount,
-    baseShippingFee
+    baseShippingFee,
+    categoryItems
   }
 }

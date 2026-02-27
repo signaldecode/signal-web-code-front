@@ -216,6 +216,25 @@ export const useProductDetail = (productId) => {
     }
   })
 
+  // 다운로드 가능한 쿠폰
+  const downloadableCoupons = computed(() => {
+    const p = response.value?.data
+    if (!p?.downloadableCoupons) return []
+
+    return p.downloadableCoupons.map(c => ({
+      id: c.id,
+      name: c.name,
+      description: c.description || '',
+      notice: c.notice || '',
+      // API: RATE/AMOUNT → UI: PERCENTAGE/AMOUNT
+      discountType: c.discountType === 'RATE' ? 'PERCENTAGE' : c.discountType,
+      discountValue: c.discountValue,
+      minOrderAmount: c.minOrderAmount || 0,
+      maxDiscountAmount: c.maxDiscountAmount || 0,
+      remainingQuantity: c.remainingQuantity
+    }))
+  })
+
   return {
     // 원본 응답
     response,
@@ -227,6 +246,7 @@ export const useProductDetail = (productId) => {
     optionGroups,
     variants,
     reviews,
-    qnas
+    qnas,
+    downloadableCoupons
   }
 }

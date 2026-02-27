@@ -19,12 +19,15 @@
     "buyLabel": "바로 구매",
     "removeLabel": "옵션 삭제",
     "promotionEndSuffix": "까지",
-    "couponTitle": "지금 사용 가능한 쿠폰이 있어요!",
+    "couponTitle": "지금 받을 수 있는 쿠폰이 있어요!",
     "couponDownload": "다운로드",
     "couponDownloaded": "받기 완료",
     "couponUnit": "원",
     "couponPercent": "%",
-    "couponOff": "할인"
+    "couponOff": "할인",
+    "couponDownloadSuccess": "쿠폰이 다운로드되었습니다.",
+    "couponAlreadyDownloaded": "이미 다운로드한 쿠폰입니다.",
+    "couponDownloadFail": "쿠폰 다운로드에 실패했습니다."
   },
   "tabs": [
     { "label": "상세정보", "value": "detail" },

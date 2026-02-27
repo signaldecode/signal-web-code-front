@@ -83,7 +83,24 @@ onUnmounted(() => {
 
       <div class="section-md-pick__content">
         <div class="section-md-pick__image-card">
+          <a
+            v-if="data.linkUrl"
+            :href="data.linkUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="section-md-pick__image-link"
+          >
+            <img
+              :src="data.mainImage"
+              :alt="data.mainImageAlt"
+              class="section-md-pick__main-image"
+              loading="lazy"
+              width="588"
+              height="588"
+            />
+          </a>
           <img
+            v-else
             :src="data.mainImage"
             :alt="data.mainImageAlt"
             class="section-md-pick__main-image"

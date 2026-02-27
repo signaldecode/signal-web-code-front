@@ -29,6 +29,12 @@ export const useCoupons = () => {
       coupons.value = response.data || response || []
       return coupons.value
     } catch (e) {
+      // 401 에러는 비로그인 상태로 조용히 처리
+      const status = e?.response?.status || e?.status || e?.statusCode
+      if (status === 401) {
+        coupons.value = []
+        return []
+      }
       error.value = e.data?.message || '쿠폰 목록을 불러오는데 실패했습니다.'
       coupons.value = []
       return []

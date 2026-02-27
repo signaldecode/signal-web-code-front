@@ -9,7 +9,7 @@ useSeoMeta({
 })
 
 // API 연동
-const { categories } = useMain()
+const { categoryItems, fetchCategories } = useShopInfo()
 const { reviews, totalPages, pending, fetchReviews } = useReviews()
 
 // 필터 상태
@@ -22,7 +22,7 @@ const pageSize = 12
 // 카테고리 옵션 (API에서 가져온 카테고리 목록)
 const categoryOptions = computed(() => {
   const options = [{ label: reviewData.filters.category.placeholder, value: '' }]
-  categories.value.forEach(cat => {
+  categoryItems.value.forEach(cat => {
     options.push({ label: cat.label, value: String(cat.id) })
   })
   return options
@@ -55,6 +55,7 @@ watch(currentPage, () => {
 
 // 초기 로드
 onMounted(() => {
+  fetchCategories()
   loadReviews()
 })
 

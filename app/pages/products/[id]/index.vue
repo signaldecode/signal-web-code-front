@@ -32,6 +32,7 @@ const {
   product,
   reviews,
   qnas: qna,
+  downloadableCoupons,
   pending,
   error,
   refresh: refreshProductDetail
@@ -244,33 +245,26 @@ const handleQnaSubmitted = async () => {
   await refreshProductDetail()
 }
 
-// 더미 쿠폰 데이터 (UI 확인용)
-const dummyCoupons = [
-  {
-    id: 1,
-    name: '신규회원 웰컴 쿠폰',
-    discountType: 'PERCENTAGE',
-    discountValue: 10,
-    minOrderAmount: 30000
-  },
-  {
-    id: 2,
-    name: '첫 구매 감사 쿠폰',
-    discountType: 'AMOUNT',
-    discountValue: 5000,
-    minOrderAmount: 50000
-  },
-  {
-    id: 3,
-    name: '앱 다운로드 특별 쿠폰',
-    discountType: 'PERCENTAGE',
-    discountValue: 15,
-    minOrderAmount: null
-  }
-]
+// 쿠폰 다운로드
+const { downloadCoupon } = useDownloadableCoupons()
 
-const handleDownloadCoupon = (coupon) => {
-  success(`${coupon.name} 쿠폰이 다운로드되었습니다.`)
+const handleDownloadCoupon = async (coupon) => {
+  // 로그인 확인
+  if (!authStore.isLoggedIn) {
+    showLoginRequiredModal.value = true
+    return
+  }
+
+  const result = await downloadCoupon(coupon.id)
+  if (result.success) {
+    if (result.alreadyDownloaded) {
+      success(detailData.hero.couponAlreadyDownloaded || '이미 다운로드한 쿠폰입니다.')
+    } else {
+      success(`${coupon.name} ${detailData.hero.couponDownloadSuccess || '쿠폰이 다운로드되었습니다.'}`)
+    }
+  } else {
+    showError(result.error || detailData.hero.couponDownloadFail || '쿠폰 다운로드에 실패했습니다.')
+  }
 }
 </script>
 
@@ -284,7 +278,7 @@ const handleDownloadCoupon = (coupon) => {
           :product="product"
           :labels="detailData.hero"
           :wishlisted="isWishlisted"
-          :coupons="dummyCoupons"
+          :coupons="downloadableCoupons"
           @add-to-cart="handleAddToCart"
           @buy-now="handleBuyNow"
           @toggle-wishlist="handleToggleWishlist"

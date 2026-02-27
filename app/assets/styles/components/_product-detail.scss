@@ -63,7 +63,7 @@
   padding: $padding-11 $padding-5;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: $padding-8;
 
   @include tablet {

@@ -25,7 +25,26 @@ const router = useRouter()
 const authStore = useAuthStore()
 const { post } = useApi()
 const cart = useCart()
-const { logoUrl, isLoaded: shopInfoLoaded } = useShopInfo()
+const { logoUrl, isLoaded: shopInfoLoaded, snsInfo } = useShopInfo()
+
+// SNS 링크에서 블로그 URL 추출
+const blogUrl = computed(() => {
+  const info = snsInfo.value
+  if (!info) return ''
+
+  // 배열 형태: [{ type: 'blog', url: '...' }]
+  if (Array.isArray(info)) {
+    const blogLink = info.find(sns => sns.type?.toLowerCase() === 'blog')
+    return blogLink?.url || blogLink?.href || ''
+  }
+
+  // 객체 형태: { blog: 'https://...' }
+  if (typeof info === 'object') {
+    return info.blog || ''
+  }
+
+  return ''
+})
 
 // 로고 이미지 (API 로딩 완료 후에만 표시, fallback 없음)
 const logoSrc = computed(() => logoUrl.value || '')
@@ -169,7 +188,13 @@ onUnmounted(() => {
       <div class="header__top-bar-inner">
         <nav class="header__top-nav">
           <NuxtLink to="/support" class="header__top-link">고객센터</NuxtLink>
-          <NuxtLink to="/blog" class="header__top-link">블로그</NuxtLink>
+          <a
+            v-if="blogUrl"
+            :href="blogUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="header__top-link"
+          >블로그</a>
           <ClientOnly>
             <template v-if="authStore.isLoggedIn">
               <NuxtLink to="/mypage" class="header__top-link">마이페이지</NuxtLink>

@@ -29,6 +29,12 @@ export const useDownloadableCoupons = () => {
       coupons.value = response.data || response || []
       return coupons.value
     } catch (e) {
+      // 401 에러는 비로그인 상태로 조용히 처리 (쿠폰 목록은 로그인 후 표시)
+      const status = e?.response?.status || e?.status || e?.statusCode
+      if (status === 401) {
+        coupons.value = []
+        return []
+      }
       error.value = e.data?.message || '쿠폰 목록을 불러오는데 실패했습니다.'
       coupons.value = []
       return []
@@ -104,7 +110,8 @@ export const useDownloadableCoupons = () => {
       const response = await get('/coupons/applicable', { subtotal })
       applicableCoupons.value = (response.data || response || []).map(c => transformApplicableCoupon(c, subtotal))
       return applicableCoupons.value
-    } catch (e) {
+    } catch {
+      // 401 에러 등 모든 에러 조용히 처리
       applicableCoupons.value = []
       return []
     } finally {

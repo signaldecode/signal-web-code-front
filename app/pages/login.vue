@@ -226,7 +226,7 @@ const handleGuestLookup = async () => {
                 />
               </svg>
             </button>
-            <button
+            <!-- <button
               type="button"
               class="login-social__button login-social__button--kakao"
               :aria-label="loginData.social.kakao.ariaLabel"
@@ -238,7 +238,7 @@ const handleGuestLookup = async () => {
                   fill="currentColor"
                 />
               </svg>
-            </button>
+            </button> -->
           </div>
         </form>
 

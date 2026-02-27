@@ -1,11 +1,12 @@
 /**
- * 메인 페이지 API 호출 및 데이터 변환 composable
- * GET /main - 메인 페이지 데이터 조회
+ * 메인 페이지 배너 API 호출 composable
  * GET /main/banners - 배너 조회
+ *
+ * NOTE: 상품/카테고리 데이터는 useSections.js로 이전됨
  */
 export const useMain = () => {
   const { useApiData } = useApi()
-  const { data: response, pending, error, refresh } = useApiData('main-page', '/main')
+
   const { data: bannerResponse, pending: bannerPending, refresh: refreshBanners } = useApiData(
     'main-banners',
     '/main/banners',
@@ -18,30 +19,7 @@ export const useMain = () => {
     return bannerResponse.value !== null && bannerResponse.value !== undefined
   })
 
-  // 상품 데이터 변환 함수
-  const transformProduct = (product) => {
-    const hasDiscount = product.sellingPrice && product.sellingPrice < product.regularPrice
-
-    return {
-      id: product.id,
-      href: `/products/${product.id}`,
-      image: product.imageUrl,
-      imageAlt: product.name,
-      isBest: product.tags?.some(tag => tag.toUpperCase() === 'BEST') || product.isBest,
-      isNew: product.tags?.some(tag => tag.toUpperCase() === 'NEW') || product.isNew,
-      name: product.name,
-      summary: product.summary,
-      promotionName: product.promotionName,
-      price: product.sellingPrice || product.regularPrice,
-      originalPrice: hasDiscount ? product.regularPrice : null,
-      discountRate: product.discountRate || 0,
-      currency: '원',
-      rating: product.ratingAvg,
-      reviewCount: product.reviewCount
-    }
-  }
-
-  // 배너 데이터 변환 함수 (Hero slides)
+  // 배너 데이터 변환 함수
   const transformBanner = (banner) => ({
     id: banner.id,
     title: banner.title || banner.name || '',
@@ -56,16 +34,6 @@ export const useMain = () => {
     linkTarget: banner.linkTarget
   })
 
-  // 카테고리 데이터 변환 함수
-  const transformCategory = (category) => ({
-    id: category.id,
-    label: category.name,
-    href: `/category?tab=${category.id}`,
-    image: `/images/categories/category-${category.sortOrder}.png`,
-    imageAlt: `${category.name} 카테고리`
-  })
-
-  // 변환된 데이터 computed
   // 배너 타입별 데이터 (HERO, SLIDE, HALF, FULL)
   const heroBanners = computed(() => {
     return bannerResponse.value?.data?.HERO?.map(transformBanner) || []
@@ -83,34 +51,16 @@ export const useMain = () => {
     return bannerResponse.value?.data?.FULL?.map(transformBanner) || []
   })
 
-  const categories = computed(() => {
-    return response.value?.data?.categories?.map(transformCategory) || []
-  })
-
-  const bestProducts = computed(() => {
-    return response.value?.data?.bestProducts?.map(transformProduct) || []
-  })
-
-  const recommendProducts = computed(() => {
-    return response.value?.data?.recommendProducts?.map(transformProduct) || []
-  })
-
   return {
-    // 원본 응답
-    response,
-    pending,
+    // 상태
     bannerPending,
     bannerLoaded,
-    error,
-    refresh,
     refreshBanners,
-    // 변환된 데이터
+
+    // 변환된 배너 데이터
     heroBanners,
     slideBanners,
     halfBanners,
-    fullBanners,
-    categories,
-    bestProducts,
-    recommendProducts
+    fullBanners
   }
 }

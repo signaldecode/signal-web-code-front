@@ -16,7 +16,7 @@ useSeoMeta({
 })
 
 // API에서 카테고리 목록 가져오기
-const { categories: apiCategories } = useMain()
+const { categoryItems: apiCategories, fetchCategories } = useShopInfo()
 
 // 상품 API
 const {
@@ -79,15 +79,26 @@ watch(() => route.query.tab, (newTab) => {
   }
 })
 
-// 초기 로드 시 URL 기반으로 설정
-onMounted(() => {
-  const initialTab = getTabFromUrl()
-  activeTab.value = initialTab
-  if (initialTab === 'all') {
-    setCategory(null)
-  } else {
-    setCategory(Number(initialTab))
+// 초기 API 호출 여부
+const initialLoadDone = ref(false)
+
+// 카테고리 로드 후 탭 활성화 (최초 1회만)
+watch(apiCategories, (categories) => {
+  if (categories?.length && !initialLoadDone.value) {
+    initialLoadDone.value = true
+    const initialTab = getTabFromUrl()
+    activeTab.value = initialTab
+    if (initialTab === 'all') {
+      setCategory(null)
+    } else {
+      setCategory(Number(initialTab))
+    }
   }
+}, { immediate: true })
+
+// 초기 로드 시 카테고리 가져오기
+onMounted(() => {
+  fetchCategories()
 })
 
 // 정렬 변경

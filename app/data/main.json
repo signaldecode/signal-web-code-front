@@ -98,6 +98,16 @@
       "next": "다음 상품"
     }
   },
+  "newItems": {
+    "title": "New Arrival",
+    "subtitle": "새롭게 출시된 신상품",
+    "viewAllLabel": "전체보기",
+    "viewAllHref": "/category?sort=newest",
+    "arrowLabels": {
+      "prev": "이전 상품",
+      "next": "다음 상품"
+    }
+  },
   "mdPick": {
     "title": "MD's Pick",
     "subtitle": "MD가 추천하는 제품",
