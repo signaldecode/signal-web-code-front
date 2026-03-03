@@ -22,6 +22,7 @@
 @use "pages/notices";
 @use "pages/error";
 @use "pages/coupon-download";
+@use "pages/inquiry";
 
 // Components
 @use "components/button";
@@ -76,6 +77,7 @@
 @use "components/textarea";
 @use "components/star-rating";
 @use "components/image-upload";
+@use "components/file-upload";
 @use "components/review-write";
 @use "components/qna-write";
 @use "components/write-modal";

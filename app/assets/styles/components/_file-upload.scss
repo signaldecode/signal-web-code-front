@@ -1,0 +1,133 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+
+.base-file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: $padding-3;
+
+  &__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-2;
+    width: 100%;
+    height: 52px;
+    padding: 0 $padding-4;
+    border: 1px dashed $Border-Border-line-100;
+    border-radius: 4px;
+    background: $Primary-white-color;
+    color: $Text-Thirty-text-color;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      border-color: $Border-Border-line-300;
+      background: $Bg-Primary-bg-color;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  &__add-text {
+    @include typo-body-3;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $padding-3;
+    padding: $padding-3 $padding-4;
+    background: $Bg-Primary-bg-color;
+    border-radius: 4px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    color: $Text-Thirty-text-color;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__size {
+    @include typo-body-4;
+    color: $Text-Thirty-text-color;
+  }
+
+  &__delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $Text-Thirty-text-color;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $Error-color;
+    }
+  }
+
+  &__help {
+    @include typo-body-4;
+    color: $Text-Thirty-text-color;
+    margin: 0;
+  }
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

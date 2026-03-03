@@ -1,0 +1,209 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+@use '../tokens/breakpoints' as *;
+
+.page-inquiry {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.inquiry-page {
+  flex: 1;
+  padding: $header-total-height + $padding-11 0 $padding-12;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $header-total-height-mobile + $padding-10 0 $padding-11;
+  }
+
+  &__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 $padding-4;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $padding-10;
+
+    @media (max-width: $breakpoint-md) {
+      margin-bottom: $padding-8;
+    }
+  }
+
+  &__title {
+    @include typo-headline-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-3;
+
+    @media (max-width: $breakpoint-md) {
+      @include typo-headline-3;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+  }
+}
+
+.inquiry-form {
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-6;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-2;
+  }
+
+  &__label {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    font-weight: 500;
+  }
+
+  &__required {
+    color: $Error-color;
+    margin-left: $padding-1;
+  }
+
+  &__error {
+    @include typo-body-4;
+    color: $Error-color;
+  }
+
+  &__privacy {
+    margin-top: $padding-8;
+    padding-top: $padding-8;
+    border-top: 1px solid $Border-Border-line-100;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $padding-3;
+    margin-top: $padding-10;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+    }
+  }
+
+  &__btn {
+    flex: 1;
+
+    @media (max-width: $breakpoint-md) {
+      width: 100%;
+    }
+  }
+}
+
+.inquiry-privacy {
+  background: $Bg-Primary-bg-color;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $padding-4 $padding-5;
+    gap: $padding-4;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $padding-3;
+    }
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: $padding-2;
+  }
+
+  &__required {
+    color: $Error-color;
+    font-weight: 500;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: $padding-1;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $Text-Thirty-text-color;
+    @include typo-body-4;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $Text-Primary-text-color;
+    }
+  }
+
+  &__body {
+    padding: 0 $padding-5 $padding-5;
+  }
+
+  &__loading,
+  &__error {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    text-align: center;
+    padding: $padding-6 0;
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $padding-3;
+  }
+
+  &__content {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: $padding-4;
+    background: $Primary-white-color;
+    border: 1px solid $Border-Border-line-100;
+    border-radius: 4px;
+    @include typo-body-4;
+    color: $Text-Secondary-text-color;
+
+    h1, h2, h3, h4, h5, h6 {
+      @include typo-title-6;
+      margin: 0 0 $padding-2;
+    }
+
+    p {
+      margin: 0 0 $padding-3;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ul, ol {
+      margin: 0 0 $padding-3;
+      padding-left: $padding-5;
+    }
+
+    li {
+      margin-bottom: $padding-1;
+    }
+  }
+}
+
+.layout-800 {
+  max-width: 800px;
+  margin: 0 auto;
+}
