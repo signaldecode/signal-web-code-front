@@ -193,8 +193,8 @@ export const useOrder = () => {
         qty: `${order.itemCount}개`,
         date: formatShortDate(order.createdAt),
         status: {
-          text: order.statusDescription || order.status,
-          variant: getStatusVariant(order.status)
+          text: order.orderStatusDescription || order.statusDescription || order.orderStatus || order.status,
+          variant: getStatusVariant(order.orderStatus || order.status)
         },
         image: order.firstItemThumbnailUrl || ''
       }
@@ -412,10 +412,8 @@ export const useOrder = () => {
       }),
       shipping: {
         receiver: order.shippingAddress?.recipientName || '-',
-        zipcode: order.shippingAddress?.postalCode || '-',
-        address: `${order.shippingAddress?.address1 || ''} ${order.shippingAddress?.address2 || ''}`.trim() || '-',
         phone: order.shippingAddress?.recipientPhone || '-',
-        memo: order.customerNote || '-'
+        email: order.shippingAddress?.email || '-'
       },
       shipment: order.shipment ? {
         trackingNumber: order.shipment.trackingNumber || '-',
@@ -429,28 +427,6 @@ export const useOrder = () => {
       shippedAt: formatDate(order.shippedAt),
       deliveredAt: formatDate(order.deliveredAt),
       cancelledAt: formatDate(order.cancelledAt)
-    }
-  }
-
-  /**
-   * 비회원 주문 조회
-   * POST /api/v1/orders/guest/lookup
-   * @param {string} orderNumber - 주문번호
-   * @param {string} password - 비밀번호
-   */
-  const guestOrderLookup = async (orderNumber, password) => {
-    pending.value = true
-    error.value = null
-
-    try {
-      const response = await post('/orders/guest/lookup', { orderNumber, password })
-      return response.data || response
-    } catch (err) {
-      console.error('Failed to lookup guest order:', err)
-      error.value = err.data?.message || err.message || '주문 조회에 실패했습니다.'
-      throw err
-    } finally {
-      pending.value = false
     }
   }
 
@@ -475,28 +451,6 @@ export const useOrder = () => {
     }
   }
 
-  /**
-   * 비회원 주문 취소
-   * POST /api/v1/orders/guest/cancel
-   * @param {string} orderNumber - 주문번호
-   * @param {string} password - 비밀번호
-   */
-  const cancelGuestOrder = async (orderNumber, password) => {
-    pending.value = true
-    error.value = null
-
-    try {
-      const response = await post('/orders/guest/cancel', { orderNumber, password })
-      return response.data || response
-    } catch (err) {
-      console.error('Failed to cancel guest order:', err)
-      error.value = err.data?.message || err.message || '주문 취소에 실패했습니다.'
-      throw err
-    } finally {
-      pending.value = false
-    }
-  }
-
   return {
     // 상태
     pending,
@@ -507,9 +461,7 @@ export const useOrder = () => {
     getClaims,
     getOrder,
     getOrderByNumber,
-    guestOrderLookup,
     cancelOrder,
-    cancelGuestOrder,
     transformOrderList,
     transformClaimList,
     transformOrderDetail,

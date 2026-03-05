@@ -32,24 +32,10 @@ const orderNumber = computed(() => {
   return num
 })
 
-// 주문 상세 페이지로 이동
-const authStore = useAuthStore()
-const { getOrderByNumber, transformOrderDetail } = useOrder()
-
-const goToOrderDetail = async () => {
-  if (authStore.isLoggedIn) {
-    const id = orderId.value || orderNumber.value
-    navigateTo(`/mypage/orders/${id}${orderId.value ? '' : '?type=number'}`, { replace: true })
-  } else if (orderNumber.value) {
-    try {
-      const data = await getOrderByNumber(orderNumber.value)
-      const orderDetail = transformOrderDetail(data)
-      sessionStorage.setItem('guestOrderDetail', JSON.stringify(orderDetail))
-    } catch (e) {
-      // 조회 실패해도 페이지 이동 (guest-order에서 리다이렉트 처리)
-    }
-    navigateTo(`/guest-order/${orderNumber.value}`, { replace: true })
-  }
+// 주문 상세 페이지로 이동 (로그인 필수이므로 마이페이지로 이동)
+const goToOrderDetail = () => {
+  const id = orderId.value || orderNumber.value
+  navigateTo(`/mypage/orders/${id}${orderId.value ? '' : '?type=number'}`, { replace: true })
 }
 
 // 주문번호 복사

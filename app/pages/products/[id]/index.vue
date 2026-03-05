@@ -117,45 +117,30 @@ const handleAddToCart = async (data) => {
   }
 }
 
-// 현재 주문 데이터 임시 저장 (모달에서 사용)
-const pendingOrderData = ref(null)
-
 const handleBuyNow = (data) => {
-  // 로그인 상태 확인
+  // 로그인 상태 확인 - 비로그인 시 주문 데이터 저장 후 로그인 페이지로 리다이렉트
   if (!authStore.isLoggedIn) {
-    // 주문 데이터 임시 저장
-    pendingOrderData.value = data
-    showGuestModal.value = true
+    const orderItem = {
+      productId: data.product.id,
+      variantId: data.variant?.id || null,
+      quantity: data.quantity || 1,
+      productName: data.product.name,
+      productImage: data.product.image,
+      optionName: data.variant?.name || '',
+      price: data.variant?.price || data.product.price,
+      totalPrice: (data.variant?.price || data.product.price) * (data.quantity || 1)
+    }
+
+    if (import.meta.client) {
+      sessionStorage.setItem('orderItems', JSON.stringify([orderItem]))
+    }
+
+    router.push('/login?redirect=/order')
     return
   }
 
   // 로그인된 경우 바로 구매
   buyNow(data.product, data.variant, data.quantity)
-}
-
-// 로그인 후 주문하기
-const handleLoginAndBuy = () => {
-  if (!pendingOrderData.value) return
-
-  // sessionStorage에 주문 데이터 저장
-  const data = pendingOrderData.value
-  const orderItem = {
-    productId: data.product.id,
-    variantId: data.variant?.id || null,
-    quantity: data.quantity || 1,
-    productName: data.product.name,
-    productImage: data.product.image,
-    optionName: data.variant?.name || '',
-    price: data.variant?.price || data.product.price,
-    totalPrice: (data.variant?.price || data.product.price) * (data.quantity || 1)
-  }
-
-  if (import.meta.client) {
-    sessionStorage.setItem('orderItems', JSON.stringify([orderItem]))
-  }
-
-  showGuestModal.value = false
-  router.push('/login?redirect=/order')
 }
 
 const handleToggleWishlist = async (isWishlisted) => {
@@ -183,9 +168,6 @@ const handleToggleWishlist = async (isWishlisted) => {
     showError(message)
   }
 }
-
-// 비회원 주문 모달
-const showGuestModal = ref(false)
 
 // 로그인 필요 모달 (위시리스트용)
 const showLoginRequiredModal = ref(false)
@@ -334,12 +316,6 @@ const handleDownloadCoupon = async (coupon) => {
       v-model="isQnaModalOpen"
       :product="product"
       @submitted="handleQnaSubmitted"
-    />
-
-    <!-- 로그인 안내 모달 -->
-    <GuestOrderModal
-      v-model="showGuestModal"
-      @login="handleLoginAndBuy"
     />
 
     <!-- 로그인 필요 모달 (위시리스트) -->

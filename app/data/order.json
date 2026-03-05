@@ -108,12 +108,21 @@
         "apply": "적용"
       },
       "point": {
-        "label": "포인트 사용",
-        "placeholder": "사용할 포인트를 입력해주세요",
-        "apply": "전액 사용",
-        "available": "사용 가능 포인트",
+        "label": "적립금 사용",
+        "placeholder": "적립금을 사용해주세요",
+        "use": "적립금 사용",
+        "modify": "적립금 수정",
         "unit": "P"
       }
+    },
+    "pointModal": {
+      "title": "적립금 사용",
+      "available": "사용 가능 적립금",
+      "placeholder": "사용할 적립금을 입력해주세요",
+      "useMax": "적립금 최대 사용",
+      "unit": "P",
+      "cancel": "취소",
+      "confirm": "확인"
     },
     "payment": {
       "title": "결제 수단",
@@ -214,6 +223,11 @@
     "ordererPhone": "주문자 연락처 형식이 올바르지 않습니다.",
     "shippingPhone": "배송지 연락처 형식이 올바르지 않습니다.",
     "shippingEmail": "받으실 이메일 형식이 올바르지 않습니다."
+  },
+  "cancelModal": {
+    "title": "결제 취소",
+    "message": "결제가 완료되지 않았습니다.\n주문이 취소됩니다.",
+    "confirm": "확인"
   },
   "dummy": {
     "products": [

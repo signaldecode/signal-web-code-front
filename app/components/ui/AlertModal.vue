@@ -88,7 +88,7 @@ const iconByVariant = computed(() => {
       <p class="alert-modal__message">{{ message }}</p>
     </div>
     <template #footer>
-      <BaseButton variant="bg" color="black" size="medium" @click="handleConfirm">
+      <BaseButton variant="bg" color="black" size="big" @click="handleConfirm">
         {{ confirmText }}
       </BaseButton>
     </template>

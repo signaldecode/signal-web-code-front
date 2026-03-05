@@ -15,28 +15,28 @@ const props = defineProps({
   couponDiscount: {
     type: Number,
     default: 0
-  },
-  availablePoint: {
-    type: Number,
-    required: true
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'openCouponModal'])
+const emit = defineEmits(['update:modelValue', 'openCouponModal', 'openPointModal'])
 
-const updateField = (field, value) => {
-  emit('update:modelValue', {
-    ...props.modelValue,
-    [field]: value
-  })
-}
+// 포인트 사용 여부
+const hasPointUsed = computed(() => {
+  const point = parseInt(props.modelValue.point) || 0
+  return point > 0
+})
 
-const useAllPoint = () => {
-  updateField('point', String(props.availablePoint))
-}
+// 포인트 버튼 라벨
+const pointButtonLabel = computed(() => {
+  return hasPointUsed.value ? props.labels.point.modify : props.labels.point.use
+})
 
 const handleOpenCouponModal = () => {
   emit('openCouponModal')
+}
+
+const handleOpenPointModal = () => {
+  emit('openPointModal')
 }
 </script>
 
@@ -62,30 +62,27 @@ const handleOpenCouponModal = () => {
         </button>
       </div>
 
-      <!-- 포인트 입력 -->
-      <!-- <div class="order-coupon__row">
+      <!-- 포인트 사용 -->
+      <div class="order-coupon__row">
         <div class="order-coupon__input-wrapper">
           <BaseInput
-            :model-value="modelValue.point"
-            type="number"
+            :model-value="modelValue.point ? `${Number(modelValue.point).toLocaleString()}${labels.point.unit}` : ''"
+            type="text"
             :placeholder="labels.point.placeholder"
-            @update:model-value="updateField('point', $event)"
+            :readonly="true"
+            :disabled="true"
           />
         </div>
         <BaseButton
-          :label="labels.point.apply"
+          :label="pointButtonLabel"
           variant="line"
           color="black"
           size="big"
           type="button"
           class="order-coupon__apply-btn"
-          @click="useAllPoint"
+          @click="handleOpenPointModal"
         />
       </div>
-      <p class="order-coupon__available">
-        {{ labels.point.available }}:
-        <strong>{{ availablePoint.toLocaleString() }}{{ labels.point.unit }}</strong>
-      </p> -->
     </div>
   </section>
 </template>

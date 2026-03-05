@@ -13,9 +13,6 @@ const cart = useCart()
 const { freeShippingAmount, baseShippingFee } = useShopInfo()
 const authStore = useAuthStore()
 
-// 비회원 주문 모달
-const showGuestModal = ref(false)
-
 // 추천상품: best 리스트 재사용
 const { products: bestProducts, pending: bestPending } = useProducts({ tag: 'best', size: 4 })
 
@@ -214,29 +211,19 @@ const handleOrder = () => {
   const orderItems = prepareOrderItems()
   if (!orderItems) return
 
-  // 로그인 상태 확인
+  // 주문 상품 저장
+  if (import.meta.client) {
+    sessionStorage.setItem('orderItems', JSON.stringify(orderItems))
+  }
+
+  // 로그인 상태 확인 - 비로그인 시 로그인 페이지로 리다이렉트
   if (!authStore.isLoggedIn) {
-    showGuestModal.value = true
+    navigateTo('/login?redirect=/order')
     return
   }
 
-  // 로그인된 경우 바로 주문 페이지로
-  if (import.meta.client) {
-    sessionStorage.setItem('orderItems', JSON.stringify(orderItems))
-  }
+  // 로그인된 경우 주문 페이지로
   navigateTo('/order')
-}
-
-// 로그인 후 주문하기
-const handleLogin = () => {
-  const orderItems = prepareOrderItems()
-  if (!orderItems) return
-
-  if (import.meta.client) {
-    sessionStorage.setItem('orderItems', JSON.stringify(orderItems))
-  }
-  showGuestModal.value = false
-  navigateTo('/login?redirect=/order')
 }
 
 // 주문 버튼 라벨
@@ -354,12 +341,6 @@ const submitLabel = computed(() => {
       :disabled="cartProducts.length === 0"
       hide-agreements
       @submit="handleOrder"
-    />
-
-    <!-- 로그인 안내 모달 -->
-    <GuestOrderModal
-      v-model="showGuestModal"
-      @login="handleLogin"
     />
   </div>
 </template>

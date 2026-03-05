@@ -3,6 +3,7 @@ import paymentData from '~/data/payment.json'
 import mainData from '~/data/main.json'
 
 const route = useRoute()
+const { cancelOrder } = useOrder()
 
 useHead({ title: paymentData.fail.seo.title })
 useSeoMeta({
@@ -11,6 +12,23 @@ useSeoMeta({
 })
 
 const errorMessage = computed(() => route.query.message || '')
+const orderId = computed(() => route.query.orderId || '')
+
+// 결제 실패 시 주문 취소
+onMounted(async () => {
+  if (orderId.value) {
+    try {
+      await cancelOrder(orderId.value)
+    } catch (e) {
+      console.warn('Failed to cancel order:', e)
+    }
+  }
+  // sessionStorage에 저장된 정보 삭제
+  if (import.meta.client) {
+    sessionStorage.removeItem('paymentOrder')
+    sessionStorage.removeItem('pendingOrderNumber')
+  }
+})
 
 const goToOrder = () => navigateTo('/order', { replace: true })
 const goHome = () => navigateTo('/', { replace: true })

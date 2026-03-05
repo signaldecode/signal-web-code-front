@@ -50,6 +50,7 @@ onMounted(async () => {
     // 주문 상품 정보 삭제
     clearOrderItems()
     sessionStorage.removeItem('paymentOrder')
+    sessionStorage.removeItem('pendingOrderNumber')
 
     // 주문완료 페이지로 이동
     const queryParams = new URLSearchParams()

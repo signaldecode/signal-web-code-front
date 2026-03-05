@@ -28,13 +28,11 @@ export const useSections = () => {
 
     // 이미 데이터가 있으면 스킵
     if (sectionData.value[keyword]) {
-      console.log(`[useSections] ${keyword}: 캐시된 데이터 사용`)
       return sectionData.value[keyword]
     }
 
     try {
       const url = buildUrl(`/sections/${keyword}`)
-      console.log(`[useSections] ${keyword}: API 호출 시작`, url)
 
       const response = await $fetch(url, {
         method: 'GET',
@@ -48,7 +46,6 @@ export const useSections = () => {
       return data
     } catch (err) {
       const status = err?.response?.status || err?.status || err?.statusCode
-      console.log(`[useSections] ${keyword}: API 에러 (${status})`)
       if (status !== 401) {
         console.error(`[useSections] 에러 [${keyword}]:`, err)
       }

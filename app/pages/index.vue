@@ -128,7 +128,6 @@ const loadSections = async () => {
   if (!sections.value?.length) return
 
   sectionsLoaded.value = true
-  console.log('[index] 섹션 로드 시작:', sections.value.map(s => s.keyword))
 
   await Promise.all([
     fetchSections(sections.value),

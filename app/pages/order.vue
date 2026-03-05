@@ -6,11 +6,15 @@ import { validate } from '~/utils/validators'
 const router = useRouter()
 const authStore = useAuthStore()
 const { warning } = useToast()
-const { getOrderItems, clearOrderItems, createOrder } = useOrder()
+const { getOrderItems, clearOrderItems, createOrder, cancelOrder } = useOrder()
 const { requestPayment } = usePayments()
-const { fetchAddresses, defaultAddress } = useAddress()
 const { removeFromCart } = useCart()
 const { freeShippingAmount, baseShippingFee } = useShopInfo()
+
+// 로그인 필수 - 비로그인 시 로그인 페이지로 리다이렉트
+definePageMeta({
+  middleware: ['auth']
+})
 
 // SEO
 useHead({ title: orderData.seo.title })
@@ -22,46 +26,127 @@ useSeoMeta({
   ogImage: orderData.seo.ogImage
 })
 
-// 회원 여부
-const isMember = computed(() => authStore.isLoggedIn)
-
 // 주문 상품 (바로구매 or 장바구니에서 가져옴)
 const orderItems = ref([])
 
-onMounted(async () => {
-  // 주문 상품 로드
+// 생성된 주문번호 (결제 전 상태) - 페이지 이탈 시 취소용
+const pendingOrderNumber = ref(null)
+
+// 결제 리다이렉트 진행 중 여부 (success/fail 페이지로 이동 중)
+const isPaymentRedirecting = ref(false)
+
+// 취소 알럿 모달
+const showCancelModal = ref(false)
+
+// sessionStorage 키
+const PENDING_ORDER_KEY = 'pendingOrderNumber'
+
+// pendingOrderNumber를 sessionStorage에 저장
+const savePendingOrder = (orderNumber) => {
+  pendingOrderNumber.value = orderNumber
+  if (import.meta.client && orderNumber) {
+    sessionStorage.setItem(PENDING_ORDER_KEY, orderNumber)
+  }
+}
+
+// pendingOrderNumber 초기화
+const clearPendingOrder = () => {
+  pendingOrderNumber.value = null
+  if (import.meta.client) {
+    sessionStorage.removeItem(PENDING_ORDER_KEY)
+  }
+}
+
+// 주문 취소 실행
+const executeCancelOrder = async (orderNumber = null) => {
+  const targetOrder = orderNumber || pendingOrderNumber.value
+  if (targetOrder) {
+    try {
+      await cancelOrder(targetOrder)
+    } catch (e) {
+      console.warn('Failed to cancel pending order:', e)
+    }
+    if (!orderNumber) {
+      clearPendingOrder()
+    }
+  }
+}
+
+// 기존 미결제 주문 취소 (새 주문 생성 전 호출)
+const cancelPreviousPendingOrder = async () => {
+  // sessionStorage에서 이전 주문번호 확인
+  if (import.meta.client) {
+    const storedOrder = sessionStorage.getItem(PENDING_ORDER_KEY)
+    if (storedOrder) {
+      try {
+        await cancelOrder(storedOrder)
+      } catch (e) {
+        console.warn('Failed to cancel previous pending order:', e)
+      }
+      sessionStorage.removeItem(PENDING_ORDER_KEY)
+    }
+  }
+  // ref에 저장된 주문도 취소
+  if (pendingOrderNumber.value) {
+    await executeCancelOrder()
+  }
+}
+
+// 취소 알럿 확인 시 호출
+const handleCancelConfirm = async () => {
+  showCancelModal.value = false
+  await executeCancelOrder()
+  clearPendingOrder()
+}
+
+// 페이지 이탈 시 미결제 주문 취소 (알럿 표시)
+const showCancelAlert = () => {
+  if (pendingOrderNumber.value && !isPaymentRedirecting.value) {
+    showCancelModal.value = true
+    return true // 이탈 중단
+  }
+  return false
+}
+
+// beforeunload 이벤트 핸들러 (브라우저 닫기/새로고침)
+const handleBeforeUnload = () => {
+  // 결제 리다이렉트 중이면 취소하지 않음
+  if (isPaymentRedirecting.value) return
+
+  const orderToCancel = pendingOrderNumber.value || (import.meta.client && sessionStorage.getItem(PENDING_ORDER_KEY))
+  if (orderToCancel) {
+    // sendBeacon으로 비동기 취소 요청 (페이지 종료 시에도 전송 보장)
+    const apiBase = useRuntimeConfig().public.apiBase || ''
+    navigator.sendBeacon(`${apiBase}/orders/${orderToCancel}/cancel`)
+    sessionStorage.removeItem(PENDING_ORDER_KEY)
+  }
+}
+
+onMounted(() => {
+  if (import.meta.client) {
+    window.addEventListener('beforeunload', handleBeforeUnload)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (import.meta.client) {
+    window.removeEventListener('beforeunload', handleBeforeUnload)
+    // 결제 리다이렉트 중이 아닐 때만 주문 취소 (모달 없이 바로 취소)
+    if (!isPaymentRedirecting.value) {
+      const orderToCancel = pendingOrderNumber.value || sessionStorage.getItem(PENDING_ORDER_KEY)
+      if (orderToCancel) {
+        executeCancelOrder(orderToCancel)
+        clearPendingOrder()
+      }
+    }
+  }
+})
+
+onMounted(() => {
+  // 주문 상품 로드 (sessionStorage는 클라이언트에서만)
   const items = getOrderItems()
   if (items.length > 0) {
     orderItems.value = items
-  }
-
-  // 회원인 경우 사용자 정보 및 기본 배송지 가져오기
-  if (isMember.value) {
-    // 사용자 정보 및 배송지 목록 동시 조회
-    await Promise.all([
-      authStore.fetchUser(),
-      fetchAddresses()
-    ])
-
-    // 주문자 정보 채우기
-    if (authStore.user) {
-      orderer.name = authStore.user.name || ''
-      orderer.phone = authStore.user.phone || ''
-      orderer.email = authStore.user.email || ''
-    }
-
-    // 기본 배송지로 배송 정보 채우기
-    if (defaultAddress.value) {
-      shipping.recipient = defaultAddress.value.recipient || ''
-      shipping.phone = defaultAddress.value.phone || ''
-      shipping.zipcode = defaultAddress.value.zipcode || ''
-      shipping.address = defaultAddress.value.address || ''
-      shipping.addressDetail = defaultAddress.value.addressDetail || ''
-    } else if (authStore.user) {
-      // 기본 배송지가 없으면 회원 정보로 수령인/연락처만 채우기
-      shipping.recipient = authStore.user.name || ''
-      shipping.phone = authStore.user.phone || ''
-    }
   }
 })
 
@@ -101,11 +186,6 @@ const shipping = reactive({
   customMemo: ''
 })
 
-const guestPassword = reactive({
-  password: '',
-  passwordConfirm: ''
-})
-
 const payment = reactive({
   method: 'card',
   cardCompany: '',
@@ -118,10 +198,56 @@ const coupon = reactive({
   point: ''
 })
 
+// 사용 가능 적립금
+const availablePoint = ref(0)
+const { get } = useApi()
+
+// 사용 가능 적립금 조회 API
+const fetchAvailablePoint = async () => {
+  try {
+    const res = await get('/users/me/points/available')
+    if (res?.success) {
+      availablePoint.value = res.data || 0
+    }
+  } catch (e) {
+    availablePoint.value = 0
+  }
+}
+
+// 사용자 정보 조회 (SSR에서 fetch 후 hydration - 네트워크 탭에 안 보임)
+const { data: userData } = await useAsyncData('order-user-data', () =>
+  $fetch('/api/_internal/me'),
+  { server: true }
+)
+
+// 사용자 정보로 폼 초기화
+const initUserData = () => {
+  const res = userData.value
+  if (res?.success && res?.data) {
+    const user = res.data
+
+    // 주문자 정보 채우기
+    orderer.name = user.name || ''
+    orderer.phone = user.phone || ''
+    orderer.email = user.email || ''
+
+    // 수령인/연락처도 회원 기본 정보에서 가져오기
+    shipping.recipient = user.name || ''
+    shipping.phone = user.phone || ''
+  }
+}
+
+// 즉시 실행 및 데이터 변경 시 재실행
+initUserData()
+watch(userData, initUserData)
+
 // 쿠폰 선택 모달
 const isCouponModalOpen = ref(false)
 const selectedCoupon = ref(null)
 const couponDiscount = ref(0)
+
+// 적립금 사용 모달
+const isPointModalOpen = ref(false)
 
 const agreements = reactive({
   all: false,
@@ -160,7 +286,7 @@ const summary = computed(() => {
 
   // 포인트 사용
   const pointUsed = parseInt(coupon.point) || 0
-  base.pointUsed = Math.min(pointUsed, orderData.dummy.availablePoint)
+  base.pointUsed = Math.min(pointUsed, availablePoint.value)
 
   // 총 결제 금액
   base.total = base.productTotal + base.shippingFee - base.discount - base.couponDiscount - base.pointUsed
@@ -168,28 +294,8 @@ const summary = computed(() => {
   return base
 })
 
-// 필수 약관 동의 여부 (회원은 약관 동의 불필요)
-const isAgreementValid = computed(() => {
-  if (isMember.value) return true
-  return agreements.terms && agreements.privacy
-})
-
-// 배송지 선택 모달
-const isAddressModalOpen = ref(false)
-
-// 배송지 선택 (저장된 배송지 목록에서 선택)
-const selectAddress = () => {
-  isAddressModalOpen.value = true
-}
-
-// 배송지 선택 완료 처리
-const handleAddressSelect = (address) => {
-  shipping.recipient = address.recipient
-  shipping.phone = address.phone
-  shipping.zipcode = address.zipcode
-  shipping.address = address.address
-  shipping.addressDetail = address.addressDetail || ''
-}
+// 회원은 약관 동의 불필요 (가입 시 이미 동의)
+const isAgreementValid = computed(() => true)
 
 // 쿠폰 모달 열기
 const openCouponModal = () => {
@@ -202,20 +308,19 @@ const handleCouponSelect = ({ coupon, discountAmount }) => {
   couponDiscount.value = discountAmount
 }
 
+// 적립금 모달 열기
+const openPointModal = async () => {
+  await fetchAvailablePoint()
+  isPointModalOpen.value = true
+}
+
+// 적립금 사용 확인
+const handlePointConfirm = (point) => {
+  coupon.point = String(point)
+}
+
 // 결제하기
 const handleSubmit = async () => {
-  if (!isAgreementValid.value) {
-    warning(orderData.sections.agreements.requiredAlert || '필수 약관에 동의해주세요.')
-    return
-  }
-
-  // 연락처 유효성 검사
-  // 비회원인 경우 주문자 연락처도 검사
-  if (!isMember.value && !validate('phone', orderer.phone.replace(/-/g, ''))) {
-    warning(orderData.validation?.ordererPhone || '주문자 연락처 형식이 올바르지 않습니다.')
-    return
-  }
-
   // 배송지 연락처 검사
   if (!validate('phone', shipping.phone.replace(/-/g, ''))) {
     warning(orderData.validation?.shippingPhone || '배송지 연락처 형식이 올바르지 않습니다.')
@@ -228,6 +333,9 @@ const handleSubmit = async () => {
     return
   }
 
+  // 기존 미결제 주문이 있으면 먼저 취소
+  await cancelPreviousPendingOrder()
+
   // 주문 생성 요청 데이터
   const orderPayload = {
     items: orderItems.value.map(item => ({
@@ -238,31 +346,20 @@ const handleSubmit = async () => {
     shippingAddress: {
       recipientName: shipping.recipient,
       recipientPhone: shipping.phone,
-      recipientEmail: shipping.email,
-      postalCode: shipping.zipcode,
-      address1: shipping.address,
-      address2: shipping.addressDetail
+      email: shipping.email
     },
     expectedAmount: summary.value.total,
-    customerNote: shipping.memo === 'custom' ? shipping.customMemo : shipping.memo,
-    orderChannel: 'WEB'
-  }
-
-  // 선택된 쿠폰이 있는 경우
-  if (selectedCoupon.value?.id) {
-    orderPayload.userCouponId = selectedCoupon.value.id
-  }
-
-  // 비회원인 경우 guest 정보 추가
-  if (!isMember.value) {
-    orderPayload.guestEmail = orderer.email
-    orderPayload.guestPhone = orderer.phone
-    orderPayload.guestPassword = guestPassword.password
+    orderChannel: 'WEB',
+    userCouponId: selectedCoupon.value?.id || null,
+    usedPoint: parseInt(coupon.point) || 0
   }
 
   const result = await createOrder(orderPayload)
 
   if (result.success) {
+    // 미결제 주문번호 저장 (페이지 이탈 시 취소용)
+    savePendingOrder(result.orderNumber)
+
     // 주문 생성 성공 → 결제 정보 sessionStorage에 저장 (승인 페이지에서 사용)
     if (import.meta.client) {
       sessionStorage.setItem('paymentOrder', JSON.stringify({
@@ -279,7 +376,10 @@ const handleSubmit = async () => {
       ? `${firstProduct} 외 ${orderProducts.value.length - 1}건`
       : firstProduct
 
-    // 토스페이먼츠 결제창 호출
+    // 토스페이먼츠 결제창 호출 (리다이렉트 방식)
+    // 리다이렉트 전 플래그 설정하여 주문 취소 방지
+    isPaymentRedirecting.value = true
+
     const origin = window.location.origin
     const paymentResult = await requestPayment({
       amount: summary.value.total,
@@ -292,8 +392,17 @@ const handleSubmit = async () => {
       failUrl: `${origin}/payment/fail`
     })
 
-    // 사용자가 결제창을 닫은 경우
-    if (paymentResult?.cancelled) return
+    // 사용자가 결제창을 닫은 경우 → 취소 알럿 표시
+    if (paymentResult?.cancelled) {
+      isPaymentRedirecting.value = false
+      showCancelModal.value = true
+      return
+    }
+
+    // 결제 진행 중 (리다이렉트 완료) → 여기까지 오지 않음
+    // 만약 오게 되면 플래그 초기화
+    isPaymentRedirecting.value = false
+    clearPendingOrder()
   } else {
     warning(result.error)
   }
@@ -320,30 +429,13 @@ const handleSubmit = async () => {
             </div>
           </section>
 
-          <!-- 2. 주문자 정보 (비회원만 표시) -->
-          <OrderOrdererSection
-            v-if="!isMember"
-            :model-value="orderer"
-            :labels="orderData.sections.orderer"
-            @update:model-value="val => Object.assign(orderer, val)"
-          />
-
-          <!-- 3. 배송지 정보 -->
+          <!-- 2. 배송지 정보 -->
           <OrderShippingSection
             :model-value="shipping"
             :labels="orderData.sections.shipping"
-            :show-same-as-orderer="!isMember"
-            :show-select-address="isMember"
+            :show-same-as-orderer="false"
+            :show-select-address="false"
             @update:model-value="val => Object.assign(shipping, val)"
-            @select-address="selectAddress"
-          />
-
-          <!-- 4. 비회원 주문조회 비밀번호 (비회원만) -->
-          <OrderGuestPasswordSection
-            v-if="!isMember"
-            :model-value="guestPassword"
-            :labels="orderData.sections.guestPassword"
-            @update:model-value="val => Object.assign(guestPassword, val)"
           />
 
           <!-- 5. 할인 / 쿠폰 -->
@@ -352,8 +444,8 @@ const handleSubmit = async () => {
             :labels="orderData.sections.coupon"
             :selected-coupon="selectedCoupon"
             :coupon-discount="couponDiscount"
-            :available-point="orderData.dummy.availablePoint"
             @open-coupon-modal="openCouponModal"
+            @open-point-modal="openPointModal"
           />
 
           <!-- 6. 결제 수단 -->
@@ -369,23 +461,15 @@ const handleSubmit = async () => {
           :summary="summary"
           :labels="orderData.summary"
           :agreement-labels="orderData.sections.agreements"
-          :submit-label="isMember ? orderData.submit.member : orderData.submit.guest"
-          :disabled="!isAgreementValid"
-          :hide-agreements="isMember"
+          :submit-label="orderData.submit.member"
+          :disabled="false"
+          :hide-agreements="true"
           @submit="handleSubmit"
         />
       </form>
     </main>
 
     <Footer :data="mainData.footer" />
-
-    <!-- 배송지 선택 모달 (회원만) -->
-    <AddressSelectModal
-      v-if="isMember"
-      v-model="isAddressModalOpen"
-      mode="select"
-      @select="handleAddressSelect"
-    />
 
     <!-- 쿠폰 선택 모달 -->
     <CouponSelectModal
@@ -395,15 +479,34 @@ const handleSubmit = async () => {
       @select="handleCouponSelect"
     />
 
+    <!-- 적립금 사용 모달 -->
+    <PointUseModal
+      v-model="isPointModalOpen"
+      :labels="orderData.sections.pointModal"
+      :available-point="availablePoint"
+      :current-point="parseInt(coupon.point) || 0"
+      @confirm="handlePointConfirm"
+    />
+
     <FloatingPaymentBar
       v-model:agreements="agreements"
       :summary="summary"
       :labels="orderData.summary"
       :agreement-labels="orderData.sections.agreements"
-      :submit-label="isMember ? orderData.submit.member : orderData.submit.guest"
-      :disabled="!isAgreementValid"
-      :hide-agreements="isMember"
+      :submit-label="orderData.submit.member"
+      :disabled="false"
+      :hide-agreements="true"
       @submit="handleSubmit"
+    />
+
+    <!-- 결제 취소 알럿 모달 -->
+    <AlertModal
+      v-model="showCancelModal"
+      :title="orderData.cancelModal.title"
+      :message="orderData.cancelModal.message"
+      :confirm-label="orderData.cancelModal.confirm"
+      variant="warning"
+      @confirm="handleCancelConfirm"
     />
   </div>
 </template>

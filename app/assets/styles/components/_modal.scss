@@ -195,6 +195,70 @@
 }
 
 // --------------------------------------------
+// Point Use Modal
+// --------------------------------------------
+
+.point-use-modal {
+  display: flex;
+  flex-direction: column;
+  gap: space(20);
+  padding: space(8) 0;
+
+  &__available {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: space(16);
+    background-color: $Bg-Primary-bg-color;
+    border-radius: space(8);
+  }
+
+  &__available-label {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+  }
+
+  &__available-value {
+    @include typo-body-1;
+    color: $Primary-color;
+    font-weight: get-weight('Bold');
+  }
+
+  &__input-area {
+    width: 100%;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: space(8);
+    cursor: pointer;
+  }
+
+  &__checkbox-input {
+    width: space(20);
+    height: space(20);
+    margin: 0;
+    cursor: pointer;
+    accent-color: $Primary-color;
+  }
+
+  &__checkbox-label {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: space(12);
+
+    .base-button {
+      flex: 1;
+    }
+  }
+}
+
+// --------------------------------------------
 // Address Modal
 // --------------------------------------------
 

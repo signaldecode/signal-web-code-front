@@ -206,20 +206,12 @@ const handleReviewSubmitted = () => {
             <dd class="mypage-order-detail__td">{{ detail.shipping.receiver }}</dd>
           </div>
           <div class="mypage-order-detail__row">
-            <dt class="mypage-order-detail__th">{{ labels.zipcode }}</dt>
-            <dd class="mypage-order-detail__td">{{ detail.shipping.zipcode }}</dd>
-          </div>
-          <div class="mypage-order-detail__row">
-            <dt class="mypage-order-detail__th">{{ labels.address }}</dt>
-            <dd class="mypage-order-detail__td">{{ detail.shipping.address }}</dd>
-          </div>
-          <div class="mypage-order-detail__row">
             <dt class="mypage-order-detail__th">{{ labels.phone }}</dt>
             <dd class="mypage-order-detail__td">{{ detail.shipping.phone }}</dd>
           </div>
           <div class="mypage-order-detail__row">
-            <dt class="mypage-order-detail__th">{{ labels.memo }}</dt>
-            <dd class="mypage-order-detail__td">{{ detail.shipping.memo }}</dd>
+            <dt class="mypage-order-detail__th">{{ labels.email }}</dt>
+            <dd class="mypage-order-detail__td">{{ detail.shipping.email }}</dd>
           </div>
         </dl>
       </div>
