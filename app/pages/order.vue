@@ -93,6 +93,7 @@ const shipping = reactive({
   sameAsOrderer: false,
   recipient: '',
   phone: '',
+  email: '',
   zipcode: '',
   address: '',
   addressDetail: '',
@@ -221,6 +222,12 @@ const handleSubmit = async () => {
     return
   }
 
+  // 배송지 이메일 검사
+  if (!shipping.email || !validate('email', shipping.email)) {
+    warning(orderData.validation?.shippingEmail || '받으실 이메일 형식이 올바르지 않습니다.')
+    return
+  }
+
   // 주문 생성 요청 데이터
   const orderPayload = {
     items: orderItems.value.map(item => ({
@@ -231,6 +238,7 @@ const handleSubmit = async () => {
     shippingAddress: {
       recipientName: shipping.recipient,
       recipientPhone: shipping.phone,
+      recipientEmail: shipping.email,
       postalCode: shipping.zipcode,
       address1: shipping.address,
       address2: shipping.addressDetail

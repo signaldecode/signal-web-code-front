@@ -64,7 +64,7 @@ const handleClick = () => {
     <div class="mypage-order-row__meta">
       <p class="mypage-order-row__cell mypage-order-row__cell--price">{{ order.price }}</p>
       <p class="mypage-order-row__cell">{{ order.qty }}</p>
-      <p class="mypage-order-row__cell mypage-order-row__cell--muted">{{ order.date }}</p>
+      <p class="mypage-order-row__cell mypage-order-row__cell--muted">{{ orderDate }}</p>
     </div>
 
     <div

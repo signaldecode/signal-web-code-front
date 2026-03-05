@@ -27,6 +27,9 @@ const { post } = useApi()
 const cart = useCart()
 const { logoUrl, isLoaded: shopInfoLoaded, snsInfo } = useShopInfo()
 
+// 장바구니 수량 (반응성 보장)
+const cartCount = computed(() => cart.count.value)
+
 // SNS 링크에서 블로그 URL 추출
 const blogUrl = computed(() => {
   const info = snsInfo.value
@@ -271,7 +274,7 @@ onUnmounted(() => {
             :aria-label="logo.cartLabel"
             @click="handleCartClick"
           >
-            <IconCart size="md" :count="cart.count.value" decorative />
+            <IconCart size="md" :count="cartCount" decorative />
           </button>
         </div>
       </div>

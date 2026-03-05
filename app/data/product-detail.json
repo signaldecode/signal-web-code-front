@@ -43,12 +43,9 @@
   },
   "info": {
     "title": "이용 방법",
-    "specs": [
-      { "label": "제조사", "value": "theon" },
-      { "label": "제조국", "value": "한국" },
-      { "label": "주의사항", "value": "염소계 표백제 주의" },
-      { "label": "색상", "value": "블랙 / 화이트" }
-    ]
+    "guideTitle": "이용안내",
+    "policyTitle": "환불규정",
+    "specs": []
   },
   "faq": {
     "title": "자주 묻는 질문",

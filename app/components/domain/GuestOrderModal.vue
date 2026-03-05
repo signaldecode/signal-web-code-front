@@ -8,7 +8,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'login', 'guest'])
+const emit = defineEmits(['update:modelValue', 'login'])
 
 const isOpen = computed({
   get: () => props.modelValue,
@@ -17,10 +17,6 @@ const isOpen = computed({
 
 const handleLogin = () => {
   emit('login')
-}
-
-const handleGuest = () => {
-  emit('guest')
 }
 </script>
 
@@ -52,14 +48,6 @@ const handleGuest = () => {
           size="small"
           full-width
           @click="handleLogin"
-        />
-        <BaseButton
-          :label="cartData.guestModal.guestButton"
-          variant="line"
-          color="black"
-          size="small"
-          full-width
-          @click="handleGuest"
         />
       </div>
     </template>

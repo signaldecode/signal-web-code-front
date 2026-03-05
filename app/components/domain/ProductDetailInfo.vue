@@ -4,6 +4,14 @@ defineProps({
     type: Array,
     default: () => []
   },
+  guide: {
+    type: String,
+    default: ''
+  },
+  policy: {
+    type: String,
+    default: ''
+  },
   labels: {
     type: Object,
     required: true
@@ -26,6 +34,14 @@ defineProps({
         >
           <th class="product-detail-info__label">{{ spec.label }}</th>
           <td class="product-detail-info__value">{{ spec.value }}</td>
+        </tr>
+        <tr class="product-detail-info__row">
+          <th class="product-detail-info__label">{{ labels.guideTitle }}</th>
+          <td class="product-detail-info__value" v-html="guide" />
+        </tr>
+        <tr class="product-detail-info__row">
+          <th class="product-detail-info__label">{{ labels.policyTitle }}</th>
+          <td class="product-detail-info__value" v-html="policy" />
         </tr>
       </tbody>
     </table>

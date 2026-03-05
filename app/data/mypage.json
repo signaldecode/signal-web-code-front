@@ -436,7 +436,8 @@
         "EARNED": "적립",
         "USED": "사용",
         "CANCELLED": "취소",
-        "EXPIRED": "소멸"
+        "EXPIRED": "소멸",
+        "ADMIN": "관리자"
       },
       "empty": {
         "title": "아직 쌓인 적립금이 없어요.",

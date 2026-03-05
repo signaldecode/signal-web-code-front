@@ -35,10 +35,10 @@ const { swipeEvents: recoSwipeEvents } = useSwipe({
   }
 })
 
-// 장바구니 조회
+// 장바구니 조회 (항상 최신 데이터 fetch)
 onMounted(async () => {
   try {
-    await cart.fetchCart()
+    await cart.fetchCart(true)
   } catch (e) {
     console.warn('Failed to fetch cart:', e)
   }
@@ -239,18 +239,6 @@ const handleLogin = () => {
   navigateTo('/login?redirect=/order')
 }
 
-// 비회원 주문하기
-const handleGuestOrder = () => {
-  const orderItems = prepareOrderItems()
-  if (!orderItems) return
-
-  if (import.meta.client) {
-    sessionStorage.setItem('orderItems', JSON.stringify(orderItems))
-  }
-  showGuestModal.value = false
-  navigateTo('/order?guest=true')
-}
-
 // 주문 버튼 라벨
 const submitLabel = computed(() => {
   if (selectedProducts.value.length > 0) {
@@ -368,11 +356,10 @@ const submitLabel = computed(() => {
       @submit="handleOrder"
     />
 
-    <!-- 비회원 주문 모달 -->
+    <!-- 로그인 안내 모달 -->
     <GuestOrderModal
       v-model="showGuestModal"
       @login="handleLogin"
-      @guest="handleGuestOrder"
     />
   </div>
 </template>

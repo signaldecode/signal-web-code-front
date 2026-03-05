@@ -10,8 +10,12 @@ export const useCart = () => {
   const pending = useState('cart-pending', () => false)
   const error = useState('cart-error', () => null)
   const isLoaded = useState('cart-loaded', () => false)
+  const count = useState('cart-count', () => 0)
 
-  const count = computed(() => items.value.length)
+  // items 변경 시 count 동기화 헬퍼
+  const updateCount = () => {
+    count.value = Array.isArray(items.value) ? items.value.length : 0
+  }
 
   const getOrCreateGuestSessionId = () => {
     // guest 식별용 (요구사항: X-Session-Id)
@@ -61,8 +65,8 @@ export const useCart = () => {
       return items.value
     }
 
-    // 이미 로딩 중이면 스킵 (중복 호출 방지)
-    if (pending.value) {
+    // 이미 로딩 중이면 스킵 (단, force=true면 무시)
+    if (pending.value && !force) {
       return items.value
     }
 
@@ -80,6 +84,7 @@ export const useCart = () => {
       const nextItems = data?.items ?? data?.cartItems ?? data?.content ?? []
       items.value = Array.isArray(nextItems) ? nextItems : []
       isLoaded.value = true
+      updateCount()
 
       return items.value
     } catch (e) {
@@ -92,6 +97,7 @@ export const useCart = () => {
 
   const setItems = (next) => {
     items.value = Array.isArray(next) ? next : []
+    updateCount()
   }
 
   /**
@@ -123,16 +129,8 @@ export const useCart = () => {
         body: [item] // 배열로 전송
       })
 
-      // 응답에서 장바구니 갱신
-      const data = res?.data ?? res
-      const nextItems = data?.items ?? data?.cartItems ?? data?.content ?? []
-      if (Array.isArray(nextItems) && nextItems.length > 0) {
-        items.value = nextItems
-        isLoaded.value = true
-      } else {
-        // 응답에 items가 없으면 다시 fetch (강제 갱신)
-        await fetchCart(true)
-      }
+      // 응답 성공 후 항상 장바구니 다시 조회 (API 응답 형식에 의존하지 않음)
+      await fetchCart(true)
 
       return res
     } catch (e) {
@@ -203,6 +201,7 @@ export const useCart = () => {
         const id = it.id ?? it.cartItemId
         return !ids.includes(id)
       })
+      updateCount()
 
       return true
     } catch (e) {
@@ -229,6 +228,7 @@ export const useCart = () => {
 
       // 로컬 상태 비우기
       items.value = []
+      updateCount()
 
       return true
     } catch (e) {
@@ -287,14 +287,17 @@ export const useCart = () => {
   const addItem = (product) => {
     if (!product) return
     items.value = [...items.value, product]
+    updateCount()
   }
 
   const removeItemById = (id) => {
     items.value = items.value.filter((p) => p?.id !== id)
+    updateCount()
   }
 
   const clear = () => {
     items.value = []
+    updateCount()
   }
 
   /**

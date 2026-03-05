@@ -13,8 +13,7 @@ const router = useRouter()
 const currentStepIndex = 2
 
 const goEdit = () => {
-  // TODO: 마이페이지/회원정보 수정 페이지 연결
-  router.push('/support')
+  router.push('/mypage/profile')
 }
 
 const goShop = () => {

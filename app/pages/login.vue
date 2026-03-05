@@ -13,7 +13,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const { mergeCart } = useCart();
 
-const tab = ref("member"); // member | guest
+// const tab = ref("member"); // member | guest
 
 // redirect 파라미터 (로그인 후 이동할 페이지)
 const redirectPath = computed(() => route.query.redirect || "/");
@@ -79,28 +79,28 @@ const handleKakaoLogin = () => {
   alert(loginData.messages.preparing);
 };
 
-// 비회원 주문조회 폼
-const { guestOrderLookup, transformOrderDetail } = useOrder();
+// 비회원 주문조회 폼 (주석 처리)
+// const { guestOrderLookup, transformOrderDetail } = useOrder();
 
-const guestForm = reactive({
-  orderNumber: "",
-  password: "",
-});
+// const guestForm = reactive({
+//   orderNumber: "",
+//   password: "",
+// });
 
-const handleGuestLookup = async () => {
-  try {
-    const data = await guestOrderLookup(
-      guestForm.orderNumber,
-      guestForm.password,
-    );
-    const orderDetail = transformOrderDetail(data);
-    // sessionStorage에 저장 후 이동
-    sessionStorage.setItem("guestOrderDetail", JSON.stringify(orderDetail));
-    router.push(`/guest-order/${data.orderNumber || guestForm.orderNumber}`);
-  } catch (err) {
-    alert(err.data?.message || loginData.guestForm.errorMessage);
-  }
-};
+// const handleGuestLookup = async () => {
+//   try {
+//     const data = await guestOrderLookup(
+//       guestForm.orderNumber,
+//       guestForm.password,
+//     );
+//     const orderDetail = transformOrderDetail(data);
+//     // sessionStorage에 저장 후 이동
+//     sessionStorage.setItem("guestOrderDetail", JSON.stringify(orderDetail));
+//     router.push(`/guest-order/${data.orderNumber || guestForm.orderNumber}`);
+//   } catch (err) {
+//     alert(err.data?.message || loginData.guestForm.errorMessage);
+//   }
+// };
 </script>
 
 <template>
@@ -109,6 +109,7 @@ const handleGuestLookup = async () => {
       <div class="login-page__inner layout-480">
         <h1 class="login-page__title">{{ loginData.page.title }}</h1>
 
+        <!-- 탭 (주석 처리 - 비회원 주문조회 비활성화)
         <div
           class="login-tabs"
           role="tablist"
@@ -127,10 +128,10 @@ const handleGuestLookup = async () => {
             {{ t.label }}
           </button>
         </div>
+        -->
 
         <!-- 회원 로그인 폼 -->
         <form
-          v-if="tab === 'member'"
           class="login-form"
           @submit.prevent="handleSubmit"
         >
@@ -242,7 +243,7 @@ const handleGuestLookup = async () => {
           </div>
         </form>
 
-        <!-- 비회원 주문조회 폼 -->
+        <!-- 비회원 주문조회 폼 (주석 처리)
         <form v-else class="login-form" @submit.prevent="handleGuestLookup">
           <div class="login-form__fields">
             <BaseInput
@@ -272,6 +273,7 @@ const handleGuestLookup = async () => {
             </BaseButton>
           </div>
         </form>
+        -->
       </div>
     </main>
 

@@ -127,6 +127,12 @@
     color: $Text-Thirty-text-color;
     margin-top: $padding-2;
   }
+
+  &__help {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    margin-top: $padding-1;
+  }
 }
 
 // --------------------------------------------

@@ -98,7 +98,10 @@ export const useProductDetail = (productId) => {
         stockQuantity: v.stockQuantity,
         stockStatus: v.stockStatus,
         optionValueIds: v.optionValueIds || []
-      })) || []
+      })) || [],
+      // 이용안내 / 환불규정
+      guide: p.guide || '',
+      policy: p.policy || ''
     }
   })
 

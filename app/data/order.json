@@ -47,6 +47,11 @@
           "label": "연락처",
           "placeholder": "'-' 없이 입력해주세요"
         },
+        "email": {
+          "label": "받으실 이메일",
+          "placeholder": "이메일 주소를 입력해주세요",
+          "help": "파일이 전송되는 이메일입니다. 올바른지 확인 부탁드립니다."
+        },
         "zipcode": {
           "label": "우편번호",
           "placeholder": "우편번호"
@@ -207,7 +212,8 @@
   },
   "validation": {
     "ordererPhone": "주문자 연락처 형식이 올바르지 않습니다.",
-    "shippingPhone": "배송지 연락처 형식이 올바르지 않습니다."
+    "shippingPhone": "배송지 연락처 형식이 올바르지 않습니다.",
+    "shippingEmail": "받으실 이메일 형식이 올바르지 않습니다."
   },
   "dummy": {
     "products": [

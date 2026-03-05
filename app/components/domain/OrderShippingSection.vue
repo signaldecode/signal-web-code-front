@@ -94,6 +94,7 @@ const handleSelectAddress = () => {
         />
       </div>
 
+      <!-- 주소 입력 (주석 처리)
       <AddressInput
         :zip="modelValue.zipcode"
         :address="modelValue.address"
@@ -103,7 +104,22 @@ const handleSelectAddress = () => {
         @update:address="handleAddressUpdate('address', $event)"
         @update:detail="handleAddressUpdate('addressDetail', $event)"
       />
+      -->
 
+      <div class="order-section__row order-section__row--full">
+        <BaseInput
+          :model-value="modelValue.email"
+          type="email"
+          :label="labels.fields.email?.label || '받으실 이메일'"
+          :placeholder="labels.fields.email?.placeholder || '이메일 주소를 입력해주세요'"
+          :required="true"
+          autocomplete="email"
+          @update:model-value="updateField('email', $event)"
+        />
+        <p class="order-section__help">{{ labels.fields.email?.help || '파일이 전송되는 이메일입니다. 올바른지 확인 부탁드립니다.' }}</p>
+      </div>
+
+      <!-- 배송메모 (주석 처리)
       <div class="order-section__row order-section__row--full">
         <BaseSelect
           :model-value="modelValue.memo"
@@ -121,6 +137,7 @@ const handleSelectAddress = () => {
           @update:model-value="updateField('customMemo', $event)"
         />
       </div>
+      -->
     </div>
   </section>
 </template>

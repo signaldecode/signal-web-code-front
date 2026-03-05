@@ -158,31 +158,6 @@ const handleLoginAndBuy = () => {
   router.push('/login?redirect=/order')
 }
 
-// 비회원 주문하기
-const handleGuestBuy = () => {
-  if (!pendingOrderData.value) return
-
-  // sessionStorage에 주문 데이터 저장
-  const data = pendingOrderData.value
-  const orderItem = {
-    productId: data.product.id,
-    variantId: data.variant?.id || null,
-    quantity: data.quantity || 1,
-    productName: data.product.name,
-    productImage: data.product.image,
-    optionName: data.variant?.name || '',
-    price: data.variant?.price || data.product.price,
-    totalPrice: (data.variant?.price || data.product.price) * (data.quantity || 1)
-  }
-
-  if (import.meta.client) {
-    sessionStorage.setItem('orderItems', JSON.stringify([orderItem]))
-  }
-
-  showGuestModal.value = false
-  router.push('/order?guest=true')
-}
-
 const handleToggleWishlist = async (isWishlisted) => {
   // 로그인 확인
   if (!authStore.isLoggedIn) {
@@ -302,6 +277,8 @@ const handleDownloadCoupon = async (coupon) => {
         <!-- Product Info (이용 방법) -->
         <ProductDetailInfo
           :specs="product.specs?.length ? product.specs : detailData.info.specs"
+          :guide="product.guide"
+          :policy="product.policy"
           :labels="detailData.info"
         />
 
@@ -359,11 +336,10 @@ const handleDownloadCoupon = async (coupon) => {
       @submitted="handleQnaSubmitted"
     />
 
-    <!-- 비회원 주문 모달 -->
+    <!-- 로그인 안내 모달 -->
     <GuestOrderModal
       v-model="showGuestModal"
       @login="handleLoginAndBuy"
-      @guest="handleGuestBuy"
     />
 
     <!-- 로그인 필요 모달 (위시리스트) -->
