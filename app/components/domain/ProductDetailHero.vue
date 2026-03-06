@@ -200,6 +200,12 @@ const copyUrl = async () => {
   }
 }
 
+const openSample = () => {
+  if (props.product.sampleUrl) {
+    window.open(props.product.sampleUrl, '_blank')
+  }
+}
+
 const addToCart = () => {
   // 옵션 선택 확인
   if (!isOptionSelected.value) {
@@ -268,18 +274,31 @@ defineExpose({
           :aria-label="labels.nextLabel"
           @click="nextImage"
         />
+        <!-- Dots Indicator -->
+        <div class="product-detail-hero__dots">
+          <button
+            v-for="(_, index) in images"
+            :key="index"
+            class="product-detail-hero__dot"
+            :class="{ 'product-detail-hero__dot--active': currentImageIndex === index }"
+            :aria-label="`이미지 ${index + 1}`"
+            @click="goToImage(index)"
+          />
+        </div>
       </div>
-      <!-- Dots Indicator -->
-      <div class="product-detail-hero__dots">
-        <button
-          v-for="(_, index) in images"
-          :key="index"
-          class="product-detail-hero__dot"
-          :class="{ 'product-detail-hero__dot--active': currentImageIndex === index }"
-          :aria-label="`이미지 ${index + 1}`"
-          @click="goToImage(index)"
-        />
-      </div>
+
+      <!-- Sample Button -->
+      <BaseButton
+        v-if="product.sampleUrl"
+        variant="line"
+        color="black"
+        size="big"
+        :full="true"
+        class="product-detail-hero__sample"
+        @click="openSample"
+      >
+        {{ labels.sampleLabel }}
+      </BaseButton>
     </div>
 
     <!-- Info -->

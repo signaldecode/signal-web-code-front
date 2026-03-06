@@ -101,7 +101,9 @@ export const useProductDetail = (productId) => {
       })) || [],
       // 이용안내 / 환불규정
       guide: p.guide || '',
-      policy: p.policy || ''
+      policy: p.policy || '',
+      // 샘플 URL
+      sampleUrl: p.sampleUrl || null
     }
   })
 

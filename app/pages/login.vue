@@ -47,6 +47,16 @@ const handleSubmit = async () => {
     });
 
     if (result.success) {
+      // CUSTOMER 역할 체크
+      if (result.user?.role !== "CUSTOMER") {
+        // 로그아웃 처리 (쿠키 삭제)
+        try {
+          await $fetch("/api/_internal/logout", { method: "POST" });
+        } catch {}
+        alert(loginData.messages.notCustomer);
+        return;
+      }
+
       // 로그인 응답에서 유저 정보를 직접 설정
       await authStore.login(result.user);
 

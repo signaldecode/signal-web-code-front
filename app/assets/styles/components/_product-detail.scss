@@ -143,6 +143,16 @@
     }
   }
 
+  &__sample.base-button {
+    margin-top: space(16);
+
+    &:hover {
+      background-color: $Primary-color !important;
+      border-color: $Primary-color !important;
+      color: $Primary-white-color !important;
+    }
+  }
+
   // Info Section
   &__info {
     width: 598px;
@@ -920,6 +930,7 @@
     padding: $padding-4 $padding-6;
     line-height: 1.6;
     vertical-align: middle;
+    white-space: pre-line;
 
     @include mobile {
       @include typo-body-4;

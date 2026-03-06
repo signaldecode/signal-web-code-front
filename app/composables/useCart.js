@@ -39,7 +39,7 @@ export const useCart = () => {
     const headers = {}
 
     // member: token 기반이라고 되어있어서 대응(있으면 Bearer로)
-    const tokenCookie = useCookie('access_token')
+    const tokenCookie = useCookie('user_access_token')
     const token =
       authStore.user?.accessToken ||
       authStore.user?.token ||

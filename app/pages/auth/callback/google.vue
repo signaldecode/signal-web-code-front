@@ -48,6 +48,15 @@ const handleLinkConfirm = async () => {
     );
 
     if (result.success) {
+      // CUSTOMER 역할 체크
+      if (result.user?.role !== "CUSTOMER") {
+        try { await $fetch("/api/_internal/logout", { method: "POST" }); } catch {}
+        alert(loginData.messages.notCustomer);
+        showLinkModal.value = false;
+        router.replace("/login");
+        return;
+      }
+
       await authStore.login(result.user);
       showLinkModal.value = false;
       try {
@@ -124,6 +133,13 @@ onMounted(async () => {
     if (data.isNewUser) {
       signupStore.setSocialAuth(data.signupToken, "google");
       router.replace("/signup/terms");
+      return;
+    }
+
+    // CUSTOMER 역할 체크
+    if (result.user?.role !== "CUSTOMER") {
+      try { await $fetch("/api/_internal/logout", { method: "POST" }); } catch {}
+      handleError("/login", loginData.messages.notCustomer);
       return;
     }
 

@@ -77,6 +77,7 @@
   },
   "messages": {
     "preparing": "준비 중입니다.",
-    "loginPreparing": "로그인 기능은 준비 중입니다."
+    "loginPreparing": "로그인 기능은 준비 중입니다.",
+    "notCustomer": "고객 계정만 로그인할 수 있습니다."
   }
 }

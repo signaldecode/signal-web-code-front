@@ -31,7 +31,7 @@ export const useWishlist = () => {
   const getAuthHeaders = () => {
     const headers = {}
 
-    const tokenCookie = useCookie('access_token')
+    const tokenCookie = useCookie('user_access_token')
     const token =
       authStore.user?.accessToken ||
       authStore.user?.token ||

@@ -18,64 +18,27 @@ const {
   fetchCoupons,
   downloadCoupon,
   downloadAllCoupons,
-  isDownloaded
+  isDownloaded,
+  // 등급별 쿠폰팩
+  gradePacks,
+  gradePacksPending,
+  fetchGradePacks,
+  downloadGradePack: downloadGradePackApi
 } = useDownloadableCoupons()
 
 // 로그인 필요 모달
 const showLoginModal = ref(false)
 
-// 등급별 쿠폰팩 더미 데이터 (추후 API 연동)
-const gradePacks = ref([
-  {
-    id: 1,
-    gradeName: 'SILVER',
-    condition: '10만원 이상 구매',
-    coupons: [
-      { name: '5% 할인 쿠폰', description: '전 상품' },
-      { name: '3,000원 할인 쿠폰', description: '3만원 이상 구매 시' }
-    ],
-    isDownloaded: false
-  },
-  {
-    id: 2,
-    gradeName: 'GOLD',
-    condition: '30만원 이상 구매',
-    coupons: [
-      { name: '10% 할인 쿠폰', description: '전 상품' },
-      { name: '5,000원 할인 쿠폰', description: '5만원 이상 구매 시' },
-      { name: '무료배송 쿠폰', description: '전 상품' }
-    ],
-    isDownloaded: false
-  },
-  {
-    id: 3,
-    gradeName: 'VIP',
-    condition: '월 50만원 이상 구매',
-    coupons: [
-      { name: '15% 할인 쿠폰', description: '전 상품' },
-      { name: '10,000원 할인 쿠폰', description: '10만원 이상 구매 시' },
-      { name: '무료배송 쿠폰', description: '전 상품' },
-      { name: '생일 20% 할인 쿠폰', description: '생일 당월' }
-    ],
-    isDownloaded: true
-  },
-  {
-    id: 4,
-    gradeName: 'VVIP',
-    condition: '100만원 이상 구매',
-    coupons: [
-      { name: '20% 할인 쿠폰', description: '전 상품' },
-      { name: '20,000원 할인 쿠폰', description: '15만원 이상 구매 시' },
-      { name: '무료배송 쿠폰', description: '전 상품' },
-      { name: '생일 30% 할인 쿠폰', description: '생일 당월' },
-      { name: '프리미엄 케어 쿠폰', description: '전용 상담' }
-    ],
-    isDownloaded: false
-  }
-])
+// 내 등급 ID
+const myGradeId = computed(() => authStore.user?.grade?.id || null)
+
+// 내 등급 쿠폰팩인지 확인
+const isMyGradePack = (pack) => {
+  return myGradeId.value && pack.gradeId === myGradeId.value
+}
 
 // 쿠폰팩 다운로드
-const downloadGradePack = (pack) => {
+const handleDownloadGradePack = async (pack) => {
   // 로그인 체크
   if (!authStore.isLoggedIn) {
     showLoginModal.value = true
@@ -87,16 +50,24 @@ const downloadGradePack = (pack) => {
     return
   }
 
-  // TODO: API 연동
-  // await post(`/coupons/grade-packs/${pack.id}/download`)
-  pack.isDownloaded = true
-  success(couponData.messages.downloadSuccess)
-  fetchCoupons() // 쿠폰 목록 새로고침
+  const result = await downloadGradePackApi(pack.id)
+
+  if (result.success) {
+    if (result.alreadyDownloaded) {
+      warning(couponData.messages.alreadyDownloaded)
+    } else {
+      success(couponData.messages.downloadSuccess)
+    }
+    fetchCoupons() // 쿠폰 목록 새로고침
+  } else {
+    warning(result.error || couponData.messages.downloadError)
+  }
 }
 
 // 쿠폰 목록 조회
 onMounted(() => {
   fetchCoupons()
+  fetchGradePacks()
 })
 
 // 다운로드 가능한 쿠폰 개수
@@ -261,10 +232,12 @@ const handleDownloadAll = async () => {
         </template>
 
         <!-- 등급별 쿠폰팩 -->
-         <!--
-        <section class="coupon-download-page__grade-packs">
+        <section v-if="gradePacks.length > 0" class="coupon-download-page__grade-packs">
           <h2 class="coupon-download-page__grade-title">{{ couponData.gradePacks.title }}</h2>
-          <div class="coupon-download-page__grade-grid">
+          <div v-if="gradePacksPending" class="coupon-download-page__loading">
+            <BaseSpinner />
+          </div>
+          <div v-else class="coupon-download-page__grade-grid">
             <article
               v-for="pack in gradePacks"
               :key="pack.id"
@@ -292,17 +265,16 @@ const handleDownloadAll = async () => {
               <div class="grade-pack-card__footer">
                 <BaseButton
                   :label="pack.isDownloaded ? couponData.gradePacks.downloadedButton : couponData.gradePacks.downloadButton"
-                  :variant="pack.isDownloaded ? 'line' : 'bg'"
-                  :color="pack.isDownloaded ? 'black' : 'green'"
+                  :variant="pack.isDownloaded || !isMyGradePack(pack) ? 'line' : 'bg'"
+                  :color="pack.isDownloaded || !isMyGradePack(pack) ? 'black' : 'green'"
                   size="small"
-                  :disabled="pack.isDownloaded"
-                  @click="downloadGradePack(pack)"
+                  :disabled="pack.isDownloaded || !isMyGradePack(pack)"
+                  @click="handleDownloadGradePack(pack)"
                 />
               </div>
             </article>
           </div>
         </section>
-      -->
       </div>
       </main>
     </div>

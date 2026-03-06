@@ -12,9 +12,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   // 이미 로드되었으면 스킵 (중복 호출 방지)
   if (authStore.user) return
 
-  // 쿠키에서 로그인 상태 확인 (access_token 또는 refresh_token 존재 여부)
+  // 쿠키에서 로그인 상태 확인 (user_access_token 또는 user_refresh_token 존재 여부)
   const cookies = event.node.req.headers.cookie || ''
-  const hasAuthCookie = cookies.includes('access_token') || cookies.includes('refresh_token')
+  const hasAuthCookie = cookies.includes('user_access_token') || cookies.includes('user_refresh_token')
 
   if (!hasAuthCookie) return
 
@@ -31,10 +31,13 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       credentials: 'include'
     })
 
+    console.log('[auth.server] /me response:', response)
+
     if (response.success && response.data) {
       authStore.setUser(response.data)
     }
-  } catch {
+  } catch (err) {
+    console.log('[auth.server] /me error:', err)
     // 인증 실패 시 무시 (로그인 상태 아님)
   }
 })

@@ -252,6 +252,65 @@ export const useDownloadableCoupons = () => {
     return coupons.value.map(transformCoupon)
   })
 
+  // 등급별 쿠폰팩
+  const gradePacks = ref([])
+  const gradePacksPending = ref(false)
+
+  /**
+   * 등급별 쿠폰팩 목록 조회
+   * GET /coupons/grade-packs
+   */
+  const fetchGradePacks = async () => {
+    gradePacksPending.value = true
+    try {
+      console.log('[fetchGradePacks] 호출')
+      const response = await get('/coupons/grade-packs')
+      console.log('[fetchGradePacks] response:', response)
+      gradePacks.value = response.data || response || []
+      console.log('[fetchGradePacks] gradePacks:', gradePacks.value)
+      return gradePacks.value
+    } catch (e) {
+      console.log('[fetchGradePacks] error:', e)
+      const status = e?.response?.status || e?.status || e?.statusCode
+      if (status === 401) {
+        gradePacks.value = []
+        return []
+      }
+      gradePacks.value = []
+      return []
+    } finally {
+      gradePacksPending.value = false
+    }
+  }
+
+  /**
+   * 등급별 쿠폰팩 다운로드
+   * POST /coupons/grade-packs/{id}/download
+   */
+  const downloadGradePack = async (packId) => {
+    try {
+      const response = await post(`/coupons/grade-packs/${packId}/download`)
+      // 다운로드 성공 시 해당 팩의 isDownloaded 업데이트
+      const pack = gradePacks.value.find(p => p.id === packId)
+      if (pack) {
+        pack.isDownloaded = true
+      }
+      return { success: true, message: response.message || response.data }
+    } catch (e) {
+      const errorCode = e.data?.error?.code || e.data?.code
+      const errorMessage = e.data?.error?.message || e.data?.message || '쿠폰팩 다운로드에 실패했습니다.'
+
+      if (errorCode === 'ALREADY_DOWNLOADED' || errorCode === 'COUPON_PACK_ALREADY_ISSUED') {
+        const pack = gradePacks.value.find(p => p.id === packId)
+        if (pack) {
+          pack.isDownloaded = true
+        }
+        return { success: true, alreadyDownloaded: true }
+      }
+      return { success: false, error: errorMessage }
+    }
+  }
+
   return {
     coupons,
     transformedCoupons,
@@ -265,6 +324,11 @@ export const useDownloadableCoupons = () => {
     applicableCoupons,
     applicablePending,
     fetchApplicableCoupons,
-    calculateDiscount
+    calculateDiscount,
+    // 등급별 쿠폰팩
+    gradePacks,
+    gradePacksPending,
+    fetchGradePacks,
+    downloadGradePack
   }
 }
