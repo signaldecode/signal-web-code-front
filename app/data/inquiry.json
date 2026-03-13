@@ -36,7 +36,8 @@
         { "label": "포트폴리오", "value": "portfolio" },
         { "label": "교육/LMS", "value": "education" },
         { "label": "예약/O2O", "value": "booking" },
-        { "label": "기타", "value": "other" }
+        { "label": "기타", "value": "other" },
+        { "label": "스포츠", "value": "sports"}
       ]
     },
     "name": {

@@ -405,7 +405,7 @@ export const useOrder = () => {
           unitPrice: `${Number(unitPrice).toLocaleString()}원`,
           quantity: item.quantity,
           total: `${Number(total).toLocaleString()}원`,
-          status: { text: itemStatusText, variant: statusVariantMap[itemStatus] || 'default' },
+          status: { code: itemStatus, text: itemStatusText, variant: statusVariantMap[itemStatus] || 'default' },
           image: item.thumbnailUrl || '',
           rejectedClaimInfo: item.rejectedClaimInfo || null
         }

@@ -69,6 +69,11 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // 주문 아이템 상태 코드 (SHIPPED, DELIVERED 등)
+  statusCode: {
+    type: String,
+    default: ''
+  },
   // 리뷰쓰기 버튼 라벨
   reviewButtonLabel: {
     type: String,
@@ -96,8 +101,11 @@ const props = defineProps({
 
 const emit = defineEmits(['writeReview', 'viewReview'])
 
-// 배송완료 상태 체크
-const isDelivered = computed(() => props.status === labels.statusDelivered)
+// 리뷰 작성 가능 상태 체크 (발송완료·배송완료·구매확정)
+const isDelivered = computed(() => {
+  const code = props.statusCode
+  return code === 'SHIPPED' || code === 'DELIVERED' || code === 'COMPLETED'
+})
 
 // 가격 포맷팅 헬퍼
 const currencyUnit = computed(() => props.currency || common.currency)

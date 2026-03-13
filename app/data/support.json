@@ -37,7 +37,7 @@
         "icon": "qna",
         "title": "문의하기",
         "description": "상품 및 서비스에 대해 문의하세요",
-        "href": "/support/inquiry"
+        "href": "/inquiry"
       },
       {
         "icon": "order",

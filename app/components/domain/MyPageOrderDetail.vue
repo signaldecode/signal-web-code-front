@@ -182,6 +182,7 @@ const handleReviewSubmitted = () => {
                 :quantity="p.quantity"
                 :total="p.total"
                 :status="p.status?.text"
+                :status-code="p.status?.code"
                 :has-review="!!p.review"
                 :review-button-label="labels.reviewButton"
                 :view-review-label="labels.viewReviewButton"
