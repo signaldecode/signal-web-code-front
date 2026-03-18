@@ -54,6 +54,10 @@
       "rememberMe": "로그인 상태 유지"
     }
   },
+  "productCard": {
+    "viewDetail": "자세히 보기",
+    "reviewCountLabel": "리뷰"
+  },
   "badge": {
     "best": "BEST",
     "new": "NEW"

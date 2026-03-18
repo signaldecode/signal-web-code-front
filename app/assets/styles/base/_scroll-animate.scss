@@ -1,0 +1,59 @@
+// ============================================
+// 스크롤 트리거 애니메이션
+// Intersection Observer + v-scroll-animate 디렉티브 연동
+// ============================================
+
+@use '../tokens/spacing' as *;
+
+// 공통 트랜지션
+.scroll-animate {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: opacity, transform;
+
+  // ------ 애니메이션 타입별 초기 상태 ------
+
+  // fade-up (기본)
+  &--fade-up {
+    opacity: 0;
+    transform: translateY($padding-8);
+  }
+
+  // fade-in
+  &--fade-in {
+    opacity: 0;
+  }
+
+  // slide-left (좌측에서 등장)
+  &--slide-left {
+    opacity: 0;
+    transform: translateX(-$padding-10);
+  }
+
+  // slide-right (우측에서 등장)
+  &--slide-right {
+    opacity: 0;
+    transform: translateX($padding-10);
+  }
+
+  // scale-in (확대 등장)
+  &--scale-in {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  // ------ 애니메이션 완료 상태 ------
+
+  &.scroll-animated {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+// prefers-reduced-motion 대응
+@media (prefers-reduced-motion: reduce) {
+  .scroll-animate {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

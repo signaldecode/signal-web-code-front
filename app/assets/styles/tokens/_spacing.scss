@@ -25,13 +25,19 @@ $padding-13: 160px;
 $padding-hero-arrow: 68px;
 $padding-section: 80px;
 
-// Header heights
-$header-top-bar-height: 40px;
-$header-top-bar-height-mobile: 32px;
-$header-main-height: 70px;
-$header-main-height-mobile: 56px;
-$header-total-height: $header-top-bar-height + $header-main-height; // 110px
-$header-total-height-mobile: $header-top-bar-height-mobile + $header-main-height-mobile; // 88px
+// Header heights (2-row layout: row-1 + row-2)
+$header-row-1-height: 60px;
+$header-row-1-height-mobile: 48px;
+$header-row-2-height: 44px;
+$header-row-2-height-mobile: 40px;
+$header-total-height: $header-row-1-height + $header-row-2-height; // 104px
+$header-total-height-mobile: $header-row-1-height-mobile + $header-row-2-height-mobile; // 88px
+
+// Header layout
+$header-search-max-width: 640px;
+$header-logo-height: 28px;
+$header-logo-height-mobile: 20px;
+$header-mobile-nav-width: 320px;
 
 // Hero aspect ratio
 $hero-aspect-ratio: math.div(16, 7);

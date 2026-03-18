@@ -14,25 +14,82 @@
 .section-hero {
   position: relative;
   width: 100%;
-  aspect-ratio: $hero-aspect-ratio;
   margin-top: $header-total-height;
   overflow: hidden;
+  padding: $padding-8 0;
 
   @include mobile {
-    aspect-ratio: $hero-aspect-ratio-mobile;
     margin-top: $header-total-height-mobile;
+    padding: $padding-4 0;
   }
 
-  &__slider {
+  // Peek 캐러셀 트랙: 이전 | 현재 | 다음
+  &__track {
     display: flex;
-    height: 100%;
-    transition: transform 0.5s ease-out;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-4;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 $container-padding;
+
+    @include tablet {
+      gap: $padding-3;
+      padding: 0 $padding-6;
+    }
+
+    @include mobile {
+      gap: $padding-2;
+      padding: 0 $padding-3;
+    }
   }
 
+  // 공통 슬라이드 스타일
   &__slide {
     flex-shrink: 0;
-    width: 100%;
-    height: 100%;
+    border-radius: $padding-3;
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    @include mobile {
+      border-radius: $padding-2;
+    }
+
+    // 양옆 슬라이드 (이전/다음)
+    &--prev,
+    &--next {
+      width: 15%;
+      aspect-ratio: 3 / 4;
+      opacity: 0.5;
+      filter: brightness(0.6);
+      cursor: pointer;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+
+      @include mobile {
+        width: 12%;
+        aspect-ratio: 2 / 3;
+      }
+
+      &:hover {
+        opacity: 0.75;
+        filter: brightness(0.8);
+      }
+    }
+
+    // 현재 슬라이드 (메인)
+    &--active {
+      width: 70%;
+      aspect-ratio: 16 / 7;
+
+      @include tablet {
+        width: 72%;
+      }
+
+      @include mobile {
+        width: 76%;
+        aspect-ratio: 16 / 9;
+      }
+    }
   }
 
   &__slide-link {
@@ -47,6 +104,7 @@
     object-fit: cover;
   }
 
+  // 콘텐츠 오버레이
   &__content {
     position: absolute;
     bottom: $padding-11;
@@ -66,10 +124,6 @@
     }
 
     @include mobile {
-      bottom: $padding-8;
-    }
-
-    @include mobile-xs {
       bottom: $padding-6;
     }
   }
@@ -100,11 +154,6 @@
       @include typo-headline-3;
       max-width: 100%;
     }
-
-    @include mobile-xs {
-      font-size: 24px;
-      line-height: 1.4;
-    }
   }
 
   &__description {
@@ -115,11 +164,12 @@
 
     @include mobile {
       @include typo-body-3;
-      margin-bottom: $padding-6;
+      margin-bottom: $padding-4;
       max-width: 100%;
     }
   }
 
+  // 화살표 네비게이션
   &__arrows {
     position: absolute;
     top: 50%;
@@ -1139,5 +1189,175 @@
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+// --------------------------------------------
+// Section Best Reviews (하이라이트)
+// --------------------------------------------
+
+.section-best-reviews {
+  padding: $padding-section 0;
+
+  @include tablet {
+    padding: $padding-10 0;
+  }
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: $padding-8;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $padding-2;
+      margin-bottom: $padding-6;
+    }
+  }
+
+  &__title {
+    @include typo-headline-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-1;
+
+    @include mobile {
+      @include typo-headline-4;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__view-all {
+    @include typo-body-2;
+    color: $Primary-color;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  // 3컬럼 그리드
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $padding-6;
+
+    @include tablet {
+      gap: $padding-4;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $padding-4;
+    }
+  }
+
+  &__card {
+    background: $Primary-white-color;
+    border: 1px solid $Border-Border-line-100;
+    border-radius: $padding-3;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-$padding-1);
+      box-shadow: 0 $padding-2 $padding-6 rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__card-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: $Bg-Secondary-bg-color;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__card-body {
+    padding: $padding-4;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-2;
+
+    @include mobile {
+      padding: $padding-3;
+    }
+  }
+
+  &__card-rating {
+    display: flex;
+    gap: 2px;
+
+    .base-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__card-content {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: $padding-1;
+  }
+
+  &__card-username {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    font-weight: 500;
+  }
+
+  &__card-product {
+    @include typo-body-4;
+    color: $Text-Secondary-text-color;
+    max-width: 60%;
+    text-align: right;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

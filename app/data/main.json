@@ -8,17 +8,24 @@
     "logo": {
       "alt": "브랜드 로고",
       "src": "/images/hero/logo.svg",
-      "menuLabel": "메뉴 열기",
+      "menuLabel": "카테고리",
       "searchLabel": "검색",
       "searchPlaceholder": "검색어를 입력하세요",
       "searchCloseLabel": "검색 닫기",
       "userLabel": "마이페이지",
-      "loginLabel": "LOGIN",
+      "loginLabel": "로그인",
+      "signupLabel": "회원가입",
       "cartLabel": "장바구니",
       "userMenu": {
         "mypage": "마이페이지",
         "logout": "로그아웃"
       }
+    },
+    "topBar": {
+      "links": [
+        { "label": "고객센터", "href": "/support" },
+        { "label": "블로그", "href": "", "external": true }
+      ]
     },
     "navAriaLabel": "메인 네비게이션",
     "nav": [
@@ -172,6 +179,12 @@
   "reviews": {
     "title": "REVIEWS",
     "subtitle": "고객님들의 생생한 후기"
+  },
+  "bestReviews": {
+    "title": "BEST REVIEW",
+    "subtitle": "가장 도움이 된 후기",
+    "viewAllLabel": "전체 리뷰 보기",
+    "viewAllHref": "/review"
   },
   "instagram": {
     "title": "Instagram",

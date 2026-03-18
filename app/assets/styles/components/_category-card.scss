@@ -8,118 +8,91 @@
 @use '../tokens/breakpoints' as *;
 
 .category-card {
-  width: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
 
-  @include tablet {
-    width: 80px;
-  }
-
-  @include mobile {
-    width: 100%;
-  }
-
   &__link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $padding-4;
+    gap: $padding-2;
     text-decoration: none;
     color: inherit;
-
-    @include mobile {
-      gap: $padding-2;
-    }
 
     @include mobile-xs {
       gap: $padding-1;
     }
   }
 
-  &__image-wrap {
-    width: 94px;
-    height: 94px;
-    border-radius: 34px;
+  // 원형 아이콘 컨테이너
+  &__icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
     overflow: hidden;
-    background: $Bg-Primary-bg-color;
-    transition: transform 0.2s ease;
-    padding: 26px;
+    background: $Bg-Secondary-bg-color;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: $padding-3;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 
     @include tablet {
-      width: 80px;
-      height: 80px;
-      border-radius: 28px;
-      padding: 22px;
+      width: 56px;
+      height: 56px;
+      padding: $padding-2;
     }
 
     @include mobile {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      padding: 20%;
-    }
-
-    @include mobile-xs {
-      padding: 18%;
+      width: 48px;
+      height: 48px;
+      padding: $padding-2;
     }
   }
 
-  &__link:hover &__image-wrap {
-    transform: scale(1.02);
+  &__link:hover &__icon-wrap {
+    transform: translateY(-$padding-1);
+    background: $Bg-Primary-bg-color;
+    box-shadow: 0 $padding-1 $padding-4 rgba(0, 0, 0, 0.1);
   }
 
-  &__image {
+  // 아이콘 이미지
+  &__icon {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
   }
 
+  // 이미지 없을 때 텍스트 fallback
+  &__icon-fallback {
+    @include typo-title-3;
+    font-weight: 700;
+    color: $Primary-color;
+  }
+
   &__label {
-    @include typo-title-4;
+    @include typo-body-3;
     color: $Text-Primary-text-color;
     margin: 0;
     text-align: center;
-    letter-spacing: -0.45px;
+    letter-spacing: -0.3px;
     word-break: keep-all;
-    position: relative;
-    transition: color 0.3s ease;
-
-    // 밑줄 효과
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: 0;
-      height: 2px;
-      background-color: $Primary-color;
-      transition: width 0.3s ease;
-    }
+    transition: color 0.2s ease;
 
     @include mobile {
-      @include typo-title-6;
-      letter-spacing: -0.3px;
+      @include typo-body-4;
+      letter-spacing: -0.2px;
     }
 
     @include mobile-xs {
-      font-size: $Body-body-4-Font-size;
-      letter-spacing: -0.2px;
+      font-size: $Body-body-5-Font-size;
     }
   }
 
   // Hover 효과
   &__link:hover &__label {
     color: $Primary-color;
-
-    &::after {
-      width: 100%;
-    }
   }
 }

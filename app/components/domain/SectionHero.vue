@@ -22,77 +22,43 @@ const props = defineProps({
 
 const arrowLabels = mainData.hero.arrowLabels
 
-const sliderRef = ref(null)
 const currentIndex = ref(0)
-const isAnimating = ref(false)
 const totalSlides = computed(() => props.slides.length || 1)
 
-// Clone first and last slides for infinite effect
-const extendedSlides = computed(() => {
-  if (props.slides.length <= 1) return props.slides
-  return [
-    props.slides[props.slides.length - 1], // Clone of last
-    ...props.slides,
-    props.slides[0] // Clone of first
-  ]
-})
+// 현재 활성 슬라이드
+const activeSlide = computed(() => props.slides[currentIndex.value] || props.data)
 
-// Real slide index for display (1-based for indicator)
-const displayIndex = computed(() => {
-  if (currentIndex.value < 0) return totalSlides.value
-  if (currentIndex.value >= totalSlides.value) return 1
-  return currentIndex.value + 1
-})
+// 이전/다음 슬라이드 인덱스 (순환)
+const prevIndex = computed(() =>
+  (currentIndex.value - 1 + totalSlides.value) % totalSlides.value
+)
+const nextIndex = computed(() =>
+  (currentIndex.value + 1) % totalSlides.value
+)
 
-const activeSlide = computed(() => {
-  return props.slides[displayIndex.value - 1] || props.data
-})
+// 슬라이드 가져오기 (인덱스 순환)
+const getSlide = (index) => props.slides[index] || {}
 
 let autoPlayTimer = null
 
-const goToSlide = (index, animate = true) => {
-  if (isAnimating.value) return
-
-  if (animate) {
-    isAnimating.value = true
-  }
-  currentIndex.value = index
+const goToSlide = (index) => {
+  currentIndex.value = ((index % totalSlides.value) + totalSlides.value) % totalSlides.value
 }
 
 const nextSlide = () => {
   goToSlide(currentIndex.value + 1)
+  restartAutoPlay()
 }
 
 const prevSlide = () => {
   goToSlide(currentIndex.value - 1)
-}
-
-const sliderStyle = computed(() => {
-  // 슬라이드가 1개 이하면 translateX 없음
-  if (props.slides.length <= 1) {
-    return {}
-  }
-  return {
-    transform: `translateX(-${(currentIndex.value + 1) * 100}%)`,
-    transition: isAnimating.value ? 'transform 0.5s ease-out' : 'none'
-  }
-})
-
-const handleTransitionEnd = () => {
-  isAnimating.value = false
-
-  // Jump to real position without animation
-  if (currentIndex.value >= totalSlides.value) {
-    currentIndex.value = 0
-  } else if (currentIndex.value < 0) {
-    currentIndex.value = totalSlides.value - 1
-  }
+  restartAutoPlay()
 }
 
 const startAutoPlay = () => {
   stopAutoPlay()
   if (props.autoPlay && totalSlides.value > 1) {
-    autoPlayTimer = setInterval(nextSlide, props.interval)
+    autoPlayTimer = setInterval(() => goToSlide(currentIndex.value + 1), props.interval)
   }
 }
 
@@ -103,10 +69,15 @@ const stopAutoPlay = () => {
   }
 }
 
+const restartAutoPlay = () => {
+  stopAutoPlay()
+  startAutoPlay()
+}
+
 // 모바일 터치 스와이프
 const { swipeEvents: heroSwipeEvents } = useSwipe({
-  onSwipeLeft: () => { nextSlide(); startAutoPlay() },
-  onSwipeRight: () => { prevSlide(); startAutoPlay() }
+  onSwipeLeft: nextSlide,
+  onSwipeRight: prevSlide
 })
 
 onMounted(() => {
@@ -119,51 +90,84 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="section-hero">
-    <div
-      ref="sliderRef"
-      class="section-hero__slider"
-      :style="sliderStyle"
-      @transitionend="handleTransitionEnd"
-      @touchstart="(e) => { stopAutoPlay(); heroSwipeEvents.touchstart(e) }"
-      @touchmove="heroSwipeEvents.touchmove"
-      @touchend="heroSwipeEvents.touchend"
-    >
+  <section
+    class="section-hero"
+    @mouseenter="stopAutoPlay"
+    @mouseleave="startAutoPlay"
+    @touchstart="(e) => { stopAutoPlay(); heroSwipeEvents.touchstart(e) }"
+    @touchmove="heroSwipeEvents.touchmove"
+    @touchend="heroSwipeEvents.touchend"
+  >
+    <div class="section-hero__track">
+      <!-- 이전 슬라이드 -->
       <div
-        v-for="(slide, index) in extendedSlides"
-        :key="'slide-' + index"
-        class="section-hero__slide"
+        v-if="totalSlides > 1"
+        class="section-hero__slide section-hero__slide--prev"
+        @click="prevSlide"
       >
+        <NuxtImg
+          :src="getSlide(prevIndex).imageUrl || getSlide(prevIndex).image"
+          :alt="getSlide(prevIndex).title || getSlide(prevIndex).imageAlt"
+          class="section-hero__image"
+          format="webp"
+          width="800"
+          quality="60"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- 현재 슬라이드 (메인) -->
+      <div class="section-hero__slide section-hero__slide--active">
         <component
-          :is="(slide.linkUrl || slide.href) ? 'a' : 'div'"
-          :href="slide.linkUrl || slide.href || undefined"
-          :target="(slide.linkUrl || slide.href) ? (slide.linkTarget || '_self') : undefined"
-          :rel="slide.linkTarget === '_blank' ? 'noopener noreferrer' : undefined"
+          :is="(activeSlide.linkUrl || activeSlide.href) ? 'a' : 'div'"
+          :href="activeSlide.linkUrl || activeSlide.href || undefined"
+          :target="(activeSlide.linkUrl || activeSlide.href) ? (activeSlide.linkTarget || '_self') : undefined"
+          :rel="activeSlide.linkTarget === '_blank' ? 'noopener noreferrer' : undefined"
           class="section-hero__slide-link"
         >
           <NuxtImg
-            :src="slide.imageUrl || slide.image"
-            :alt="slide.title || slide.imageAlt"
+            :src="activeSlide.imageUrl || activeSlide.image"
+            :alt="activeSlide.title || activeSlide.imageAlt"
             class="section-hero__image"
             format="webp"
             width="1920"
-            quality="75"
-            :loading="index <= 1 ? 'eager' : 'lazy'"
-            :fetchpriority="index <= 1 ? 'high' : 'auto'"
+            quality="80"
+            loading="eager"
+            fetchpriority="high"
           />
         </component>
       </div>
+
+      <!-- 다음 슬라이드 -->
+      <div
+        v-if="totalSlides > 1"
+        class="section-hero__slide section-hero__slide--next"
+        @click="nextSlide"
+      >
+        <NuxtImg
+          :src="getSlide(nextIndex).imageUrl || getSlide(nextIndex).image"
+          :alt="getSlide(nextIndex).title || getSlide(nextIndex).imageAlt"
+          class="section-hero__image"
+          format="webp"
+          width="800"
+          quality="60"
+          loading="lazy"
+        />
+      </div>
     </div>
+
+    <!-- 콘텐츠 오버레이 -->
     <div class="section-hero__content">
       <p v-if="activeSlide.subtitle" class="section-hero__subtitle">{{ activeSlide.subtitle }}</p>
-      <!-- <h1 v-if="activeSlide.title" class="section-hero__title">{{ activeSlide.title }}</h1> -->
       <p v-if="activeSlide.description" class="section-hero__description">{{ activeSlide.description }}</p>
       <SlideIndicator
         v-if="totalSlides > 1"
-        :current="displayIndex"
+        :current="currentIndex + 1"
         :total="totalSlides"
       />
     </div>
+
+    <!-- 화살표 -->
     <div v-if="totalSlides > 1" class="section-hero__arrows">
       <IconSlideButton
         direction="prev"

@@ -1,0 +1,83 @@
+<script setup>
+const props = defineProps({
+  sections: {
+    type: Array,
+    default: () => []
+  }
+})
+
+const { getEntry } = useSectionRegistry()
+
+// 컴포넌트 resolve 맵 (lazy resolve 방지를 위해 미리 등록)
+const componentMap = {
+  SectionBestItems: resolveComponent('SectionBestItems'),
+  SectionBestReviews: resolveComponent('SectionBestReviews'),
+  SectionMdPick: resolveComponent('SectionMdPick'),
+  SectionCategoryItems: resolveComponent('SectionCategoryItems'),
+  SectionReviews: resolveComponent('SectionReviews'),
+  SectionInstagram: resolveComponent('SectionInstagram'),
+  BannerFull: resolveComponent('BannerFull'),
+  BannerSlide: resolveComponent('BannerSlide'),
+  SectionHalfBanners: resolveComponent('SectionHalfBanners')
+}
+
+/**
+ * keyword로 실제 Vue 컴포넌트 resolve
+ */
+const resolveSection = (keyword) => {
+  const entry = getEntry(keyword)
+  if (!entry) return null
+  return componentMap[entry.component] || null
+}
+
+/**
+ * keyword로 props 조회
+ */
+const getSectionProps = (keyword) => {
+  const entry = getEntry(keyword)
+  if (!entry) return {}
+  return entry.props()
+}
+
+/**
+ * 렌더 여부 판단
+ */
+const shouldRender = (keyword) => {
+  const entry = getEntry(keyword)
+  if (!entry) return false
+  return !entry.isEmpty()
+}
+
+/**
+ * ClientOnly 래핑 여부
+ */
+const isClientOnly = (keyword) => {
+  const entry = getEntry(keyword)
+  return entry?.clientOnly || false
+}
+</script>
+
+<template>
+  <template v-for="(section, index) in sections" :key="section.keyword">
+    <!-- ClientOnly 섹션 -->
+    <ClientOnly v-if="isClientOnly(section.keyword) && shouldRender(section.keyword)">
+      <div v-scroll-animate="{ animation: 'fade-up', delay: index * 100 }">
+        <component
+          :is="resolveSection(section.keyword)"
+          v-bind="getSectionProps(section.keyword)"
+        />
+      </div>
+    </ClientOnly>
+
+    <!-- SSR 섹션 -->
+    <div
+      v-else-if="!isClientOnly(section.keyword) && shouldRender(section.keyword)"
+      v-scroll-animate="{ animation: 'fade-up', delay: index * 100 }"
+    >
+      <component
+        :is="resolveSection(section.keyword)"
+        v-bind="getSectionProps(section.keyword)"
+      />
+    </div>
+  </template>
+</template>

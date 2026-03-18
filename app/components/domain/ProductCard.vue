@@ -59,6 +59,18 @@ const discountRate = computed(() => {
             size="product"
           />
         </div>
+        <div class="product-card__hover-overlay">
+          <p v-if="product.summary" class="product-card__hover-summary">{{ product.summary }}</p>
+          <div v-if="product.rating" class="product-card__hover-rating">
+            <BaseRating
+              :rating="product.rating"
+              :review-count="product.reviewCount"
+              variant="simple"
+              size="md"
+            />
+          </div>
+          <span class="product-card__hover-cta">{{ uiData.productCard.viewDetail }}</span>
+        </div>
       </div>
 
       <div class="product-card__info">

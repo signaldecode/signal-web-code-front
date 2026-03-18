@@ -15,10 +15,10 @@
   &__inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: $padding-12 $container-padding;
+    padding: $padding-10 $container-padding;
 
     @include tablet {
-      padding: $padding-10 $padding-6;
+      padding: $padding-8 $padding-6;
     }
 
     @include mobile {
@@ -30,7 +30,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: $padding-10;
+    margin-bottom: $padding-6;
 
     @include mobile {
       flex-direction: column;
@@ -42,10 +42,10 @@
   &__left {
     display: flex;
     flex-direction: column;
-    gap: $padding-5;
+    gap: $padding-3;
 
     @include mobile {
-      gap: $padding-3;
+      gap: $padding-2;
     }
   }
 
@@ -62,10 +62,9 @@
   }
 
   &__logo-text {
-    font-size: 30px;
-    line-height: 1.2;
-    color: $Primary-white-color;
+    @include typo-title-3;
     font-weight: 700;
+    color: $Primary-white-color;
     letter-spacing: 1px;
 
     @include mobile {
@@ -97,13 +96,13 @@
   }
 
   &__nav-link {
-    @include typo-title-3;
+    @include typo-body-2;
     color: $Primary-white-color;
     text-decoration: none;
     transition: color 0.2s ease;
 
     @include mobile {
-      @include typo-body-3;
+      @include typo-body-4;
     }
 
     &:hover {
@@ -119,7 +118,7 @@
   }
 
   &__info-line {
-    @include typo-body-2;
+    @include typo-body-3;
     color: $Black-Primary-black-400;
     margin: 0;
     display: flex;
@@ -135,7 +134,7 @@
     }
 
     @include mobile {
-      @include typo-body-4;
+      @include typo-body-5;
       flex-direction: column;
       align-items: flex-start;
       gap: $padding-1;
@@ -170,10 +169,10 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    @include typo-body-2;
+    @include typo-body-3;
     color: $Black-Primary-black-400;
     padding: 0;
-    margin-top: $padding-2;
+    margin-top: $padding-1;
 
     .base-icon {
       color: $Black-Primary-black-400;
@@ -259,10 +258,10 @@
   }
 
   &__copyright {
-    @include typo-body-2;
+    @include typo-body-4;
     color: $Black-Primary-black-500;
     margin: 0;
-    padding-top: $padding-6;
+    padding-top: $padding-4;
 
     @include mobile {
       @include typo-body-5;
