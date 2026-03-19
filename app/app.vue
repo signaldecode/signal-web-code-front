@@ -29,10 +29,13 @@ watch(theme, (newTheme) => {
 }, { immediate: true })
 
 // 헤더 메뉴 (API에서 받아오거나 기본값 사용)
+// TODO: 카테고리 필터링은 임시 처리 — 백엔드에서 제외하면 제거할 것
+const EXCLUDED_NAV_IDS = ['category', '/category']
 const navItems = computed(() => {
   if (headerMenu.value && headerMenu.value.length > 0) {
     // API 응답: label(표시텍스트), id(URL경로), order(순서)
     return [...headerMenu.value]
+      .filter(item => !EXCLUDED_NAV_IDS.includes(item.id))
       .sort((a, b) => a.order - b.order)
       .map(item => ({
         label: item.label,

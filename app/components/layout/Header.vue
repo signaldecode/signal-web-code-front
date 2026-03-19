@@ -79,9 +79,9 @@ const closeSearch = () => {
   searchQuery.value = ''
 }
 
-// 카테고리 드롭다운 (데스크톱) / 사이드 내비 (모바일)
+// 카테고리 드롭다운 (데스크톱) / 사이드 내비 (태블릿·모바일)
 const toggleCategory = () => {
-  if (window.innerWidth >= 768) {
+  if (window.innerWidth >= 1024) {
     isCategoryOpen.value = !isCategoryOpen.value
     isMobileNavOpen.value = false
   } else {
@@ -122,6 +122,7 @@ const handleLogout = async () => {
 
 // 외부 클릭 시 카테고리 드롭다운 닫기
 const handleClickOutside = (e) => {
+  if (!isCategoryOpen.value) return
   if (categoryRef.value && !categoryRef.value.contains(e.target)) {
     closeCategory()
   }

@@ -30,7 +30,6 @@
     "navAriaLabel": "메인 네비게이션",
     "nav": [
       { "label": "베스트", "href": "/best" },
-      { "label": "카테고리", "href": "/category" },
       { "label": "쿠폰", "href": "/coupons" },
       { "label": "공지사항", "href": "/notice" },
       { "label": "리뷰", "href": "/review" },

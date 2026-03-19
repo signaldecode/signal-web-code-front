@@ -126,7 +126,7 @@
   bottom: 0;
   z-index: 1000;
 
-  @include mobile {
+  @include tablet {
     display: block;
   }
 
