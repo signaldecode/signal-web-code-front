@@ -206,85 +206,39 @@
     }
   }
 
-  &__grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: $padding-6 $padding-6;
-    padding: $padding-4 0;
-
-    @include tablet {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: $padding-4;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: $padding-3 0;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-
-    @include mobile {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: $padding-2;
-      overflow-x: visible;
-      padding: $padding-2 0;
-    }
-  }
-
-  // Slider (10개 이상)
   &__slider-wrap {
-    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0 $padding-11;
+    gap: $padding-4;
+  }
+
+  &__container {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    padding: $padding-4 0;
+    text-align: center;
 
     @include tablet {
-      padding: 0 $padding-10;
+      padding: $padding-3 0;
     }
 
     @include mobile {
-      padding: 0;
+      padding: $padding-2 0;
     }
   }
 
-  &__slider {
-    display: flex;
-    justify-content: flex-start;
+  &__track {
+    display: inline-flex;
     align-items: flex-start;
     gap: $padding-6;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: $padding-4 0;
-    // 10개만 보이도록 max-width 제한: (90px * 10) + (24px * 9) = 1116px
-    max-width: 1116px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
 
     @include tablet {
       gap: $padding-4;
-      padding: $padding-3 0;
-      // 태블릿: (80px * 8) + (16px * 7) = 752px
-      max-width: 752px;
     }
 
     @include mobile {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: $padding-2;
-      overflow-x: visible;
-      padding: $padding-2 0;
-      max-width: none;
+      gap: $padding-3;
     }
   }
 
@@ -293,24 +247,7 @@
   }
 
   &__arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    transition: opacity 0.2s;
-
-    &--hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    &--left {
-      left: 0;
-    }
-
-    &--right {
-      right: 0;
-    }
+    flex-shrink: 0;
 
     @include mobile {
       display: none;

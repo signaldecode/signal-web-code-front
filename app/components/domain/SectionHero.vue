@@ -28,6 +28,12 @@ const isTransitioning = ref(false)
 const animOffset = ref(0)
 const skipTransition = ref(false)
 const trackRef = ref(null)
+const sectionRef = ref(null)
+const heroWidth = ref(0)
+
+const updateHeroWidth = () => {
+  if (sectionRef.value) heroWidth.value = sectionRef.value.clientWidth
+}
 
 // 현재 활성 슬라이드 (오버레이 텍스트용)
 const activeSlide = computed(() => props.slides[currentIndex.value] || props.data)
@@ -56,8 +62,11 @@ const visibleSlides = computed(() => {
 // animOffset: 0=정지, 1=다음으로 이동 중, -1=이전으로 이동 중
 const trackStyle = computed(() => {
   const targetPos = CENTER_POS + animOffset.value
+  const vw = heroWidth.value
   return {
-    transform: `translateX(calc((100vw - var(--hero-slide-width)) / 2 - ${targetPos} * var(--hero-slide-step)))`,
+    transform: vw
+      ? `translateX(calc((${vw}px - var(--hero-slide-width)) / 2 - ${targetPos} * var(--hero-slide-step)))`
+      : `translateX(calc((100vw - var(--hero-slide-width)) / 2 - ${targetPos} * var(--hero-slide-step)))`,
     transition: skipTransition.value ? 'none' : undefined
   }
 })
@@ -124,16 +133,20 @@ const { swipeEvents: heroSwipeEvents } = useSwipe({
 })
 
 onMounted(() => {
+  updateHeroWidth()
+  window.addEventListener('resize', updateHeroWidth)
   startAutoPlay()
 })
 
 onUnmounted(() => {
+  window.removeEventListener('resize', updateHeroWidth)
   stopAutoPlay()
 })
 </script>
 
 <template>
   <section
+    ref="sectionRef"
     class="section-hero"
     @mouseenter="stopAutoPlay"
     @mouseleave="startAutoPlay"
