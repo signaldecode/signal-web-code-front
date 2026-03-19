@@ -65,10 +65,11 @@
     }
   }
 
-  // 검색바
-  &__search-center {
-    flex: 1;
-    max-width: $header-search-max-width;
+  // 검색바 (Row 2 인라인)
+  &__search-inline {
+    width: $header-search-max-width;
+    flex-shrink: 1;
+    min-width: 120px;
 
     @include mobile {
       display: none;
@@ -174,6 +175,7 @@
   &__row-2-left {
     display: flex;
     align-items: center;
+    min-width: 0;
     gap: $padding-6;
 
     @include tablet {
@@ -185,12 +187,13 @@
     }
   }
 
-  // 우측 그룹 (고객센터 / 블로그)
+  // 우측 그룹 (검색 / 고객센터 / 블로그)
   &__row-2-right {
     display: flex;
     align-items: center;
     gap: $padding-5;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-width: 0;
 
     @include mobile {
       display: none;

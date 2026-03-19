@@ -170,21 +170,12 @@ onUnmounted(() => {
 
 <template>
   <header :class="['header', { 'header--scrolled': showDarkStyle }]">
-    <!-- Row 1: 로고 | 검색 | 회원가입 | 로그인 | 장바구니 -->
+    <!-- Row 1: 로고 | 회원가입 | 로그인 | 장바구니 -->
     <div class="header__row-1">
       <div class="header__row-1-inner">
         <NuxtLink to="/" class="header__logo" @click="closeMobileNav">
           <NuxtImg v-if="logoSrc" :src="logoSrc" :alt="logo.alt" class="header__logo-img" preload />
         </NuxtLink>
-
-        <!-- 검색바 (데스크톱 중앙) -->
-        <div class="header__search-center">
-          <BaseSearchInput
-            v-model="searchQuery"
-            :placeholder="logo.searchPlaceholder"
-            @submit="handleSearchSubmit"
-          />
-        </div>
 
         <!-- 유저 액션 (데스크톱) -->
         <div class="header__user-actions">
@@ -262,8 +253,15 @@ onUnmounted(() => {
           </nav>
         </div>
 
-        <!-- 우측: 고객센터 / 블로그 -->
+        <!-- 우측: 검색 | 고객센터 / 블로그 -->
         <div class="header__row-2-right">
+          <div class="header__search-inline">
+            <BaseSearchInput
+              v-model="searchQuery"
+              :placeholder="logo.searchPlaceholder"
+              @submit="handleSearchSubmit"
+            />
+          </div>
           <NuxtLink to="/support" class="header__util-link">고객센터</NuxtLink>
           <a
             v-if="blogUrl"
