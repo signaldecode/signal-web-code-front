@@ -74,6 +74,21 @@ export const useScrollAnimation = (options = {}) => {
  *   <div v-scroll-animate="{ animation: 'fade-up', delay: 200 }">딜레이 적용</div>
  */
 export const vScrollAnimate = {
+  getSSRProps(binding) {
+    const value = binding.value
+    let animation = 'fade-up'
+
+    if (typeof value === 'string') {
+      animation = value
+    } else if (typeof value === 'object' && value !== null) {
+      animation = value.animation || 'fade-up'
+    }
+
+    return {
+      class: `scroll-animate scroll-animate--${animation}`
+    }
+  },
+
   mounted(el, binding) {
     const value = binding.value
     let animation = 'fade-up'

@@ -23,70 +23,108 @@
     padding: $padding-4 0;
   }
 
-  // Peek 캐러셀 트랙: 이전 | 현재 | 다음
+  // 트랙 래퍼: Transition 시 겹치는 트랙을 담는 컨테이너
+  &__track-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  // Peek 캐러셀 트랙: 양쪽이 화면 밖으로 잘리는 centeredSlides 스타일
   &__track {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     gap: $padding-4;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 $container-padding;
-
-    @include tablet {
-      gap: $padding-3;
-      padding: 0 $padding-6;
-    }
 
     @include mobile {
       gap: $padding-2;
-      padding: 0 $padding-3;
     }
+  }
+
+  // 슬라이드 트랜지션 — 다음으로
+  .hero-slide-next-enter-active,
+  .hero-slide-next-leave-active {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+  }
+
+  .hero-slide-next-leave-active {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slide-next-enter-from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  .hero-slide-next-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  // 슬라이드 트랜지션 — 이전으로
+  .hero-slide-prev-enter-active,
+  .hero-slide-prev-leave-active {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+  }
+
+  .hero-slide-prev-leave-active {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slide-prev-enter-from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  .hero-slide-prev-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
   }
 
   // 공통 슬라이드 스타일
   &__slide {
-    flex-shrink: 0;
-    border-radius: $padding-3;
+    border-radius: $padding-4;
     overflow: hidden;
     transition: all 0.5s ease;
+    min-width: 0;
+    flex-shrink: 0;
 
     @include mobile {
       border-radius: $padding-2;
     }
 
-    // 양옆 슬라이드 (이전/다음)
+    // 양옆 슬라이드 (이전/다음) — 화면 밖으로 잘림
     &--prev,
     &--next {
-      width: 15%;
-      aspect-ratio: 3 / 4;
-      opacity: 0.5;
-      filter: brightness(0.6);
+      width: 20%;
+      opacity: 0.6;
+      filter: brightness(0.7);
       cursor: pointer;
       transition: opacity 0.3s ease, filter 0.3s ease;
 
       @include mobile {
-        width: 12%;
-        aspect-ratio: 2 / 3;
+        width: 14%;
       }
 
       &:hover {
-        opacity: 0.75;
-        filter: brightness(0.8);
+        opacity: 0.8;
+        filter: brightness(0.85);
       }
     }
 
-    // 현재 슬라이드 (메인)
+    // 현재 슬라이드 (메인) — 중앙 강조
     &--active {
-      width: 70%;
-      aspect-ratio: 16 / 7;
+      width: 60%;
+      aspect-ratio: 2 / 1;
 
       @include tablet {
-        width: 72%;
+        width: 64%;
       }
 
       @include mobile {
-        width: 76%;
+        width: 72%;
         aspect-ratio: 16 / 9;
       }
     }
