@@ -30,10 +30,10 @@ const handleSubmit = () => {
   emit('submit', props.modelValue)
 }
 
-const handleClose = () => {
-  emit('update:modelValue', '')
-  emit('close')
-}
+// const handleClose = () => {
+//   emit('update:modelValue', '')
+//   emit('close')
+// }
 
 const focus = () => {
   nextTick(() => {
