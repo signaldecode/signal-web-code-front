@@ -4,41 +4,94 @@
 // ============================================
 
 @use '../tokens/spacing' as *;
+@use '../tokens/animation' as *;
 
 // 공통 트랜지션
 .scroll-animate {
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: opacity, transform;
+  will-change: opacity, transform, filter;
 
   // ------ 애니메이션 타입별 초기 상태 ------
 
-  // fade-up (기본)
+  // fade-up (기본) — 우아한 감속
   &--fade-up {
     opacity: 0;
-    transform: translateY($padding-8);
+    transform: translateY($anim-offset-y);
+    transition:
+      opacity $duration-slow $ease-out-expo,
+      transform $duration-slow $ease-out-expo;
   }
 
-  // fade-in
+  // fade-in — 단순 페이드
   &--fade-in {
     opacity: 0;
+    transition: opacity $duration-normal $ease-out;
   }
 
   // slide-left (좌측에서 등장)
   &--slide-left {
     opacity: 0;
-    transform: translateX(-$padding-10);
+    transform: translateX(-$anim-offset-x);
+    transition:
+      opacity $duration-slow $ease-out-expo,
+      transform $duration-slow $ease-out-expo;
   }
 
   // slide-right (우측에서 등장)
   &--slide-right {
     opacity: 0;
-    transform: translateX($padding-10);
+    transform: translateX($anim-offset-x);
+    transition:
+      opacity $duration-slow $ease-out-expo,
+      transform $duration-slow $ease-out-expo;
   }
 
-  // scale-in (확대 등장)
+  // scale-in (확대 등장) — 탄성 이징
   &--scale-in {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale($anim-scale-from);
+    transition:
+      opacity $duration-normal $ease-out,
+      transform $duration-slow $ease-out-back;
+  }
+
+  // blur-in (블러 해제) — 고급 페이드
+  &--blur-in {
+    opacity: 0;
+    filter: blur($anim-blur-from);
+    transform: translateY(calc($anim-offset-y * 0.5));
+    transition:
+      opacity $duration-slow $ease-out-expo,
+      filter $duration-slower $ease-out,
+      transform $duration-slow $ease-out-expo;
+  }
+
+  // reveal-up (클립패스 reveal) — 마스크 효과
+  &--reveal-up {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: translateY($padding-5);
+    transition:
+      opacity $duration-fast $ease-out,
+      clip-path $duration-slow $ease-out-expo,
+      transform $duration-slow $ease-out-expo;
+  }
+
+  // zoom-fade (줌 + 페이드, 배너용)
+  &--zoom-fade {
+    opacity: 0;
+    transform: scale(1.05);
+    transition:
+      opacity $duration-slow $ease-out-expo,
+      transform $duration-slower $ease-out;
+  }
+
+  // slide-up-spring (스프링 바운스)
+  &--slide-up-spring {
+    opacity: 0;
+    transform: translateY($anim-offset-y);
+    transition:
+      opacity $duration-normal $ease-out,
+      transform $duration-slow $ease-out-back;
   }
 
   // ------ 애니메이션 완료 상태 ------
@@ -46,14 +99,42 @@
   &.scroll-animated {
     opacity: 1;
     transform: translate(0, 0) scale(1);
+    filter: blur(0);
+    clip-path: inset(0 0 0 0);
   }
+}
+
+// ------ Stagger 지원 (자식 순차 등장) ------
+// v-scroll-animate="{ animation: 'fade-up', stagger: true }" 사용 시
+// JS에서 각 자식에 --stagger-index CSS 변수 주입
+
+.scroll-animate--stagger > * {
+  opacity: 0;
+  transform: translateY(calc($anim-offset-y * 0.5));
+  transition:
+    opacity $duration-slow $ease-out-expo,
+    transform $duration-slow $ease-out-expo;
+  transition-delay: calc(var(--stagger-index, 0) * #{$stagger-delay});
+}
+
+.scroll-animate--stagger.scroll-animated > * {
+  opacity: 1;
+  transform: translate(0, 0);
 }
 
 // prefers-reduced-motion 대응
 @media (prefers-reduced-motion: reduce) {
   .scroll-animate {
-    transition: none;
-    opacity: 1;
-    transform: none;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+
+    &--stagger > * {
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
   }
 }

@@ -22,6 +22,35 @@ const componentMap = {
 }
 
 /**
+ * 섹션별 애니메이션 매핑
+ * 각 섹션 특성에 맞는 고유 애니메이션 배정
+ */
+const sectionAnimationMap = {
+  best: { animation: 'slide-up-spring', stagger: true },
+  best_review: { animation: 'blur-in' },
+  new: { animation: 'fade-up', stagger: true },
+  recommend: { animation: 'scale-in' },
+  category: { animation: 'fade-up', stagger: true },
+  full_banner: false,
+  slide_banner: false,
+  half_banner: false,
+  review: { animation: 'fade-in' },
+  instagram: { animation: 'blur-in' }
+}
+
+/**
+ * keyword에 맞는 애니메이션 옵션 반환
+ */
+const getAnimationConfig = (keyword, index) => {
+  const config = sectionAnimationMap[keyword]
+  if (config === false) return false
+  return {
+    ...(config || { animation: 'fade-up' }),
+    delay: index * 60
+  }
+}
+
+/**
  * keyword로 실제 Vue 컴포넌트 resolve
  */
 const resolveSection = (keyword) => {
@@ -61,7 +90,7 @@ const isClientOnly = (keyword) => {
   <template v-for="(section, index) in sections" :key="section.keyword">
     <!-- ClientOnly 섹션 -->
     <ClientOnly v-if="isClientOnly(section.keyword) && shouldRender(section.keyword)">
-      <div v-scroll-animate="{ animation: 'fade-up', delay: index * 100 }">
+      <div v-scroll-animate="getAnimationConfig(section.keyword, index)">
         <component
           :is="resolveSection(section.keyword)"
           v-bind="getSectionProps(section.keyword)"
@@ -72,7 +101,7 @@ const isClientOnly = (keyword) => {
     <!-- SSR 섹션 -->
     <div
       v-else-if="!isClientOnly(section.keyword) && shouldRender(section.keyword)"
-      v-scroll-animate="{ animation: 'fade-up', delay: index * 100 }"
+      v-scroll-animate="getAnimationConfig(section.keyword, index)"
     >
       <component
         :is="resolveSection(section.keyword)"
