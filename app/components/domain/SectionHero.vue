@@ -16,105 +16,85 @@ const props = defineProps({
   },
   interval: {
     type: Number,
-    default: 5000
+    default: 6000
   }
 })
 
 const arrowLabels = mainData.hero.arrowLabels
+const ctaLabel = mainData.hero.ctaLabel
 
 const currentIndex = ref(0)
+const prevIndex = ref(-1)
 const totalSlides = computed(() => props.slides.length || 1)
 const isTransitioning = ref(false)
-const animOffset = ref(0)
-const skipTransition = ref(false)
-const trackRef = ref(null)
-const sectionRef = ref(null)
-const heroWidth = ref(0)
+const progressValue = ref(0)
+const textVisible = ref(true)
 
-const updateHeroWidth = () => {
-  if (sectionRef.value) heroWidth.value = sectionRef.value.clientWidth
-}
-
-// 현재 활성 슬라이드 (오버레이 텍스트용)
+// 현재 활성 슬라이드
 const activeSlide = computed(() => props.slides[currentIndex.value] || props.data)
 
-// 순환 인덱스 계산
-const getCircularIndex = (i) => {
-  const n = totalSlides.value
-  return ((i % n) + n) % n
-}
+// Ken Burns 방향: 슬라이드마다 번갈아 zoom-in / zoom-out
+const kenBurnsDirection = computed(() => currentIndex.value % 2 === 0 ? 'in' : 'out')
 
-// 5개 슬라이드 윈도우: [현재-2, 현재-1, 현재, 현재+1, 현재+2]
-// → 항상 양쪽에 잘린 슬라이드가 보이고, 전환 시에도 빈 공간 없이 무한 순환
-const CENTER_POS = 2
-
-const visibleSlides = computed(() => {
-  if (totalSlides.value <= 1) {
-    return [{ slide: props.slides[0] || props.data, index: 0 }]
-  }
-  return [-2, -1, 0, 1, 2].map(offset => {
-    const idx = getCircularIndex(currentIndex.value + offset)
-    return { slide: props.slides[idx], index: idx }
-  })
-})
-
-// 트랙 translateX: 중앙(position 2)에 현재 슬라이드 배치
-// animOffset: 0=정지, 1=다음으로 이동 중, -1=이전으로 이동 중
-const trackStyle = computed(() => {
-  const targetPos = CENTER_POS + animOffset.value
-  const vw = heroWidth.value
-  return {
-    transform: vw
-      ? `translateX(calc((${vw}px - var(--hero-slide-width)) / 2 - ${targetPos} * var(--hero-slide-step)))`
-      : `translateX(calc((100vw - var(--hero-slide-width)) / 2 - ${targetPos} * var(--hero-slide-step)))`,
-    transition: skipTransition.value ? 'none' : undefined
-  }
+// 타이틀 글자 분리 (split-text 애니메이션)
+const splitTitle = computed(() => {
+  const title = activeSlide.value.title || ''
+  return title.split('').map((char, i) => ({
+    char: char === ' ' ? '\u00A0' : char,
+    delay: i * 40
+  }))
 })
 
 let autoPlayTimer = null
+let progressTimer = null
+const PROGRESS_INTERVAL = 30 // 30ms마다 업데이트
 
 const goToSlide = (index) => {
-  currentIndex.value = getCircularIndex(index)
-}
-
-const nextSlide = () => {
   if (isTransitioning.value || totalSlides.value <= 1) return
+  const n = totalSlides.value
+  const target = ((index % n) + n) % n
+  if (target === currentIndex.value) return
+
   isTransitioning.value = true
-  animOffset.value = 1
-  restartAutoPlay()
+  textVisible.value = false
+
+  // 텍스트 퇴장 후 슬라이드 전환
+  setTimeout(() => {
+    prevIndex.value = currentIndex.value
+    currentIndex.value = target
+    progressValue.value = 0
+
+    // crossfade 완료 후 텍스트 등장
+    setTimeout(() => {
+      textVisible.value = true
+      isTransitioning.value = false
+    }, 800)
+  }, 300)
 }
 
-const prevSlide = () => {
-  if (isTransitioning.value || totalSlides.value <= 1) return
-  isTransitioning.value = true
-  animOffset.value = -1
-  restartAutoPlay()
-}
+const nextSlide = () => goToSlide(currentIndex.value + 1)
+const prevSlide = () => goToSlide(currentIndex.value - 1)
 
-// 애니메이션 완료 → 인덱스 갱신 후 즉시 스냅 (무한 순환 트릭)
-// 핵심: getBoundingClientRect()로 강제 reflow → 브라우저가 transition:none 상태를 확실히 paint 한 뒤 transition 복원
-const onTransitionEnd = (event) => {
-  if (event.propertyName !== 'transform') return
-  skipTransition.value = true
-  if (animOffset.value === 1) goToSlide(currentIndex.value + 1)
-  else if (animOffset.value === -1) goToSlide(currentIndex.value - 1)
-  animOffset.value = 0
-  nextTick(() => {
-    // 강제 reflow: transition:none + 새 transform이 확실히 적용된 후 transition 복원
-    trackRef.value?.getBoundingClientRect()
-    skipTransition.value = false
-    isTransitioning.value = false
-  })
-}
-
+// 프로그레스 바 + 오토플레이
 const startAutoPlay = () => {
   stopAutoPlay()
-  if (props.autoPlay && totalSlides.value > 1) {
-    autoPlayTimer = setInterval(() => nextSlide(), props.interval)
-  }
+  if (!props.autoPlay || totalSlides.value <= 1) return
+
+  progressValue.value = 0
+  progressTimer = setInterval(() => {
+    progressValue.value += (PROGRESS_INTERVAL / props.interval) * 100
+    if (progressValue.value >= 100) {
+      progressValue.value = 100
+      nextSlide()
+    }
+  }, PROGRESS_INTERVAL)
 }
 
 const stopAutoPlay = () => {
+  if (progressTimer) {
+    clearInterval(progressTimer)
+    progressTimer = null
+  }
   if (autoPlayTimer) {
     clearInterval(autoPlayTimer)
     autoPlayTimer = null
@@ -122,97 +102,165 @@ const stopAutoPlay = () => {
 }
 
 const restartAutoPlay = () => {
-  stopAutoPlay()
+  progressValue.value = 0
   startAutoPlay()
 }
 
 // 모바일 터치 스와이프
 const { swipeEvents: heroSwipeEvents } = useSwipe({
-  onSwipeLeft: nextSlide,
-  onSwipeRight: prevSlide
+  onSwipeLeft: () => { nextSlide(); restartAutoPlay() },
+  onSwipeRight: () => { prevSlide(); restartAutoPlay() }
 })
 
+const onArrowClick = (dir) => {
+  if (dir === 'next') nextSlide()
+  else prevSlide()
+  restartAutoPlay()
+}
+
 onMounted(() => {
-  updateHeroWidth()
-  window.addEventListener('resize', updateHeroWidth)
-  startAutoPlay()
+  // 초기 텍스트 애니메이션
+  textVisible.value = false
+  setTimeout(() => {
+    textVisible.value = true
+    startAutoPlay()
+  }, 100)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateHeroWidth)
   stopAutoPlay()
 })
 </script>
 
 <template>
   <section
-    ref="sectionRef"
-    class="section-hero"
+    class="section-hero-v2"
     @mouseenter="stopAutoPlay"
     @mouseleave="startAutoPlay"
     @touchstart="(e) => { stopAutoPlay(); heroSwipeEvents.touchstart(e) }"
     @touchmove="heroSwipeEvents.touchmove"
-    @touchend="heroSwipeEvents.touchend"
+    @touchend="(e) => { heroSwipeEvents.touchend(e); startAutoPlay() }"
   >
-    <div class="section-hero__track-wrapper">
+    <!-- 배경 이미지 레이어 (crossfade + ken-burns) -->
+    <div class="section-hero-v2__bg">
       <div
-        ref="trackRef"
-        class="section-hero__track"
-        :style="trackStyle"
-        @transitionend="onTransitionEnd"
+        v-for="(slide, i) in slides"
+        :key="i"
+        class="section-hero-v2__bg-slide"
+        :class="{
+          'section-hero-v2__bg-slide--active': i === currentIndex,
+          'section-hero-v2__bg-slide--prev': i === prevIndex && isTransitioning,
+          'section-hero-v2__bg-slide--ken-in': i === currentIndex && kenBurnsDirection === 'in',
+          'section-hero-v2__bg-slide--ken-out': i === currentIndex && kenBurnsDirection === 'out'
+        }"
       >
-        <div
-          v-for="({ slide }, i) in visibleSlides"
-          :key="i"
-          class="section-hero__slide"
-          @click="totalSlides > 1 && i < CENTER_POS ? prevSlide() : totalSlides > 1 && i > CENTER_POS ? nextSlide() : null"
-        >
-          <component
-            :is="(slide.linkUrl || slide.href) ? 'a' : 'div'"
-            :href="(i === CENTER_POS || totalSlides <= 1) ? (slide.linkUrl || slide.href || undefined) : undefined"
-            :target="(i === CENTER_POS || totalSlides <= 1) && (slide.linkUrl || slide.href) ? (slide.linkTarget || '_self') : undefined"
-            :rel="(i === CENTER_POS || totalSlides <= 1) && slide.linkTarget === '_blank' ? 'noopener noreferrer' : undefined"
-            class="section-hero__slide-link"
-          >
-            <NuxtImg
-              :src="slide.imageUrl || slide.image"
-              :alt="slide.title || slide.imageAlt"
-              class="section-hero__image"
-              sizes="sm:100vw md:85vw lg:85vw"
-              quality="100"
-              :loading="(i === CENTER_POS || totalSlides <= 1) ? 'eager' : 'lazy'"
-              :fetchpriority="(i === CENTER_POS || totalSlides <= 1) ? 'high' : undefined"
-            />
-          </component>
-        </div>
+        <NuxtImg
+          :src="slide.imageUrl || slide.image"
+          :alt="slide.title || slide.imageAlt"
+          class="section-hero-v2__bg-image"
+          sizes="100vw"
+          quality="90"
+          :loading="i === 0 ? 'eager' : 'lazy'"
+          :fetchpriority="i === 0 ? 'high' : undefined"
+        />
       </div>
+      <!-- 그라데이션 오버레이 -->
+      <div class="section-hero-v2__overlay" />
     </div>
 
     <!-- 콘텐츠 오버레이 -->
-    <div class="section-hero__content">
-      <p v-if="activeSlide.subtitle" class="section-hero__subtitle">{{ activeSlide.subtitle }}</p>
-      <p v-if="activeSlide.description" class="section-hero__description">{{ activeSlide.description }}</p>
-      <SlideIndicator
-        v-if="totalSlides > 1"
-        :current="currentIndex + 1"
-        :total="totalSlides"
-      />
+    <div class="section-hero-v2__content">
+      <p
+        v-if="activeSlide.subtitle"
+        class="section-hero-v2__subtitle"
+        :class="{ 'section-hero-v2__subtitle--visible': textVisible }"
+      >
+        {{ activeSlide.subtitle }}
+      </p>
+
+      <!-- Split-text 타이틀 -->
+      <h2 class="section-hero-v2__title">
+        <span
+          v-for="(item, i) in splitTitle"
+          :key="`${currentIndex}-${i}`"
+          class="section-hero-v2__char"
+          :class="{ 'section-hero-v2__char--visible': textVisible }"
+          :style="{ transitionDelay: `${item.delay}ms` }"
+        >{{ item.char }}</span>
+      </h2>
+
+      <p
+        v-if="activeSlide.description"
+        class="section-hero-v2__description"
+        :class="{ 'section-hero-v2__description--visible': textVisible }"
+      >
+        {{ activeSlide.description }}
+      </p>
+
+      <!-- 글래스모피즘 CTA 버튼 -->
+      <component
+        :is="(activeSlide.linkUrl || activeSlide.href) ? 'a' : 'span'"
+        :href="activeSlide.linkUrl || activeSlide.href || undefined"
+        :target="(activeSlide.linkUrl || activeSlide.href) ? (activeSlide.linkTarget || '_self') : undefined"
+        :rel="activeSlide.linkTarget === '_blank' ? 'noopener noreferrer' : undefined"
+        class="section-hero-v2__cta"
+        :class="{ 'section-hero-v2__cta--visible': textVisible }"
+      >
+        <span class="section-hero-v2__cta-text">{{ ctaLabel }}</span>
+        <span class="section-hero-v2__cta-arrow">&rarr;</span>
+      </component>
     </div>
 
-    <!-- 화살표 -->
-    <div v-if="totalSlides > 1" class="section-hero__arrows">
-      <IconSlideButton
-        direction="prev"
-        class="slide-button--hero"
-        :aria-label="arrowLabels.prev"
-        @click="prevSlide"
-      />
-      <IconSlideButton
-        direction="next"
-        class="slide-button--hero"
-        :aria-label="arrowLabels.next"
-        @click="nextSlide"
-      />
+    <!-- 하단 컨트롤 바 -->
+    <div class="section-hero-v2__controls">
+      <!-- 화살표 -->
+      <div v-if="totalSlides > 1" class="section-hero-v2__arrows">
+        <button
+          class="section-hero-v2__arrow-btn"
+          :aria-label="arrowLabels.prev"
+          @click="onArrowClick('prev')"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button
+          class="section-hero-v2__arrow-btn"
+          :aria-label="arrowLabels.next"
+          @click="onArrowClick('next')"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 프로그레스 인디케이터 -->
+      <div v-if="totalSlides > 1" class="section-hero-v2__progress">
+        <button
+          v-for="(_, i) in slides"
+          :key="i"
+          class="section-hero-v2__progress-item"
+          :class="{ 'section-hero-v2__progress-item--active': i === currentIndex }"
+          :aria-label="`${i + 1}번 슬라이드`"
+          @click="() => { goToSlide(i); restartAutoPlay() }"
+        >
+          <span class="section-hero-v2__progress-bar">
+            <span
+              v-if="i === currentIndex"
+              class="section-hero-v2__progress-fill"
+              :style="{ width: `${progressValue}%` }"
+            />
+          </span>
+        </button>
+      </div>
+
+      <!-- 슬라이드 카운터 -->
+      <div v-if="totalSlides > 1" class="section-hero-v2__counter">
+        <span class="section-hero-v2__counter-current">{{ String(currentIndex + 1).padStart(2, '0') }}</span>
+        <span class="section-hero-v2__counter-sep">/</span>
+        <span class="section-hero-v2__counter-total">{{ String(totalSlides).padStart(2, '0') }}</span>
+      </div>
     </div>
   </section>
 </template>

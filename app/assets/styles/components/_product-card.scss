@@ -8,6 +8,20 @@
 @use '../tokens/breakpoints' as *;
 
 .product-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 12px;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+
+    @include mobile {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
   &__link {
     display: block;
     text-decoration: none;
@@ -33,7 +47,37 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  // 순위 뱃지 (글래스모피즘)
+  &__rank {
+    position: absolute;
+    top: $padding-3;
+    right: $padding-3;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: $Primary-white-color;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    z-index: 2;
+
+    @include mobile {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+      top: $padding-2;
+      right: $padding-2;
+    }
   }
 
   &__hover-overlay {
@@ -42,12 +86,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: $padding-2;
-    background: rgba(0, 0, 0, 0.55);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      transparent 100%
+    );
     opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: $padding-4;
+    transition: opacity 0.4s ease;
+    padding: $padding-6;
     text-align: center;
     pointer-events: none;
 
@@ -81,18 +130,26 @@
   &__hover-cta {
     @include typo-button-2;
     color: $Primary-white-color;
-    border: 1px solid $Primary-white-color;
-    border-radius: $padding-1;
-    padding: $padding-1 $padding-3;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    padding: $padding-2 $padding-5;
     margin-top: $padding-1;
+    transition: background 0.3s ease;
   }
 
   &__link:hover &__image {
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
 
   &__link:hover &__hover-overlay {
     opacity: 1;
+  }
+
+  &__link:hover &__hover-cta {
+    background: rgba(255, 255, 255, 0.25);
   }
 
   &__badges {
@@ -101,6 +158,7 @@
     left: $padding-3;
     display: flex;
     gap: $padding-1;
+    z-index: 2;
 
     @include mobile-xs {
       top: $padding-2;

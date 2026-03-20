@@ -46,6 +46,7 @@
       "prev": "이전 슬라이드",
       "next": "다음 슬라이드"
     },
+    "ctaLabel": "자세히 보기",
     "slides": [
       {
         "title": "POWER OF RADIANCE",
@@ -82,6 +83,21 @@
         "image": "/images/hero/main-hero.png",
         "imageAlt": "메인 히어로 이미지 5"
       }
+    ]
+  },
+  "bentoGrid": {
+    "featuredTitle": "Featured",
+    "featuredSubtitle": "에디터 추천 템플릿",
+    "featuredCta": "자세히 보기",
+    "categoryTitle": "카테고리",
+    "bannerTitle": "프로모션"
+  },
+  "trustBar": {
+    "items": [
+      { "icon": "template", "value": 1200, "suffix": "+", "label": "프리미엄 템플릿" },
+      { "icon": "star", "value": 4.8, "suffix": "", "label": "평균 평점" },
+      { "icon": "update", "value": 2, "suffix": "회/주", "label": "정기 업데이트" },
+      { "icon": "shield", "value": 0, "suffix": "", "label": "평생 무료 업데이트", "displayText": "무료" }
     ]
   },
   "categories": {

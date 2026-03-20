@@ -4,6 +4,7 @@
 
 @use '../tokens/breakpoints' as *;
 @use '../tokens/spacing' as *;
+@use '../tokens/colors' as *;
 
 // --------------------------------------------
 // Container
@@ -129,6 +130,18 @@
 // Page Layout
 // --------------------------------------------
 
+// 스크롤 프로그레스바
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--theme-primary);
+  z-index: 200;
+  transition: width 50ms linear;
+  pointer-events: none;
+}
+
 .page-main {
   min-height: 100vh;
   display: flex;
@@ -136,6 +149,27 @@
 
   &__hero-wrap {
     position: relative;
+  }
+
+  &__hero-placeholder {
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    max-height: 1080px;
+    margin-top: $header-total-height;
+    background: $Black-Primary-black-900;
+
+    @include tablet {
+      min-height: 500px;
+      max-height: 800px;
+    }
+
+    @include mobile {
+      height: 100svh;
+      min-height: 400px;
+      max-height: 700px;
+      margin-top: $header-total-height-mobile;
+    }
   }
 
   > main {

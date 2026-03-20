@@ -16,6 +16,7 @@ const componentMap = {
   SectionCategoryItems: resolveComponent('SectionCategoryItems'),
   SectionReviews: resolveComponent('SectionReviews'),
   SectionInstagram: resolveComponent('SectionInstagram'),
+  SectionBentoGrid: resolveComponent('SectionBentoGrid'),
   BannerFull: resolveComponent('BannerFull'),
   BannerSlide: resolveComponent('BannerSlide'),
   SectionHalfBanners: resolveComponent('SectionHalfBanners')
@@ -34,6 +35,7 @@ const sectionAnimationMap = {
   full_banner: false,
   slide_banner: false,
   half_banner: false,
+  bento: { animation: 'fade-up' },
   review: { animation: 'fade-in' },
   instagram: { animation: 'blur-in' }
 }

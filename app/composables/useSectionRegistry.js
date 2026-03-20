@@ -45,7 +45,8 @@ export const useSectionRegistry = () => {
           subtitle: bestMeta.value?.subtitle || bestMeta.value?.description || mainData.bestItems.subtitle,
           arrowLabels: mainData.bestItems.arrowLabels
         },
-        products: bestProducts.value || []
+        products: bestProducts.value || [],
+        showRank: true
       }),
       isEmpty: () => !bestProducts.value?.length
     },
@@ -147,6 +148,21 @@ export const useSectionRegistry = () => {
         reviews: sectionReviews.value || []
       }),
       isEmpty: () => !sectionReviews.value?.length
+    },
+
+    bento: {
+      component: 'SectionBentoGrid',
+      clientOnly: true,
+      props: () => ({
+        data: {
+          ...mainData.bentoGrid,
+          mainImage: recommendMeta.value?.bannerImageUrl || mainData.mdPick.mainImage
+        },
+        featuredProduct: recommendProducts.value?.[0] || null,
+        categories: apiCategoryItems.value?.length ? apiCategoryItems.value.slice(0, 4) : mainData.categories.items.slice(0, 4),
+        banner: apiSlideBanners.value?.[0] || mainData.banners.slide[0] || null
+      }),
+      isEmpty: () => !recommendProducts.value?.length && !apiCategoryItems.value?.length
     },
 
     instagram: {

@@ -7,6 +7,10 @@ const props = defineProps({
   products: {
     type: Array,
     default: () => []
+  },
+  showRank: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -125,9 +129,10 @@ onUnmounted(() => {
           :style="sliderStyle"
         >
           <ProductCard
-            v-for="product in products"
+            v-for="(product, idx) in products"
             :key="product.id"
             :product="product"
+            :rank="showRank ? idx + 1 : 0"
             class="section-best-items__item"
             :style="{ width: itemWidth + 'px' }"
           />

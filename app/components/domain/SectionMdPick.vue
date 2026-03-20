@@ -15,8 +15,25 @@ const props = defineProps({
 const currentIndex = ref(0)
 const visibleItems = 2
 const containerRef = ref(null)
+const sectionRef = ref(null)
 const itemWidth = ref(0)
 const gap = 24
+const parallaxOffset = ref(0)
+
+// 선택된 상품의 이미지로 메인 이미지 변경
+const selectedProductIndex = ref(-1)
+const displayImage = computed(() => {
+  if (selectedProductIndex.value >= 0) {
+    return props.products[selectedProductIndex.value]?.image || props.data.mainImage
+  }
+  return props.data.mainImage
+})
+const displayImageAlt = computed(() => {
+  if (selectedProductIndex.value >= 0) {
+    return props.products[selectedProductIndex.value]?.name || props.data.mainImageAlt
+  }
+  return props.data.mainImageAlt
+})
 
 // Touch/Swipe
 const { swipeEvents: sliderSwipeEvents } = useSwipe({
@@ -36,15 +53,15 @@ const sliderStyle = computed(() => ({
 }))
 
 const nextSlide = () => {
-  if (canGoNext.value) {
-    currentIndex.value++
-  }
+  if (canGoNext.value) currentIndex.value++
 }
 
 const prevSlide = () => {
-  if (canGoPrev.value) {
-    currentIndex.value--
-  }
+  if (canGoPrev.value) currentIndex.value--
+}
+
+const selectProduct = (idx) => {
+  selectedProductIndex.value = selectedProductIndex.value === idx ? -1 : idx
 }
 
 const calculateItemWidth = () => {
@@ -56,6 +73,18 @@ const calculateItemWidth = () => {
   })
 }
 
+// 패럴랙스 스크롤
+const onScroll = () => {
+  if (!sectionRef.value) return
+  const rect = sectionRef.value.getBoundingClientRect()
+  const viewH = window.innerHeight
+  // 섹션이 뷰포트 안에 있을 때만
+  if (rect.bottom > 0 && rect.top < viewH) {
+    const progress = (viewH - rect.top) / (viewH + rect.height)
+    parallaxOffset.value = (progress - 0.5) * 40 // -20px ~ +20px
+  }
+}
+
 let resizeTimer = null
 const debouncedCalculate = () => {
   clearTimeout(resizeTimer)
@@ -65,16 +94,19 @@ const debouncedCalculate = () => {
 onMounted(() => {
   calculateItemWidth()
   window.addEventListener('resize', debouncedCalculate, { passive: true })
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
 })
 
 onUnmounted(() => {
   clearTimeout(resizeTimer)
   window.removeEventListener('resize', debouncedCalculate)
+  window.removeEventListener('scroll', onScroll)
 })
 </script>
 
 <template>
-  <section class="section-md-pick">
+  <section ref="sectionRef" class="section-md-pick">
     <div class="section-md-pick__inner">
       <div class="section-md-pick__header">
         <h2 class="section-md-pick__title">{{ data.title }}</h2>
@@ -91,22 +123,24 @@ onUnmounted(() => {
             class="section-md-pick__image-link"
           >
             <img
-              :src="data.mainImage"
-              :alt="data.mainImageAlt"
+              :src="displayImage"
+              :alt="displayImageAlt"
               class="section-md-pick__main-image"
               loading="lazy"
               width="588"
               height="588"
+              :style="{ transform: `translateY(${parallaxOffset}px)` }"
             />
           </a>
           <img
             v-else
-            :src="data.mainImage"
-            :alt="data.mainImageAlt"
+            :src="displayImage"
+            :alt="displayImageAlt"
             class="section-md-pick__main-image"
             loading="lazy"
             width="588"
             height="588"
+            :style="{ transform: `translateY(${parallaxOffset}px)` }"
           />
         </div>
 
@@ -127,13 +161,16 @@ onUnmounted(() => {
             />
             <div ref="containerRef" class="section-md-pick__slider-container">
               <div class="section-md-pick__slider" :style="sliderStyle">
-                <ProductCardSmall
-                  v-for="product in products"
+                <div
+                  v-for="(product, idx) in products"
                   :key="product.id"
-                  :product="product"
                   class="section-md-pick__item"
+                  :class="{ 'section-md-pick__item--selected': selectedProductIndex === idx }"
                   :style="{ width: itemWidth > 0 ? `${itemWidth}px` : undefined }"
-                />
+                  @click="selectProduct(idx)"
+                >
+                  <ProductCardSmall :product="product" />
+                </div>
               </div>
             </div>
             <IconSlideButton

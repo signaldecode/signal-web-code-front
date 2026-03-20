@@ -17,6 +17,10 @@ const props = defineProps({
   badgeVariant: {
     type: String,
     default: 'best-dark'
+  },
+  rank: {
+    type: Number,
+    default: 0
   }
 })
 
@@ -52,6 +56,8 @@ const discountRate = computed(() => {
           class="product-card__image"
           loading="lazy"
         />
+        <!-- 순위 뱃지 -->
+        <span v-if="rank > 0" class="product-card__rank">{{ rank }}</span>
         <div v-if="showBadge && product.isBest" class="product-card__badges">
           <BaseBadge
             :label="badgeLabel"

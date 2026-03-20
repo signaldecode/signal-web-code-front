@@ -172,6 +172,705 @@
 }
 
 // --------------------------------------------
+// Section Hero V2 — Fullscreen Cinematic
+// Crossfade + Ken Burns + Split-text + Glass CTA
+// --------------------------------------------
+
+.section-hero-v2 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  max-height: 1080px;
+  overflow: hidden;
+  margin-top: $header-total-height;
+
+  @include tablet {
+    min-height: 500px;
+    max-height: 800px;
+  }
+
+  @include mobile {
+    height: 100svh;
+    min-height: 400px;
+    max-height: 700px;
+    margin-top: $header-total-height-mobile;
+  }
+
+  // === 배경 이미지 레이어 ===
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  &__bg-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    will-change: opacity, transform;
+
+    &--active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    &--prev {
+      opacity: 1;
+      z-index: 0;
+    }
+  }
+
+  // Ken Burns zoom 효과
+  &__bg-slide--ken-in &__bg-image {
+    animation: ken-burns-in 8s ease-out forwards;
+  }
+
+  &__bg-slide--ken-out &__bg-image {
+    animation: ken-burns-out 8s ease-out forwards;
+  }
+
+  &__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  // 그라데이션 오버레이
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.05) 40%,
+      rgba(0, 0, 0, 0.3) 70%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+    pointer-events: none;
+  }
+
+  // === 콘텐츠 오버레이 ===
+  &__content {
+    position: absolute;
+    bottom: 120px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: $Primary-white-color;
+
+    @include tablet {
+      bottom: 100px;
+    }
+
+    @include mobile {
+      bottom: 100px;
+      padding-left: $padding-6;
+      padding-right: $padding-6;
+    }
+  }
+
+  // 서브타이틀
+  &__subtitle {
+    @include typo-body-2;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 $padding-4;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: 0.1s;
+
+    &--visible {
+      opacity: 0.85;
+      transform: translateY(0);
+    }
+
+    @include mobile {
+      @include typo-body-3;
+      letter-spacing: 0.12em;
+      margin-bottom: $padding-3;
+    }
+  }
+
+  // Split-text 타이틀
+  &__title {
+    @include typo-display-1;
+    margin: 0 0 $padding-6;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    overflow: hidden;
+
+    @include tablet {
+      @include typo-headline-1;
+      line-height: 1.15;
+    }
+
+    @include mobile {
+      @include typo-headline-2;
+      line-height: 1.15;
+      margin-bottom: $padding-4;
+    }
+  }
+
+  &__char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%) rotateX(-80deg);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center bottom;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+    }
+  }
+
+  // 설명
+  &__description {
+    @include typo-body-1;
+    margin: 0 0 $padding-8;
+    max-width: 420px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: 0.5s;
+
+    &--visible {
+      opacity: 0.9;
+      transform: translateY(0);
+    }
+
+    @include mobile {
+      @include typo-body-3;
+      margin-bottom: $padding-6;
+      max-width: 100%;
+    }
+  }
+
+  // === 글래스모피즘 CTA 버튼 ===
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: $padding-3;
+    padding: $padding-4 $padding-8;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 60px;
+    color: $Primary-white-color;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease,
+                background 0.3s ease, border-color 0.3s ease;
+    transition-delay: 0.7s;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    @include mobile {
+      padding: $padding-3 $padding-6;
+    }
+  }
+
+  &__cta-text {
+    @include typo-button-1;
+    letter-spacing: 0.04em;
+
+    @include mobile {
+      @include typo-button-2;
+    }
+  }
+
+  &__cta-arrow {
+    display: inline-block;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+
+    .section-hero-v2__cta:hover & {
+      transform: translateX(4px);
+    }
+  }
+
+  // === 하단 컨트롤 바 ===
+  &__controls {
+    position: absolute;
+    bottom: $padding-10;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    @include container;
+    display: flex;
+    align-items: center;
+    gap: $padding-6;
+
+    @include mobile {
+      bottom: $padding-6;
+      padding-left: $padding-6;
+      padding-right: $padding-6;
+      gap: $padding-4;
+    }
+  }
+
+  // 화살표
+  &__arrows {
+    display: flex;
+    gap: $padding-2;
+    flex-shrink: 0;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__arrow-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: $Primary-white-color;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $Primary-white-color;
+      outline-offset: 2px;
+    }
+  }
+
+  // 프로그레스 바
+  &__progress {
+    display: flex;
+    gap: $padding-2;
+    flex: 1;
+    max-width: 280px;
+
+    @include mobile {
+      flex: 1;
+      max-width: none;
+    }
+  }
+
+  &__progress-item {
+    flex: 1;
+    padding: $padding-2 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid $Primary-white-color;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  }
+
+  &__progress-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: $Primary-white-color;
+    border-radius: 2px;
+    transition: width 30ms linear;
+  }
+
+  &__progress-item--active &__progress-bar {
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  // 카운터
+  &__counter {
+    display: flex;
+    align-items: center;
+    gap: $padding-1;
+    color: $Primary-white-color;
+    @include typo-body-3;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  &__counter-sep {
+    opacity: 0.5;
+  }
+}
+
+// Ken Burns 키프레임
+@keyframes ken-burns-in {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes ken-burns-out {
+  0% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// --------------------------------------------
+// Section Bento Grid
+// --------------------------------------------
+
+.section-bento {
+  padding: $padding-section 0;
+
+  @include tablet {
+    padding: $padding-10 0;
+  }
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: $padding-5;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $padding-4;
+    }
+  }
+
+  // === Featured (왼쪽 큰 카드, 2행 차지) ===
+  &__featured {
+    grid-row: 1 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 480px;
+
+    @include mobile {
+      grid-row: auto;
+      min-height: 300px;
+    }
+  }
+
+  &__featured-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__featured-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__featured-link:hover &__featured-image {
+    transform: scale(1.04);
+  }
+
+  &__featured-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $padding-8;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.1) 60%,
+      transparent 100%
+    );
+    color: $Primary-white-color;
+
+    @include mobile {
+      padding: $padding-6;
+    }
+  }
+
+  &__featured-badge {
+    @include typo-body-4;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: $padding-1 $padding-3;
+    align-self: flex-start;
+    margin-bottom: $padding-3;
+  }
+
+  &__featured-title {
+    @include typo-headline-2;
+    margin: 0 0 $padding-2;
+    max-width: 80%;
+
+    @include mobile {
+      @include typo-headline-4;
+    }
+  }
+
+  &__featured-subtitle {
+    @include typo-body-2;
+    margin: 0 0 $padding-4;
+    opacity: 0.8;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__featured-cta {
+    @include typo-button-2;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+
+    .section-bento__featured-link:hover & {
+      opacity: 1;
+    }
+  }
+
+  // === 카테고리 그리드 (오른쪽 2x2) ===
+  &__categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $padding-5;
+
+    @include mobile {
+      gap: $padding-3;
+    }
+  }
+
+  &__cat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-3;
+    padding: $padding-6;
+    background: $Bg-Primary-bg-color;
+    border-radius: 12px;
+    text-decoration: none;
+    color: $Text-Primary-text-color;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      background: $Primary-white-color;
+    }
+
+    @include mobile {
+      padding: $padding-4;
+      gap: $padding-2;
+    }
+  }
+
+  &__cat-image {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+
+    @include mobile {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  &__cat-label {
+    @include typo-title-5;
+    text-align: center;
+
+    @include mobile {
+      @include typo-title-6;
+    }
+  }
+
+  // === 하단 배너 ===
+  &__banner {
+    grid-column: 1 / -1;
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 200px;
+
+    @include mobile {
+      max-height: 160px;
+    }
+  }
+
+  &__banner-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  &__banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__banner-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-1;
+    background: rgba(0, 0, 0, 0.3);
+    color: $Primary-white-color;
+  }
+
+  &__banner-title {
+    @include typo-headline-3;
+
+    @include mobile {
+      @include typo-headline-5;
+    }
+  }
+
+  &__banner-subtitle {
+    @include typo-body-2;
+    opacity: 0.85;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+}
+
+// --------------------------------------------
+// Section Trust Bar
+// --------------------------------------------
+
+.section-trust-bar {
+  padding: $padding-11 0;
+  background: $Bg-Primary-bg-color;
+  border-bottom: 1px solid $Border-Border-line-100;
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+    display: flex;
+    justify-content: center;
+    gap: $padding-12;
+
+    @include tablet {
+      gap: $padding-8;
+    }
+
+    @include mobile {
+      gap: $padding-4;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $padding-2;
+    min-width: 120px;
+
+    @include mobile {
+      min-width: calc(50% - #{$padding-4});
+      gap: $padding-1;
+    }
+  }
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    color: var(--theme-primary);
+    stroke-width: 1.5;
+    fill: none;
+
+    @include mobile {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__value {
+    @include typo-headline-3;
+    color: $Text-Primary-text-color;
+    letter-spacing: -0.02em;
+
+    @include mobile {
+      @include typo-headline-5;
+    }
+  }
+
+  &__label {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+}
+
+// --------------------------------------------
 // Section Categories
 // --------------------------------------------
 
@@ -495,8 +1194,10 @@
 
   &__main-image {
     width: 100%;
-    height: 100%;
+    height: 110%; // 패럴랙스용 여유
     object-fit: cover;
+    transition: transform 0.1s linear, opacity 0.4s ease;
+    will-change: transform;
   }
 
   &__info {
@@ -561,6 +1262,15 @@
 
   &__item {
     flex: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: outline 0.2s ease, transform 0.2s ease;
+
+    &--selected {
+      outline: 2px solid var(--theme-primary);
+      outline-offset: 2px;
+      transform: translateY(-2px);
+    }
   }
 
   &__arrow {
@@ -1000,7 +1710,9 @@
     border: none;
     overflow: hidden;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    border-radius: 12px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     @include tablet {
       width: 200px;
@@ -1008,11 +1720,60 @@
 
     @include mobile {
       width: 160px;
+      border-radius: 8px;
     }
 
     &:hover {
-      opacity: 0.8;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
+  }
+
+  // 호버 오버레이 (리뷰 내용 표시)
+  &__card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-2;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: $padding-4;
+    text-align: center;
+    z-index: 2;
+    border-radius: 12px;
+
+    @include mobile {
+      display: none;
+    }
+
+    .section-reviews__card:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__card-review-text {
+    @include typo-body-4;
+    color: $Primary-white-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__card-overlay &__card-username {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__card-overlay &__card-rating .base-icon {
+    width: 12px;
+    height: 12px;
   }
 
   &__card-image {
@@ -1168,10 +1929,94 @@
     }
   }
 
-  // 3컬럼 그리드
-  &__grid {
+  // 매거진 레이아웃 (featured + side)
+  &__magazine {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1.2fr 1fr;
+    gap: $padding-6;
+    min-height: 480px;
+
+    @include tablet {
+      gap: $padding-4;
+      min-height: 400px;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      gap: $padding-4;
+    }
+  }
+
+  // Featured 큰 카드
+  &__featured {
+    background: $Primary-white-color;
+    border: 1px solid $Border-Border-line-100;
+    border-radius: $padding-4;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__featured-image {
+    width: 100%;
+    flex: 1;
+    min-height: 280px;
+    overflow: hidden;
+    background: $Bg-Secondary-bg-color;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .section-best-reviews__featured:hover & img {
+      transform: scale(1.04);
+    }
+  }
+
+  &__featured-body {
+    padding: $padding-6;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-3;
+
+    @include mobile {
+      padding: $padding-4;
+    }
+  }
+
+  &__featured-content {
+    @include typo-body-1;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    @include mobile {
+      @include typo-body-2;
+      -webkit-line-clamp: 3;
+    }
+  }
+
+  // Side 카드들
+  &__side {
+    display: flex;
+    flex-direction: column;
     gap: $padding-6;
 
     @include tablet {
@@ -1179,7 +2024,6 @@
     }
 
     @include mobile {
-      grid-template-columns: 1fr;
       gap: $padding-4;
     }
   }
@@ -1192,17 +2036,25 @@
     cursor: pointer;
     text-align: left;
     padding: 0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
-      transform: translateY(-$padding-1);
-      box-shadow: 0 $padding-2 $padding-6 rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    @include mobile {
+      flex-direction: column;
     }
   }
 
   &__card-image {
-    width: 100%;
-    aspect-ratio: 16 / 10;
+    width: 180px;
+    flex-shrink: 0;
     overflow: hidden;
     background: $Bg-Secondary-bg-color;
 
@@ -1211,6 +2063,15 @@
       height: 100%;
       object-fit: cover;
     }
+
+    @include tablet {
+      width: 140px;
+    }
+
+    @include mobile {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
   }
 
   &__card-body {
@@ -1218,6 +2079,9 @@
     display: flex;
     flex-direction: column;
     gap: $padding-2;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
 
     @include mobile {
       padding: $padding-3;

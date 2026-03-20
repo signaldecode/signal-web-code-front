@@ -29,13 +29,19 @@ useSeoMeta({
   ogImage: () => seoInfo.value?.ogImage || mainData.seo.ogImage
 })
 
-// 활성 섹션 목록 (best 뒤에 best_review 자동 삽입)
+// 활성 섹션 목록 (best 뒤에 best_review, 선두에 bento 자동 삽입)
 const activeSections = computed(() => {
   const list = Array.isArray(sections.value) ? [...sections.value] : []
+
+  // best 뒤에 best_review 삽입
   const bestIndex = list.findIndex(s => s.keyword === 'best')
   if (bestIndex !== -1) {
     list.splice(bestIndex + 1, 0, { keyword: 'best_review', isActive: true })
   }
+
+  // 선두에 bento 삽입
+  list.unshift({ keyword: 'bento', isActive: true })
+
   return list
 })
 
@@ -60,9 +66,22 @@ const loadSections = async () => {
   ])
 }
 
+// 스크롤 프로그레스바
+const scrollProgress = ref(0)
+const onScrollProgress = () => {
+  const scrollTop = window.scrollY
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
+  scrollProgress.value = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0
+}
+
 onMounted(async () => {
   await loadSections()
   fetchPopups()
+  window.addEventListener('scroll', onScrollProgress, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScrollProgress)
 })
 
 watch(
@@ -78,26 +97,26 @@ watch(
 
 <template>
   <div class="page-main">
+    <!-- 스크롤 프로그레스바 -->
+    <div class="scroll-progress" :style="{ width: `${scrollProgress}%` }" />
+
     <!-- Hero 배너 -->
     <ClientOnly>
-      <div v-if="bannerPending" class="page-main__loading">
-        <BaseSpinner />
-      </div>
-      <div v-else class="page-main__hero-wrap">
-        <SectionHero
-          v-if="heroSlides.length"
-          :data="mainData.hero"
-          :slides="heroSlides"
-        />
-      </div>
+      <div v-if="bannerPending" class="page-main__hero-placeholder" />
+      <SectionHero
+        v-else-if="heroSlides.length"
+        :data="mainData.hero"
+        :slides="heroSlides"
+      />
       <template #fallback>
-        <div class="page-main__loading">
-          <BaseSpinner />
-        </div>
+        <div class="page-main__hero-placeholder" />
       </template>
     </ClientOnly>
 
     <main>
+      <!-- Trust Bar -->
+      <SectionTrustBar :data="mainData.trustBar" />
+
       <!-- 카테고리 (항상 표시) -->
       <SectionCategories
         :data="mainData.categories"
