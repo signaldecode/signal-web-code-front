@@ -130,18 +130,6 @@
 // Page Layout
 // --------------------------------------------
 
-// 스크롤 프로그레스바
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: var(--theme-primary);
-  z-index: 200;
-  transition: width 50ms linear;
-  pointer-events: none;
-}
-
 .page-main {
   min-height: 100vh;
   display: flex;

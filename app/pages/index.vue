@@ -66,22 +66,9 @@ const loadSections = async () => {
   ])
 }
 
-// 스크롤 프로그레스바
-const scrollProgress = ref(0)
-const onScrollProgress = () => {
-  const scrollTop = window.scrollY
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight
-  scrollProgress.value = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0
-}
-
 onMounted(async () => {
   await loadSections()
   fetchPopups()
-  window.addEventListener('scroll', onScrollProgress, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', onScrollProgress)
 })
 
 watch(
@@ -97,9 +84,6 @@ watch(
 
 <template>
   <div class="page-main">
-    <!-- 스크롤 프로그레스바 -->
-    <div class="scroll-progress" :style="{ width: `${scrollProgress}%` }" />
-
     <!-- Hero 배너 -->
     <ClientOnly>
       <div v-if="bannerPending" class="page-main__hero-placeholder" />
