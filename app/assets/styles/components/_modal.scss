@@ -22,7 +22,7 @@
   &__backdrop {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: $overlay-medium;
   }
 
   &__container {
@@ -32,7 +32,7 @@
     max-height: calc(100vh - space(40));
     background-color: $Primary-white-color;
     border-radius: space(8);
-    box-shadow: 0 space(8) space(32) rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-2xl;
 
     // Size variants
     &--small {
@@ -84,7 +84,7 @@
     color: $Text-Primary-text-color;
     cursor: pointer;
     border-radius: space(4);
-    transition: background-color 0.2s, color 0.2s;
+    @include transition(background-color, color);
 
     &:hover {
       background-color: $Bg-Primary-bg-color;
@@ -110,10 +110,10 @@
 // Modal transition
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.2s ease;
+  @include transition(opacity);
 
   .base-modal__container {
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    @include transition(transform, opacity);
   }
 }
 
@@ -297,7 +297,7 @@
     padding: space(16);
     border: 1px solid $Border-Border-line-100;
     border-radius: space(8);
-    transition: border-color 0.2s;
+    @include transition(border-color);
 
     &:hover {
       border-color: $Primary-color;

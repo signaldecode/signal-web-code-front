@@ -87,7 +87,7 @@
   width: calc(100% - 46px);
   height: 3px;
   background: $Border-Border-line-100;
-  border-radius: 9999px;
+  border-radius: $radius-full;
   transform: translateX(23px);
 }
 
@@ -99,7 +99,7 @@
 .signup-steps__circle {
   width: 46px;
   height: 46px;
-  border-radius: 9999px;
+  border-radius: $radius-full;
   border: 2px solid $Black-Primary-black-400;
   background: $Primary-white-color;
   position: relative;
@@ -160,13 +160,13 @@
 .signup-terms-card {
   width: 100%;
   border: 1px solid $Border-Border-line-100;
-  border-radius: 10px;
+  border-radius: radius(10);
   padding: $padding-6;
   background: $Primary-white-color;
 
   @include mobile {
     padding: $padding-4;
-    border-radius: 8px;
+    border-radius: radius(8);
   }
 }
 
@@ -229,7 +229,7 @@
   @include typo-title-5;
   color: $Text-Secondary-text-color;
   margin: 0;
-  border-radius: 8px;
+  border-radius: radius(8);
   padding: $padding-5;
   max-height: 200px;
   overflow-y: auto;
@@ -300,7 +300,7 @@
   @include typo-body-2;
   color: $Text-Thirty-text-color;
   background: $Bg-Primary-bg-color;
-  border-radius: 8px;
+  border-radius: radius(8);
   padding: $padding-5;
   text-align: center;
 }
@@ -309,7 +309,7 @@
   @include typo-body-2;
   color: $Text-Thirty-text-color;
   background: $Bg-Primary-bg-color;
-  border-radius: 8px;
+  border-radius: radius(8);
   padding: $padding-5;
   display: flex;
   align-items: center;

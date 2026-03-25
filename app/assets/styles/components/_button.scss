@@ -17,9 +17,9 @@
   justify-content: center;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  @include transition(all);
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: radius(4);
 
   &:focus-visible {
     outline: 2px solid $Primary-color;

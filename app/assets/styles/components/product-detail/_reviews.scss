@@ -1,0 +1,233 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Reviews (상품리뷰)
+// --------------------------------------------
+
+.product-detail-reviews {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+  // border-top: 2px solid $Bg-Secondary-bg-color;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-6;
+  }
+
+  &__title {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  // Summary Cards
+  &__summary {
+    display: flex;
+    gap: $padding-7;
+    margin-bottom: $padding-6;
+
+    @include mobile {
+      gap: $padding-4;
+    }
+  }
+
+  &__summary-item {
+    flex: 1;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-4;
+    background: $Bg-Primary-bg-color;
+    border-radius: radius(10);
+
+    @include mobile {
+      height: 140px;
+      gap: $padding-3;
+      padding: $padding-3 0;
+    }
+
+    &:last-child {
+      @include mobile {
+        display: none;
+      }
+    }
+  }
+
+  &__summary-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: $padding-2;
+    @include typo-headline-2;
+    @include mobile {
+      @include typo-title-4;
+    }
+  }
+
+  &__avg-stars {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+
+    .base-icon {
+      width: 30px;
+      height: 30px;
+      @include mobile {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &__avg-score {
+    color: $Primary-color;
+  }
+
+  &__avg-max {
+    color: $Text-Disabled-color;
+  }
+
+  &__total-count {
+    color: $Primary-color;
+  }
+
+  &__total-unit {
+    color: $Text-Disabled-color;
+  }
+
+  .icon-review {
+    @include mobile {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  // Distribution Chart (Vertical Bars)
+  &__distribution {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: $padding-4;
+  }
+
+  &__dist-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $padding-2;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  &__dist-track {
+    width: 16px;
+    height: 74px;
+    background: var(--theme-primary-50);
+    border-radius: radius(4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  &__dist-fill {
+    width: 100%;
+    background: $Primary-color;
+    border-radius: radius(4);
+    @include transition-slow(height);
+  }
+
+  &__dist-label {
+    @include typo-title-6;
+    color: $Text-Primary-text-color;
+  }
+
+  &__dist-count {
+    @include typo-body-3;
+    color: $Primary-white-color;
+    background: $Primary-color;
+    padding: $padding-1 $padding-2;
+    border-radius: radius(4);
+    white-space: nowrap;
+    position: relative;
+    margin-bottom: $padding-1;
+
+    // 말풍선 꼬리
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: $Primary-color;
+    }
+  }
+
+  // Toolbar
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-4;
+    padding-bottom: $padding-4;
+    border-bottom: 1px solid $Border-Border-line-100;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $padding-3;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    gap: $padding-2;
+  }
+
+  &__sort {
+    flex-shrink: 0;
+  }
+
+  // List
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__empty {
+    padding: $padding-12 0;
+    text-align: center;
+  }
+
+  &__pagination {
+    margin-top: $padding-8;
+  }
+}
+
+// Write Button Content (공통)
+.write-btn-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}

@@ -32,13 +32,13 @@
     width: 100%;
     padding: $padding-4;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 8px;
+    border-radius: radius(8);
     background: $Primary-white-color;
     @include typo-body-2;
     color: $Text-Primary-text-color;
     resize: vertical;
     min-height: 120px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    @include transition(border-color, box-shadow);
 
     &::placeholder {
       color: $Text-Disabled-color;
@@ -105,7 +105,7 @@
       padding: $padding-3;
       @include typo-body-3;
       min-height: 80px;
-      border-radius: 6px;
+      border-radius: radius(6);
     }
 
     &__count {

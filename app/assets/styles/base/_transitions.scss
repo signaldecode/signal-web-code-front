@@ -2,10 +2,12 @@
 // Page Transitions
 // ============================================
 
+@use '../tokens/spacing' as *;
+
 // Page transition (fade)
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.3s ease;
+  @include transition-slow(opacity);
 }
 
 .page-enter-from,

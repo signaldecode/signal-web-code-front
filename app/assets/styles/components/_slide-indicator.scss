@@ -32,7 +32,7 @@
     width: 100px;
     height: 2px;
     background: rgba($Primary-white-color, 0.6);
-    border-radius: 9999px;
+    border-radius: $radius-full;
     overflow: hidden;
 
     @include mobile {
@@ -47,7 +47,7 @@
   &__progress {
     height: 100%;
     background: $Primary-white-color;
-    border-radius: 9999px;
-    transition: width 0.3s ease;
+    border-radius: $radius-full;
+    @include transition-slow(width);
   }
 }

@@ -28,8 +28,8 @@
   padding: space(16) space(20);
   background-color: $Black-Primary-black-900;
   color: $Primary-white-color;
-  border-radius: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: $radius-full;
+  box-shadow: $shadow-md;
   pointer-events: auto;
 
   &--info,
@@ -83,7 +83,7 @@
     color: $Primary-white-color-op70;
     cursor: pointer;
     border-radius: space(4);
-    transition: color 0.2s;
+    @include transition(color);
 
     &:hover {
       color: $Primary-white-color;
@@ -94,7 +94,7 @@
 // Toast transitions
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 0.3s ease;
+  @include transition-slow(all);
 }
 
 .toast-enter-from {
@@ -108,5 +108,5 @@
 }
 
 .toast-move {
-  transition: transform 0.3s ease;
+  @include transition-slow(transform);
 }

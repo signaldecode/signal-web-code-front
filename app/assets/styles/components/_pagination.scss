@@ -28,7 +28,7 @@
     border: none;
     color: $Text-Secondary-text-color;
     cursor: pointer;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     @include mobile {
       width: 28px;
@@ -63,11 +63,11 @@
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: 4px;
+    border-radius: radius(4);
     @include typo-body-2;
     color: $Text-Secondary-text-color;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    @include transition(background, color);
 
     @include mobile {
       width: 28px;

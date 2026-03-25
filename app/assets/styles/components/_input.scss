@@ -37,10 +37,10 @@
     padding: 0 $padding-4;
     background: $Primary-white-color;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 4px;
+    border-radius: radius(4);
     @include typo-body-2;
     color: $Text-Primary-text-color;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    @include transition(border-color, background-color);
 
     &::placeholder {
       color: $Text-Thirty-text-color;

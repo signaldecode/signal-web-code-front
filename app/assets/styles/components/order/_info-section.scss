@@ -1,0 +1,71 @@
+// ============================================
+// 주문 페이지 스타일 - Info Section
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Info Section (공통 정보 섹션)
+// --------------------------------------------
+
+.order-info-section {
+  &__title {
+    @include typo-title-3;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-5;
+    padding-bottom: $padding-4;
+    border-bottom: 2px solid $Text-Primary-text-color;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-4;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    gap: $padding-4;
+
+    @include mobile {
+      flex-direction: column;
+      gap: $padding-1;
+    }
+
+    &--highlight {
+      justify-content: space-between;
+      padding-top: $padding-4;
+      margin-top: $padding-2;
+      border-top: 1px solid $Border-Border-line-100;
+
+      .order-info-section__label {
+        @include typo-title-4;
+        color: $Text-Primary-text-color;
+      }
+
+      .order-info-section__value {
+        @include typo-title-3;
+        color: $Primary-color;
+      }
+    }
+  }
+
+  &__label {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+
+  &__value {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    word-break: keep-all;
+  }
+}

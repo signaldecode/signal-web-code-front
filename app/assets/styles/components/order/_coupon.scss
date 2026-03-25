@@ -1,0 +1,93 @@
+// ============================================
+// 주문 페이지 스타일 - Coupon & Point
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Coupon & Point
+// --------------------------------------------
+
+.order-coupon {
+  display: flex;
+  flex-direction: column;
+  gap: $padding-4;
+
+  &__row {
+    display: flex;
+    gap: $padding-3;
+    align-items: flex-end;
+  }
+
+  &__input-wrapper {
+    flex: 1;
+  }
+
+  &__apply-btn {
+    flex-shrink: 0;
+  }
+
+  &__select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 48px;
+    padding: 0 $padding-4;
+    background: $Primary-white-color;
+    border: 1px solid $Border-Border-line-100;
+    border-radius: radius(4);
+    cursor: pointer;
+    @include transition(border-color);
+
+    &:hover {
+      border-color: $Border-Border-line-200;
+    }
+
+    svg {
+      flex-shrink: 0;
+      color: $Text-Secondary-text-color;
+    }
+  }
+
+  &__placeholder {
+    @include typo-body-2;
+    color: $Text-Thirty-text-color;
+  }
+
+  &__selected {
+    display: flex;
+    align-items: center;
+    gap: $padding-3;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__selected-name {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__selected-discount {
+    @include typo-body-2;
+    color: $Primary-color;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  &__available {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+
+    strong {
+      color: $Primary-color;
+      font-weight: 500;
+    }
+  }
+}

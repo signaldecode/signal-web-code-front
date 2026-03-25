@@ -64,7 +64,7 @@
   border-bottom: 2px solid transparent;
   color: $Text-Disabled-color;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  @include transition(color, border-color);
 
   &:focus-visible {
     outline: 2px solid $Primary-color;
@@ -172,7 +172,7 @@
 .login-social__button {
   width: 48px;
   height: 48px;
-  border-radius: 999px;
+  border-radius: $radius-full;
   border: none;
   display: flex;
   align-items: center;

@@ -87,7 +87,7 @@
     @include typo-button-2;
     padding: $padding-2 $padding-3; // 8 12
     border: 1px solid $Border-Border-line-100;
-    border-radius: 4px;
+    border-radius: radius(4);
     background: $Primary-white-color;
     color: $Text-Primary-text-color;
     cursor: pointer;
@@ -124,7 +124,7 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    transition: background-color 0.2s;
+    @include transition(background-color);
 
 
   }

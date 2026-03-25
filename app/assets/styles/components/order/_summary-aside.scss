@@ -1,0 +1,166 @@
+// ============================================
+// 주문 페이지 스타일 - Summary Aside
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Summary Aside
+// --------------------------------------------
+
+.order-summary-aside {
+  position: sticky;
+  top: calc(#{$header-total-height} + #{$padding-6});
+  width: 408px;
+  padding: $padding-9;
+  background: $Bg-Primary-bg-color;
+  border-radius: radius(8);
+
+  @include tablet {
+    position: static;
+    width: 100%;
+  }
+
+  @include mobile {
+    display: none;
+  }
+
+  &__title {
+    @include typo-title-1;
+    font-weight: 500;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-4;
+    padding-bottom: $padding-4;
+    border-bottom: 1px solid $Border-Border-line-200;
+  }
+
+  &__content {
+    margin-bottom: $padding-4;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-3;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    dt {
+      @include typo-body-2;
+      color: $Text-Secondary-text-color;
+    }
+
+    dd {
+      @include typo-body-2;
+      color: $Text-Primary-text-color;
+      margin: 0;
+    }
+
+    &--discount {
+      dd {
+        color: $Primary-color;
+      }
+    }
+  }
+
+  &__free {
+    color: $Primary-color !important;
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: $padding-4;
+    margin-top: $padding-4;
+    border-top: 1px solid $Border-Border-line-100;
+  }
+
+  &__total-label {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+  }
+
+  &__total-price {
+    @include typo-headline-3;
+    color: $Text-Primary-text-color;
+  }
+
+  &__currency {
+    @include typo-title-4;
+    font-weight: 500;
+  }
+
+  &__agreements {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-4;
+    margin-top: $padding-4;
+  }
+
+  &__divider {
+    height: 1px;
+    background: $Border-Border-line-200;
+  }
+
+  &__agreement-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__agreement-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__agreement-label {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+  }
+
+  &__required {
+    color: $Primary-color;
+    margin-left: $padding-1;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $padding-1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $Text-Secondary-text-color;
+    @include transition(transform);
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__agreement-content {
+    margin-top: $padding-3;
+    padding: $padding-3;
+    background: $Primary-white-color;
+    border-radius: radius(4);
+
+    p {
+      @include typo-body-3;
+      color: $Text-Thirty-text-color;
+      margin: 0;
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+  }
+}

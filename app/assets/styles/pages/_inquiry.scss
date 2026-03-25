@@ -105,7 +105,7 @@
 
 .inquiry-privacy {
   background: $Bg-Primary-bg-color;
-  border-radius: 8px;
+  border-radius: radius(8);
   overflow: hidden;
 
   &__head {
@@ -143,7 +143,7 @@
     color: $Text-Thirty-text-color;
     @include typo-body-4;
     cursor: pointer;
-    transition: color 0.2s;
+    @include transition(color);
 
     &:hover {
       color: $Text-Primary-text-color;
@@ -175,7 +175,7 @@
     padding: $padding-4;
     background: $Primary-white-color;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 4px;
+    border-radius: radius(4);
     @include typo-body-4;
     color: $Text-Secondary-text-color;
 

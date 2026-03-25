@@ -2,6 +2,8 @@
 // Design Tokens - Animation
 // ============================================
 
+@use 'sass:list';
+
 // --------------------------------------------
 // Duration
 // --------------------------------------------
@@ -9,6 +11,10 @@ $duration-fast: 0.25s;
 $duration-normal: 0.5s;
 $duration-slow: 0.7s;
 $duration-slower: 1s;
+
+// UI transition 전용 (버튼·링크·인풋 등)
+$duration-ui: 0.2s;
+$duration-moderate: 0.3s;
 
 // --------------------------------------------
 // Easing (cubic-bezier curves)
@@ -38,3 +44,28 @@ $anim-offset-y: 28px;
 $anim-offset-x: 40px;
 $anim-scale-from: 0.95;
 $anim-blur-from: 6px;
+
+// --------------------------------------------
+// Transition Mixins (UI 전용)
+// --------------------------------------------
+
+/// 기본 UI 전환 (0.2s)
+/// @example @include transition(color);
+/// @example @include transition(color, border-color, background-color);
+@mixin transition($properties...) {
+  $result: ();
+  @each $prop in $properties {
+    $result: list.append($result, $prop $duration-ui ease, comma);
+  }
+  transition: $result;
+}
+
+/// 느린 전환 (0.3s) — transform, layout 변경 등
+/// @example @include transition-slow(transform);
+@mixin transition-slow($properties...) {
+  $result: ();
+  @each $prop in $properties {
+    $result: list.append($result, $prop $duration-moderate ease, comma);
+  }
+  transition: $result;
+}

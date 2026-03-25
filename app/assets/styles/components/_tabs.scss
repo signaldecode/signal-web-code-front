@@ -11,13 +11,13 @@
   display: inline-flex;
   gap: 0;
   border: 1px solid $Border-Border-line-100;
-  border-radius: 8px;
+  border-radius: radius(8);
   overflow: hidden;
   background: $Primary-white-color;
   flex-shrink: 0;
 
   @include mobile {
-    border-radius: 6px;
+    border-radius: radius(6);
   }
 
   &--default {
@@ -53,7 +53,7 @@
 
     .base-tabs__tab {
       border: 1px solid $Border-Border-line-100;
-      border-radius: 999px;
+      border-radius: $radius-full;
       padding: $padding-2 $padding-5;
 
       @include mobile {
@@ -79,7 +79,7 @@
     // border-right: 1px solid $Border-Border-line-100;
     color: $Text-Thirty-text-color;
     cursor: pointer;
-    transition: all 0.2s ease;
+    @include transition(all);
     white-space: nowrap;
 
     @include mobile {

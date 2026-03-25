@@ -38,7 +38,7 @@
   // 썸네일
   &__thumb {
     flex-shrink: 0;
-    border-radius: 8px;
+    border-radius: radius(8);
     overflow: hidden;
     background: $Bg-Secondary-bg-color;
 
@@ -111,11 +111,11 @@
     justify-content: center;
     padding: $padding-1 $padding-3;
     border: none;
-    border-radius: 4px;
+    border-radius: radius(4);
     background: $Primary-color;
     color: $Primary-white-color;
     cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
+    @include transition(border-color, background-color);
 
     &:hover {
       background: var(--theme-primary-100);

@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    @include transition(all);
   }
 
   // --------------------------------------------
@@ -61,7 +61,7 @@
   &--style-line {
     .base-checkbox__box {
       border: 1px solid $Border-Border-line-100;
-      border-radius: 4px;
+      border-radius: radius(4);
       background: transparent;
 
       // Checkmark icon
@@ -69,7 +69,7 @@
         content: '';
         position: absolute;
         opacity: 0;
-        transition: opacity 0.2s ease;
+        @include transition(opacity);
       }
     }
 
@@ -101,16 +101,16 @@
 
   &--style-bg {
     .base-checkbox__box {
-      border-radius: 100px;
+      border-radius: $radius-full;
       background: $Border-Border-line-100;
 
       // Inner circle
       &::after {
         content: '';
         position: absolute;
-        border-radius: 100px;
+        border-radius: $radius-full;
         background: $Primary-white-color;
-        transition: all 0.2s ease;
+        @include transition(all);
       }
     }
 
@@ -144,7 +144,7 @@
         content: '';
         position: absolute;
         opacity: 0;
-        transition: opacity 0.2s ease;
+        @include transition(opacity);
       }
     }
 
@@ -215,7 +215,7 @@
   // --------------------------------------------
 
   &__label {
-    transition: color 0.2s ease;
+    @include transition(color);
   }
 
   // Checked label color change

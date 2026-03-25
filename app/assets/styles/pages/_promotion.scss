@@ -58,7 +58,7 @@
 
   &__image {
     margin-bottom: $padding-8;
-    border-radius: 12px;
+    border-radius: radius(12);
     overflow: hidden;
 
     img {
@@ -70,7 +70,7 @@
 
   &__info {
     background: $Bg-Primary-bg-color;
-    border-radius: 12px;
+    border-radius: radius(12);
     padding: $padding-6;
   }
 

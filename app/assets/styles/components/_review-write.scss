@@ -20,12 +20,12 @@
     max-width: 640px;
     margin: 0 auto;
     background: $Primary-white-color;
-    border-radius: 16px;
+    border-radius: radius(16);
     padding: $padding-10;
 
     @include mobile {
       padding: $padding-6;
-      border-radius: 12px;
+      border-radius: radius(12);
     }
   }
 
@@ -54,14 +54,14 @@
     gap: $padding-4;
     padding: $padding-5;
     background: $Bg-Secondary-bg-color;
-    border-radius: 12px;
+    border-radius: radius(12);
     margin-bottom: $padding-8;
   }
 
   &__product-image {
     width: 80px;
     height: 80px;
-    border-radius: 8px;
+    border-radius: radius(8);
     object-fit: cover;
     background: $Primary-white-color;
   }

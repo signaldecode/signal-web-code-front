@@ -1,5 +1,6 @@
 @use '../tokens/icons' as *;
 @use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
 @use '../tokens/typography' as *;
 @use '../tokens/breakpoints' as *;
 
@@ -54,7 +55,7 @@
   border: 1px solid $Border-Border-line-100;
   border-radius: 50%;
   color: $Text-Primary-text-color;
-  transition: border-color 0.2s, color 0.2s, opacity 0.2s;
+  @include transition(border-color, color, opacity);
 
   svg {
     width: icon-size(md);
@@ -135,7 +136,7 @@
     border: none;
     cursor: pointer;
     color: $Text-Primary-text-color;
-    transition: opacity 0.2s;
+    @include transition(opacity);
 
     &:hover:not(:disabled) {
       opacity: 0.6;
@@ -171,7 +172,7 @@
 // Heart Icon
 .icon-heart {
   color: $Text-Thirty-text-color;
-  transition: color 0.2s;
+  @include transition(color);
 
   &--filled {
     color: $Error-color;
@@ -197,6 +198,6 @@
     @include typo-body-5;
     font-weight: 600;
     line-height: 1;
-    border-radius: 7px;
+    border-radius: radius(8);
   }
 }

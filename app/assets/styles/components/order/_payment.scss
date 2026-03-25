@@ -1,0 +1,24 @@
+// ============================================
+// 주문 페이지 스타일 - Payment Methods
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Payment Methods
+// --------------------------------------------
+
+.order-payment {
+  display: flex;
+  flex-direction: column;
+  gap: $padding-4;
+
+  &__card-options {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-3;
+  }
+}

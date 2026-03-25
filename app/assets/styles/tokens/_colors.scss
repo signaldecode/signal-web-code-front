@@ -108,3 +108,27 @@ $Grade-gold-start: #F5C14D;
 $Grade-gold-end: #E29F0C;
 $Grade-vip-start: #F7672F;
 $Grade-vip-end: #F7A72F;
+
+// --------------------------------------------
+// Overlay Tokens (배경 딤 처리)
+// --------------------------------------------
+$overlay-light: rgba(0, 0, 0, 0.4);
+$overlay-medium: rgba(0, 0, 0, 0.5);
+$overlay-dark: rgba(0, 0, 0, 0.6);
+$overlay-darker: rgba(0, 0, 0, 0.7);
+$overlay-heavy: rgba(0, 0, 0, 0.8);
+
+// Subtle tints (배경 틴트)
+$tint-subtle: rgba(0, 0, 0, 0.03);
+$tint-light: rgba(0, 0, 0, 0.06);
+
+// --------------------------------------------
+// Shadow Tokens (box-shadow 프리셋)
+// --------------------------------------------
+$shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.08);
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.1);
+$shadow-2xl: 0 8px 32px rgba(0, 0, 0, 0.15);
+$shadow-top: 0 -2px 12px rgba(0, 0, 0, 0.08);

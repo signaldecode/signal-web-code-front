@@ -16,11 +16,11 @@
     height: 52px;
     padding: 0 $padding-4;
     border: 1px dashed $Border-Border-line-100;
-    border-radius: 4px;
+    border-radius: radius(4);
     background: $Primary-white-color;
     color: $Text-Thirty-text-color;
     cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
+    @include transition(border-color, background-color);
 
     &:hover:not(:disabled) {
       border-color: $Border-Border-line-300;
@@ -56,7 +56,7 @@
     gap: $padding-3;
     padding: $padding-3 $padding-4;
     background: $Bg-Primary-bg-color;
-    border-radius: 4px;
+    border-radius: radius(4);
   }
 
   &__icon {
@@ -101,7 +101,7 @@
     background: transparent;
     color: $Text-Thirty-text-color;
     cursor: pointer;
-    transition: color 0.2s;
+    @include transition(color);
 
     &:hover {
       color: $Error-color;

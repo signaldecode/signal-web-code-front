@@ -1,0 +1,137 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// Review Card
+.review-card {
+  // button reset
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+
+  max-width: 1280px;
+  padding: $padding-6 0;
+  border-bottom: 1px solid $Border-Border-line-100;
+
+  &:hover {
+    background: $Bg-Secondary-bg-color;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $Primary-color;
+    outline-offset: 2px;
+  }
+
+  // 이미지가 있을 때 가로 레이아웃
+  &--has-images {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: $padding-6;
+
+    @include mobile {
+      flex-direction: column;
+      gap: $padding-4;
+    }
+  }
+
+  &__images {
+    display: flex;
+    gap: $padding-2;
+    flex-shrink: 0;
+
+    // 이미지가 있을 때 좌측에 배치
+    .review-card--has-images & {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+
+      @include mobile {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  &__image {
+    width: 120px;
+    height: 120px;
+    border-radius: radius(8);
+    object-fit: cover;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    @include mobile {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+    margin-bottom: $padding-3;
+  }
+
+  &__rating {
+    display: flex;
+    gap: 2px;
+
+    .base-icon {
+      @include mobile {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  &__username {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+    font-weight: 500;
+
+    @include mobile {
+      @include typo-body-4;
+      font-weight: 500;
+    }
+  }
+
+  &__date {
+    @include typo-body-3;
+    color: $Text-Disabled-color;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+
+    &::before {
+      content: '·';
+      margin: 0 $padding-1;
+    }
+  }
+
+  &__title {
+    @include typo-title-6;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-2;
+    font-weight: 600;
+  }
+
+  &__content {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    line-height: 1.7;
+    margin: 0;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+}

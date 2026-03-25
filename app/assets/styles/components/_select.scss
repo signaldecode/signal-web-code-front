@@ -28,7 +28,7 @@
       cursor: pointer;
       @include typo-body-2;
       color: $Text-Primary-text-color;
-      transition: color 0.2s ease;
+      @include transition(color);
 
       &:hover {
         color: $Text-Secondary-text-color;
@@ -57,11 +57,11 @@
       }
       background: $Primary-white-color;
       border: 1px solid $Border-Border-line-100;
-      border-radius: 4px;
+      border-radius: radius(4);
       cursor: pointer;
       @include typo-body-2;
       color: $Text-Primary-text-color;
-      transition: border-color 0.2s ease;
+      @include transition(border-color);
 
       &:hover:not(:disabled) {
         border-color: $Border-Border-line-200;
@@ -106,7 +106,7 @@
 
   &__arrow {
     flex-shrink: 0;
-    transition: transform 0.3s ease;
+    @include transition-slow(transform);
     color: $Text-Secondary-text-color;
 
     @include mobile {
@@ -128,8 +128,8 @@
     margin: $padding-2 0 0;
     padding: $padding-2 0;
     background: $Primary-white-color;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: radius(8);
+    box-shadow: $shadow-lg;
     list-style: none;
     overflow: hidden;
     transform-origin: top right;
@@ -145,7 +145,7 @@
       padding: $padding-2 $padding-3;
     }
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    @include transition(background, color);
 
     &:hover {
       background: $Bg-Secondary-bg-color;
@@ -162,7 +162,7 @@
 // Dropdown animation
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  @include transition(opacity, transform);
 }
 
 .dropdown-enter-from,

@@ -65,7 +65,7 @@
   width: 200px;
   pointer-events: auto;
   border-radius: space(8);
-  box-shadow: 0 space(4) space(16) rgba(0, 0, 0, 0.12);
+  box-shadow: $shadow-lg;
   overflow: hidden;
   background-color: $Primary-white-color;
 
@@ -86,13 +86,13 @@
     padding: 0;
     border: none;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: $overlay-light;
     color: $Primary-white-color;
     cursor: pointer;
-    transition: background-color 0.2s;
+    @include transition(background-color);
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: $overlay-dark;
     }
 
     &:focus-visible {
@@ -116,7 +116,7 @@
 // Transition
 .popup-floating-enter-active,
 .popup-floating-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  @include transition-slow(opacity, transform);
 }
 
 .popup-floating-enter-from {
@@ -130,5 +130,5 @@
 }
 
 .popup-floating-move {
-  transition: transform 0.3s ease;
+  @include transition-slow(transform);
 }

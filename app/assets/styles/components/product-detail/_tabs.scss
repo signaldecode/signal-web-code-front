@@ -1,0 +1,80 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Tabs (Sticky)
+// --------------------------------------------
+
+.product-detail-tabs {
+  position: sticky;
+  top: $header-total-height;
+  z-index: 10;
+  @include mobile {
+    top: $header-total-height-mobile;
+  }
+
+  &__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 $padding-2;
+
+    @include mobile {
+      padding: 0;
+    }
+  }
+
+  &__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: $Bg-Secondary-bg-color;
+    border-radius: radius(6);
+    height: 64px;
+
+    @include mobile {
+      height: 54px;
+    }
+  }
+
+  &__item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $padding-1;
+  }
+
+  &__button {
+    width: 100%;
+    height: calc(64px - #{$padding-1} * 2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include typo-body-2;
+
+    @include mobile {
+       @include typo-body-3;
+       height: calc(54px - #{$padding-1} * 2);
+
+    }
+    color: $Text-Disabled-color;
+    background: transparent;
+    border: none;
+    border-radius: radius(4);
+    cursor: pointer;
+    @include transition(all);
+    text-align: center;
+
+    &:hover {
+      color: $Text-Secondary-text-color;
+    }
+
+    &--active {
+      color: $Text-Primary-text-color;
+      background: $Primary-white-color;
+    }
+  }
+}

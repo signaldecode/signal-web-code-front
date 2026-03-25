@@ -73,7 +73,7 @@
 .signup-actions__button {
   width: 100%;
   border: none;
-  border-radius: 4px;
+  border-radius: radius(4);
   padding: $padding-4;
   display: inline-flex;
   align-items: center;

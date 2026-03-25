@@ -36,7 +36,7 @@
     flex: 1;
     padding: $padding-8;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 8px;
+    border-radius: radius(8);
   }
 
   &__summary-header {
@@ -97,7 +97,7 @@
     flex: 1;
     padding: $padding-8;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 8px;
+    border-radius: radius(8);
   }
 
   &__current-header {
@@ -161,15 +161,15 @@
     width: 100%;
     height: $size-grade-progress-height;
     background-color: $Bg-Primary-bg-color;
-    border-radius: 9999px;
+    border-radius: $radius-full;
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
     background: linear-gradient(90deg, $Primary-color 0%, rgba(var(--theme-primary-rgb), 0.3) 100%);
-    border-radius: 9999px;
-    transition: width 0.3s ease;
+    border-radius: $radius-full;
+    @include transition-slow(width);
   }
 
   &__progress-labels {
@@ -232,21 +232,21 @@
       @include typo-body-3;
       color: $Text-Secondary-text-color;
       letter-spacing: -0.35px;
-      border-radius: 10px 0 0 0;
+      border-radius: radius(10) 0 0 0;
     }
 
     th:last-child {
       border-right: none;
-      border-radius: 0 10px 0 0;
+      border-radius: 0 radius(10) 0 0;
     }
 
 
     tr:last-child td:first-child {
-      border-radius: 0 0 0 10px;
+      border-radius: 0 0 0 radius(10);
     }
 
     tr:last-child td:last-child {
-      border-radius: 0 0 10px 0;
+      border-radius: 0 0 radius(10) 0;
     }
 
     td.mypage-grade__table-cell--highlight {
@@ -268,7 +268,7 @@
     border-radius: 50%;
     font-weight: 700;
     @include typo-title-4;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-xs;
 
     @media (max-width: $breakpoint-md) {
       width: $padding-10;

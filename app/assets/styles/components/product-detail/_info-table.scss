@@ -1,0 +1,86 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Info (상품정보고시)
+// --------------------------------------------
+
+.product-detail-info {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+  // border-top: 2px solid $Bg-Secondary-bg-color;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-6;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $padding-2;
+    }
+  }
+
+  &__title {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__notice {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid $Border-Border-line-200;
+  }
+
+  &__row {
+    border-bottom: 1px solid $Border-Border-line-100;
+  }
+
+  &__label {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+    padding: $padding-4 $padding-6;
+    width: 180px;
+    background: $Bg-Primary-bg-color;
+    text-align: left;
+    font-weight: 400;
+    vertical-align: middle;
+
+    @include mobile {
+      @include typo-body-4;
+      width: 100px;
+      padding: $padding-3 $padding-4;
+    }
+  }
+
+  &__value {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    padding: $padding-4 $padding-6;
+    line-height: 1.6;
+    vertical-align: middle;
+    white-space: pre-line;
+
+    @include mobile {
+      @include typo-body-4;
+      padding: $padding-3 $padding-4;
+    }
+  }
+
+}

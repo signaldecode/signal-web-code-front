@@ -99,7 +99,7 @@
     @include typo-body-2;
     color: $Primary-white-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     @include mobile {
       @include typo-body-4;
@@ -176,7 +176,7 @@
 
     .base-icon {
       color: $Black-Primary-black-400;
-      transition: transform 0.3s ease;
+      @include transition-slow(transform);
     }
 
     &[aria-expanded="true"] .base-icon {
@@ -213,7 +213,7 @@
   &__phone-link {
     color: $Black-Primary-black-400;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Primary-white-color;
@@ -240,7 +240,7 @@
     border-radius: 50%;
     background: $Black-Primary-black-700;
     color: $Primary-white-color;
-    transition: background 0.2s ease;
+    @include transition(background);
 
     &:hover {
       background: $Black-Primary-black-600;

@@ -1,0 +1,44 @@
+// ============================================
+// 주문 페이지 스타일 - Page Layout
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Page Layout
+// --------------------------------------------
+
+.order-page {
+  @include container;
+  padding-top: calc(#{$header-total-height} + #{$padding-11});
+  padding-bottom: $padding-12;
+
+  @include mobile {
+    padding-top: calc(#{$header-total-height-mobile} + #{$padding-8});
+    padding-bottom: $padding-10;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 408px;
+    gap: $padding-12;
+    align-items: start;
+
+    @include tablet {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-11;
+
+    @include mobile {
+      gap: $padding-8;
+    }
+  }
+}

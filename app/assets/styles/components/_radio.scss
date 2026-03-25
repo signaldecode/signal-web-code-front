@@ -50,7 +50,7 @@
       border-radius: 50%;
       background: $Primary-white-color;
       flex-shrink: 0;
-      transition: all 0.2s ease;
+      @include transition(all);
 
       &::after {
         content: '';
@@ -62,14 +62,14 @@
         height: 10px;
         border-radius: 50%;
         background: $Primary-color;
-        transition: transform 0.2s ease;
+        @include transition(transform);
       }
     }
 
     .base-radio__label {
       @include typo-body-2;
       color: $Text-Secondary-text-color;
-      transition: color 0.2s ease;
+      @include transition(color);
     }
 
     // Checked state
@@ -107,8 +107,8 @@
     padding: $padding-3 $padding-5;
     background: $Primary-white-color;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    border-radius: radius(4);
+    @include transition(all);
 
     .base-radio__circle {
       display: none;
@@ -117,7 +117,7 @@
     .base-radio__label {
       @include typo-body-2;
       color: $Text-Secondary-text-color;
-      transition: color 0.2s ease;
+      @include transition(color);
       white-space: nowrap;
     }
 

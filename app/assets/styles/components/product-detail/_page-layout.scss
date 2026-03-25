@@ -1,0 +1,50 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Page Layout (1320px = 1280px + 20px * 2)
+// --------------------------------------------
+
+.page-product-detail {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__main {
+    flex: 1;
+    padding-top: $header-total-height;
+
+    @include mobile {
+      padding-top: $header-total-height-mobile;
+    }
+  }
+
+  &__loading,
+  &__error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - #{$header-total-height} - 200px);
+
+    @include mobile {
+      min-height: calc(100vh - #{$header-total-height-mobile} - 200px);
+    }
+  }
+
+  &__error {
+    @include typo-body-1;
+    color: $Text-Secondary-text-color;
+  }
+
+  &__container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+    @include mobile {
+      padding: 0 $padding-4;
+    }
+  }
+}

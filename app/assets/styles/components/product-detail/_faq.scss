@@ -1,0 +1,32 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail FAQ
+// --------------------------------------------
+
+.product-detail-faq {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-6;
+  }
+
+  &__title {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    font-weight: 600;
+  }
+}

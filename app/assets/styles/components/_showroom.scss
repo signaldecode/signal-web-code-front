@@ -119,12 +119,12 @@
 
     &:hover {
       background: $Black-Primary-black-200;
-      box-shadow: 0 $padding-2 $padding-8 rgba(0, 0, 0, 0.06);
+      box-shadow: $shadow-2xl;
     }
 
     &.is-active {
       background: $Primary-white-color;
-      box-shadow: 0 $padding-3 $padding-10 rgba(0, 0, 0, 0.08);
+      box-shadow: $shadow-2xl;
       border-color: $Border-Border-line-100;
     }
 

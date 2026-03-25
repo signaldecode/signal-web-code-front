@@ -1,0 +1,319 @@
+// ============================================
+// 주문 페이지 스타일 - Section
+// ============================================
+
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Order Section
+// --------------------------------------------
+
+.order-section {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: $padding-4;
+    border-bottom: 1px solid $Text-Primary-text-color;
+    margin-bottom: $padding-6;
+    @include mobile {
+      margin-bottom: $padding-3;
+    }
+  }
+
+  &__title {
+    @include typo-title-1;
+    color: $Text-Primary-text-color;
+
+    @include mobile {
+      @include typo-title-3;
+    }
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+
+    &:hover {
+      color: $Text-Primary-text-color;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-5;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $padding-4;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__row--full {
+    grid-template-columns: 1fr;
+  }
+
+  &__row--address {
+    grid-template-columns: 120px 1fr auto;
+    gap: $padding-3;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__address-detail {
+    grid-column: 2 / -1;
+
+    @include mobile {
+      grid-column: 1;
+    }
+  }
+
+  &__note {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    margin-top: $padding-2;
+  }
+
+  &__help {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    margin-top: $padding-1;
+  }
+}
+
+// --------------------------------------------
+// Order Product Card
+// --------------------------------------------
+
+.order-product-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $padding-6;
+  padding: $padding-5 0;
+  border-bottom: 1px solid $Border-Border-line-100;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include mobile {
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    padding: $padding-3 0;
+  }
+
+  &__image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: radius(4);
+    overflow: hidden;
+    background: $Bg-Primary-bg-color;
+
+    @include mobile {
+      width: 70px;
+      height: 70px;
+      grid-row: 1 / 4;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-1;
+
+    @include mobile {
+      grid-column: 2;
+      gap: 0;
+    }
+  }
+
+  &__name {
+    @include typo-title-5;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include mobile {
+      @include typo-title-6;
+    }
+  }
+
+  &__option {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    margin: 0;
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  &__meta {
+    display: contents;
+
+    @include mobile {
+      display: flex;
+      align-items: center;
+      gap: $padding-4;
+      grid-column: 2;
+      justify-content: flex-end;
+    }
+  }
+
+  &__price {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    flex-shrink: 0;
+    min-width: 100px;
+    text-align: right;
+
+    @include mobile {
+      @include typo-body-4;
+      min-width: auto;
+      text-align: left;
+    }
+  }
+
+  &__quantity {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    flex-shrink: 0;
+    min-width: 60px;
+    text-align: center;
+
+    @include mobile {
+      @include typo-body-4;
+      min-width: auto;
+      text-align: left;
+    }
+  }
+
+  &__total-price {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    flex-shrink: 0;
+    min-width: 120px;
+    text-align: right;
+
+    @include mobile {
+      @include typo-title-6;
+      grid-column: 2;
+      min-width: auto;
+      text-align: right;
+    }
+  }
+}
+
+// --------------------------------------------
+// Order Product List
+// --------------------------------------------
+
+.order-products {
+  display: flex;
+  flex-direction: column;
+}
+
+// --------------------------------------------
+// Order Section Address Input (커스텀 스타일)
+// --------------------------------------------
+
+.order-section {
+  .address-input {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $padding-4;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+
+    // 우편번호 + 버튼 row: 전체 너비
+    &__row {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: $padding-3;
+      align-items: center;
+
+      @include mobile {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    &__zip {
+      width: 140px;
+      flex-shrink: 0;
+
+      @include mobile {
+        width: 100%;
+      }
+
+      .base-input__input {
+        background-color: $Bg-Primary-bg-color;
+        text-align: center;
+      }
+    }
+
+    &__btn {
+      width: auto;
+      height: 44px;
+      padding: 0 $padding-5;
+      flex-shrink: 0;
+      @include typo-body-3;
+
+      @include mobile {
+        width: 100%;
+      }
+    }
+
+    // 주소 입력 필드들
+    .base-input__input {
+      height: 44px;
+      border: 1px solid $Border-Border-line-100;
+      border-radius: radius(4);
+      padding: 0 $padding-4;
+      @include typo-body-2;
+
+      &:focus {
+        border-color: $Primary-color;
+        outline: none;
+      }
+
+      &:disabled {
+        background-color: $Bg-Primary-bg-color;
+        color: $Text-Secondary-text-color;
+      }
+    }
+  }
+}

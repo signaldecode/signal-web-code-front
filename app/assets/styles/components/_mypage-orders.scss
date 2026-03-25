@@ -61,7 +61,7 @@
     border: 1px solid $Border-Border-line-100;
     background: $Primary-white-color;
     color: $Text-Primary-text-color;
-    border-radius: 9999px;
+    border-radius: $radius-full;
     padding: $padding-3 $padding-6; // 12 24
     @include typo-button-2;
 
@@ -89,7 +89,7 @@
 
   &__filters {
     background: $Bg-Primary-bg-color;
-    border-radius: 10px;
+    border-radius: radius(10);
     padding: $padding-6; // 24
     display: grid;
     grid-template-columns: 260px 150px 212px 212px;

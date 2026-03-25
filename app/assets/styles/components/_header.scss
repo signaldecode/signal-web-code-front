@@ -14,10 +14,10 @@
   right: 0;
   z-index: 100;
   background: $Primary-white-color;
-  transition: box-shadow 0.3s ease;
+  @include transition-slow(box-shadow);
 
   &--scrolled {
-    box-shadow: 0 $padding-2 $padding-4 rgba(0, 0, 0, 0.06);
+    box-shadow: $shadow-xl;
   }
 
   // ---- Row 1: 로고 | 검색 | 유저 액션 ----
@@ -93,7 +93,7 @@
     @include typo-body-3;
     color: $Text-Secondary-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
     white-space: nowrap;
 
     &:hover {
@@ -204,7 +204,7 @@
     @include typo-body-3;
     color: $Text-Thirty-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
     white-space: nowrap;
 
     &:hover {
@@ -222,7 +222,7 @@
     border: none;
     cursor: pointer;
     color: $Text-Primary-text-color;
-    transition: color 0.2s ease;
+    @include transition(color);
     flex-shrink: 0;
 
     &:hover {
@@ -235,7 +235,7 @@
 
     .base-icon {
       color: $Text-Primary-text-color;
-      transition: color 0.2s ease;
+      @include transition(color);
     }
   }
 
@@ -274,7 +274,7 @@
     font-weight: 500;
     color: $Text-Primary-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
     white-space: nowrap;
 
     @include mobile {
@@ -296,7 +296,7 @@
     z-index: 50;
     background: $Primary-white-color;
     border-bottom: 1px solid $Border-Border-line-100;
-    box-shadow: 0 $padding-2 $padding-6 rgba(0, 0, 0, 0.08);
+    box-shadow: $shadow-xl;
 
     @include tablet {
       display: none;
@@ -334,7 +334,7 @@
     color: $Text-Primary-text-color;
     text-decoration: none;
     padding: $padding-2 0;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Primary-color;
@@ -355,7 +355,7 @@
     color: $Text-Secondary-text-color;
     text-decoration: none;
     padding: $padding-1 0;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Primary-color;
@@ -372,7 +372,7 @@
     border: none;
     cursor: pointer;
     color: $Text-Primary-text-color;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     .base-icon {
       color: $Text-Primary-text-color;
@@ -416,7 +416,7 @@
   &__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: $overlay-medium;
   }
 
   &__content {
@@ -454,7 +454,7 @@
     border-radius: $padding-1;
     padding: $padding-2 $padding-4;
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    @include transition(opacity);
 
     &:hover {
       opacity: 0.85;
@@ -465,7 +465,7 @@
     @include typo-body-2;
     color: $Text-Secondary-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Primary-color;
@@ -493,7 +493,7 @@
     @include typo-body-3;
     color: $Text-Thirty-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Primary-color;
@@ -530,7 +530,7 @@
     @include typo-title-5;
     color: $Text-Primary-text-color;
     text-decoration: none;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover,
     &.router-link-active {
@@ -541,18 +541,18 @@
 
 // Mobile nav transition
 .mobile-nav-enter-active {
-  transition: opacity 0.3s ease;
+  @include transition-slow(opacity);
 
   .mobile-nav__content {
-    transition: transform 0.3s ease;
+    @include transition-slow(transform);
   }
 }
 
 .mobile-nav-leave-active {
-  transition: opacity 0.3s ease;
+  @include transition-slow(opacity);
 
   .mobile-nav__content {
-    transition: transform 0.3s ease;
+    @include transition-slow(transform);
   }
 }
 

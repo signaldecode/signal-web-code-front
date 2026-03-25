@@ -188,13 +188,13 @@
   &__inner {
     position: relative;
     aspect-ratio: 5.5 / 1;
-    border-radius: 16px;
+    border-radius: radius(16);
     overflow: hidden;
     background: $Bg-Secondary-bg-color;
 
     @include mobile {
       aspect-ratio: 4 / 1;
-      border-radius: 8px;
+      border-radius: radius(8);
     }
   }
 
@@ -252,7 +252,7 @@
     border: none;
     background: $Border-Border-line-100;
     cursor: pointer;
-    transition: background 0.2s ease;
+    @include transition(background);
     padding: 0;
 
     @include mobile {

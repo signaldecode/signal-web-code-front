@@ -1,0 +1,73 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Content (상세 이미지)
+// --------------------------------------------
+
+.product-detail-content {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__body {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+
+    &--expanded {
+      max-height: none;
+    }
+  }
+
+  &__html {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    p, div {
+      margin: 0;
+    }
+  }
+
+  &__images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 860px;
+    display: block;
+  }
+
+  &__more {
+    display: flex;
+    justify-content: center;
+    padding-top: $padding-8;
+    background: transparent;
+  }
+
+  &__more-btn {
+    min-width: 200px;
+
+    @include mobile {
+      height: 40px;
+    }
+  }
+}

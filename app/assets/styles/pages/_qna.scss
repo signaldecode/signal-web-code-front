@@ -119,14 +119,14 @@
     color: $Text-Thirty-text-color;
     padding: $padding-1 $padding-2;
     background: $Bg-Primary-bg-color;
-    border-radius: 4px;
+    border-radius: radius(4);
   }
 
   &__status {
     @include typo-body-3;
     font-weight: 500;
     padding: $padding-1 $padding-2;
-    border-radius: 4px;
+    border-radius: radius(4);
 
     &--answered {
       background: var(--theme-primary-50);
@@ -178,7 +178,7 @@
 
   &__arrow {
     color: $Text-Thirty-text-color;
-    transition: transform 0.2s ease;
+    @include transition(transform);
     display: flex;
     align-items: center;
   }
@@ -231,7 +231,7 @@
     color: $Primary-color;
     padding: $padding-1 $padding-2;
     background: $Primary-white-color;
-    border-radius: 4px;
+    border-radius: radius(4);
   }
 
   &__answer-date {
@@ -257,11 +257,11 @@
     @include typo-body-3;
     padding: $padding-2 $padding-4;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 4px;
+    border-radius: radius(4);
     background: $Primary-white-color;
     color: $Text-Secondary-text-color;
     cursor: pointer;
-    transition: all 0.2s ease;
+    @include transition(all);
 
     &:hover {
       border-color: $Primary-color;

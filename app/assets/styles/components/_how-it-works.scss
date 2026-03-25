@@ -72,11 +72,11 @@
     padding: $padding-10 $padding-6;
     border: 1px solid $Border-Border-line-100;
     border-radius: $padding-4;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    @include transition(transform, box-shadow);
 
     &:hover {
       transform: translateY(-$padding-1);
-      box-shadow: 0 $padding-2 $padding-6 rgba(0, 0, 0, 0.06);
+      box-shadow: $shadow-xl;
     }
 
     @include tablet {

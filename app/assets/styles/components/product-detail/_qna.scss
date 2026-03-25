@@ -1,0 +1,240 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Q&A
+// --------------------------------------------
+
+.product-detail-qna {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-10 20px;
+  // border-top: 2px solid $Bg-Secondary-bg-color;
+
+  @include mobile {
+    padding: $padding-8 $padding-4;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $padding-6;
+  }
+
+  &__title {
+    @include typo-title-4;
+    color: $Text-Primary-text-color;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__write-btn {
+    flex-shrink: 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid $Border-Border-line-200;
+  }
+
+  &__empty {
+    padding: $padding-12 0;
+    text-align: center;
+  }
+
+  &__pagination {
+    margin-top: $padding-8;
+  }
+}
+
+// Q&A Item (상품 상세 전용)
+.pd-qna-item {
+  border-bottom: 1px solid $Border-Border-line-100;
+
+  &--expanded {
+    // background: $Bg-Primary-bg-color;
+    margin: 0 (-$padding-2);
+    padding: 0 $padding-2;
+  }
+
+  &--secret {
+    .pd-qna-item__header {
+      cursor: default;
+    }
+  }
+
+  // Header (클릭 영역)
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+    padding: $padding-7 0;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+
+    @include mobile {
+      padding: $padding-5 0;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+
+  &__category {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    width: 60px;
+    flex-shrink: 0;
+
+    @include mobile {
+      @include typo-body-4;
+      width: auto;
+    }
+  }
+
+  &__title {
+    @include typo-title-5;
+    color: $Text-Primary-text-color;
+
+    @include mobile {
+      @include typo-title-6;
+    }
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: $padding-1;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    svg {
+      flex-shrink: 0;
+      color: $Text-Disabled-color;
+    }
+  }
+
+  &__badge {
+    flex-shrink: 0;
+
+    @include mobile {
+      transform: scale(0.85);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    gap: $padding-2;
+    flex-shrink: 0;
+    margin: 0;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__username {
+    @include typo-body-3;
+    color: $Text-Disabled-color;
+  }
+
+  &__date {
+    @include typo-body-3;
+    color: $Text-Disabled-color;
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+    color: $Text-Disabled-color;
+
+    @include mobile {
+      width: 14px;
+      height: 14px;
+    }
+    margin-left: auto;
+  }
+
+  // Content (펼쳐지는 영역)
+  &__content {
+    padding: 0 0 $padding-5;
+  }
+
+  &__question,
+  &__answer,
+  &__no-answer {
+    padding: $padding-4;
+    margin-bottom: $padding-3;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__question {
+    background: $Primary-white-color;
+    border-top: 1px solid $Border-Border-line-100;
+    padding: $padding-10 $padding-2;
+  }
+
+  &__answer {
+    background: var(--theme-primary-50);
+    // border: 1px solid var(--theme-primary-200);
+  }
+
+  &__no-answer {
+    background: $Bg-Secondary-bg-color;
+  }
+
+  &__label {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    display: block;
+    margin-bottom: $padding-2;
+    font-weight: 500;
+
+    @include mobile {
+      @include typo-body-4;
+      font-weight: 500;
+    }
+
+    &--answer {
+      color: $Primary-color;
+    }
+  }
+
+  &__text {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-line;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+
+    &--empty {
+      color: $Text-Disabled-color;
+    }
+  }
+
+  &__answer-date {
+    @include typo-body-3;
+    color: $Text-Disabled-color;
+    display: block;
+    margin-top: $padding-2;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+}

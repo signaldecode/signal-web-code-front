@@ -1,0 +1,664 @@
+@use '../../tokens/colors' as *;
+@use '../../tokens/spacing' as *;
+@use '../../tokens/typography' as *;
+@use '../../tokens/breakpoints' as *;
+
+// --------------------------------------------
+// Product Detail Hero
+// --------------------------------------------
+
+.product-detail-hero {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: $padding-11 $padding-5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $padding-8;
+
+  @include tablet {
+    gap: $padding-6;
+    padding: $padding-8 20px;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    gap: $padding-6;
+    padding: $padding-6 $padding-4;
+  }
+
+  // Gallery
+  &__gallery {
+    position: relative;
+    max-width: 626px;
+    width: 100%;
+  }
+
+  &__main-image {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    border-radius: radius(8);
+    overflow: hidden;
+    background: $Bg-Secondary-bg-color;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    @include mobile {
+      display: none;
+    }
+
+    &--prev {
+      left: $padding-4;
+    }
+
+    &--next {
+      right: $padding-4;
+    }
+  }
+
+  // Dots Indicator
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    position: absolute;
+    bottom: $padding-6;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $Border-Border-line-100;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    @include transition(background-color);
+
+    &--active {
+      background: $Border-Border-line-200;
+    }
+  }
+
+  &__sample.base-button {
+    margin-top: space(16);
+
+    &:hover {
+      background-color: $Primary-color !important;
+      border-color: $Primary-color !important;
+      color: $Primary-white-color !important;
+    }
+  }
+
+  // Info Section
+  &__info {
+    width: 598px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+
+
+    @include tablet {
+      width: 50%;
+    }
+
+    @include mobile {
+      width: 100%;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $padding-3;
+  }
+
+  &__title-wrap {
+    flex: 1;
+  }
+
+  &__name {
+    @include typo-title-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-2;
+    font-weight: 600;
+
+    @include mobile {
+      @include typo-title-4;
+      font-weight: 600;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-2;
+    color: $Text-Thirty-text-color;
+    margin: 0;
+    line-height: 1.5;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__share {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $Text-Thirty-text-color;
+
+    &:hover {
+      color: $Text-Primary-text-color;
+    }
+  }
+
+  // Price
+  &__price-wrap {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+    margin-bottom: $padding-3;
+  }
+
+  &__price {
+    @include typo-title-2;
+    color: $Text-Primary-text-color;
+    font-weight: 700;
+
+    @include mobile {
+      @include typo-title-4;
+      font-weight: 700;
+    }
+  }
+
+  &__price-wrap .base-badge {
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__original-price {
+    @include typo-body-2;
+    color: $Text-Disabled-color;
+    text-decoration: line-through;
+
+    @include mobile {
+      @include typo-title-6;
+      text-decoration: line-through;
+    }
+  }
+
+  // Promotion
+  &__promotion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $padding-2;
+    margin-bottom: $padding-3;
+    padding: $padding-2 $padding-3;
+    background: $Bg-Secondary-bg-color;
+    border-radius: radius(4);
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: $padding-1;
+    }
+  }
+
+  &__promotion-name {
+    @include typo-body-2;
+    color: $Primary-color;
+    font-weight: 500;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__promotion-date {
+    @include typo-body-3;
+    color: $Text-Secondary-text-color;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  // Rating
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $padding-1;
+    margin-bottom: $padding-6;
+    padding-bottom: $padding-6;
+    border-bottom: 1px solid $Border-Border-line-100;
+
+    @include mobile {
+      .base-rating .base-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .base-rating__value,
+      .base-rating__count {
+        @include typo-body-4;
+      }
+
+      .base-rating__divider {
+        @include typo-body-4;
+      }
+    }
+  }
+
+  &__rating-stars {
+    display: flex;
+    gap: 2px;
+
+    .base-icon {
+      @include mobile {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  &__rating-value {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    margin-left: $padding-1;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  &__review-count {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  // Options Table
+  &__options-table {
+    margin-bottom: $padding-6;
+  }
+
+  &__option-row {
+    display: flex;
+    align-items: flex-start;
+    padding: $padding-2 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+
+  &__option-label {
+    @include typo-body-3;
+    color: $Text-Thirty-text-color;
+    width: 70px;
+    flex-shrink: 0;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  &__option-value {
+    @include typo-body-3;
+    color: $Text-Primary-text-color;
+    flex: 1;
+
+    @include mobile {
+      @include typo-body-4;
+    }
+  }
+
+  // Select
+  &__select-wrap {
+    margin-bottom: $padding-3;
+  }
+
+  // Options Wrap
+  &__options-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-4;
+    margin-bottom: $padding-4;
+  }
+
+  // Option Group
+  &__option-group {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-2;
+  }
+
+  &__option-group-label {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    font-weight: 500;
+
+    @include mobile {
+      @include typo-title-6;
+      font-weight: 500;
+    }
+  }
+
+  &__option-required {
+    color: $Primary-color;
+    margin-left: 2px;
+  }
+
+  // Selected Option Box
+  &__selected-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $padding-4;
+    background: $Bg-Primary-bg-color;
+    border-radius: radius(4);
+    margin-bottom: $padding-3;
+  }
+
+  &__selected-info {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-1;
+  }
+
+  &__selected-name {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__selected-price {
+    @include typo-title-5;
+    color: $Text-Primary-text-color;
+    font-weight: 600;
+
+    @include mobile {
+      @include typo-title-6;
+      font-weight: 600;
+    }
+  }
+
+  &__selected-actions {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+  }
+
+  // Total
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $padding-4 0;
+    border-top: 1px solid $Border-Border-line-100;
+    margin-bottom: $padding-4;
+  }
+
+  &__total-label {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__total-price {
+    @include typo-title-1;
+    color: $Text-Primary-text-color;
+    font-weight: 700;
+
+    @include mobile {
+      @include typo-title-4;
+      font-weight: 700;
+    }
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    gap: $padding-2;
+  }
+
+  &__wishlist {
+    width: 52px;
+    height: 52px;
+
+    @include mobile {
+      width: 40px;
+      height: 40px;
+    }
+    flex-shrink: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $Primary-white-color;
+    border: 1px solid $Border-Border-line-200;
+    color: $Text-Primary-text-color;
+
+    &:hover {
+      background-color: $Bg-Primary-bg-color;
+    }
+  }
+
+  &__cart {
+    flex: 1;
+    height: 52px;
+
+    @include mobile {
+      height: 40px;
+    }
+    background-color: $Primary-white-color;
+    border: 1px solid $Border-Border-line-200;
+    color: $Text-Primary-text-color;
+
+    &:hover {
+      background-color: $Bg-Primary-bg-color;
+    }
+  }
+
+  &__buy {
+    flex: 1;
+    height: 52px;
+
+    @include mobile {
+      height: 40px;
+    }
+    background-color: $Border-Border-line-200;
+    border: 1px solid $Border-Border-line-200;
+    color: $Primary-white-color;
+
+    &:hover {
+      background-color: $Black-Primary-black-800;
+      border-color: $Black-Primary-black-800;
+    }
+  }
+
+  // 쿠폰 스와이퍼
+  &__coupons {
+    margin-top: $padding-4;
+    width: 100%;
+  }
+
+  &__coupons-title {
+    @include typo-body-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-3;
+    font-weight: 500;
+  }
+
+  &__coupons-swiper {
+    overflow: hidden;
+    border-radius: radius(12);
+  }
+
+  &__coupons-track {
+    display: flex;
+    @include transition-slow(transform);
+  }
+
+  &__coupon-card {
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+    gap: $padding-3;
+    padding: $padding-4;
+    background: linear-gradient(135deg, var(--theme-primary-700) 0%, var(--theme-primary-900) 100%);
+    border-radius: radius(12);
+    min-height: 80px;
+
+    @include mobile {
+      padding: $padding-3;
+      gap: $padding-2;
+      min-height: 70px;
+    }
+  }
+
+  &__coupon-discount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding-right: $padding-3;
+    border-right: 1px dashed rgba($Primary-white-color, 0.3);
+
+    @include mobile {
+      min-width: 60px;
+      padding-right: $padding-2;
+    }
+  }
+
+  &__coupon-value {
+    @include typo-headline-3;
+    color: $Primary-white-color;
+    font-weight: 700;
+    line-height: 1.2;
+
+    @include mobile {
+      @include typo-title-3;
+    }
+  }
+
+  &__coupon-off {
+    @include typo-body-4;
+    color: rgba($Primary-white-color, 0.8);
+  }
+
+  &__coupon-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $padding-1;
+    min-width: 0;
+  }
+
+  &__coupon-name {
+    @include typo-title-6;
+    color: $Primary-white-color;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__coupon-condition {
+    @include typo-body-4;
+    color: rgba($Primary-white-color, 0.7);
+  }
+
+  &__coupon-download {
+    flex-shrink: 0;
+    padding: $padding-2 $padding-3;
+    background: $Primary-white-color;
+    border: none;
+    border-radius: radius(20);
+    @include typo-body-3;
+    color: $Primary-color;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(background, transform);
+
+    @include mobile {
+      padding: $padding-1 $padding-2;
+      @include typo-body-4;
+    }
+
+    &:hover:not(:disabled) {
+      transform: scale(1.05);
+    }
+
+    &--done {
+      background: rgba($Primary-white-color, 0.3);
+      color: $Primary-white-color;
+      cursor: default;
+    }
+  }
+
+  &__coupons-dots {
+    display: flex;
+    justify-content: center;
+    gap: $padding-2;
+    margin-top: $padding-3;
+  }
+
+  &__coupons-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: $Border-Border-line-200;
+    cursor: pointer;
+    @include transition(background, transform);
+
+    &:hover {
+      background: $Border-Border-line-300;
+    }
+
+    &--active {
+      background: $Primary-color;
+      transform: scale(1.2);
+    }
+  }
+}

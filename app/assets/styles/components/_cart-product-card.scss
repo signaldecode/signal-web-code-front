@@ -34,7 +34,7 @@
   &__image {
     width: 100px;
     height: 100px;
-    border-radius: 8px;
+    border-radius: radius(8);
     overflow: hidden;
     background: $Bg-Secondary-bg-color;
     flex-shrink: 0;
@@ -140,7 +140,7 @@
     border: none;
     color: $Text-Disabled-color;
     cursor: pointer;
-    transition: color 0.2s;
+    @include transition(color);
     @include mobile {
       width: 16px;
       height: 16px;
@@ -158,11 +158,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: $padding-2 $padding-3;
-    background: rgba(0, 0, 0, 0.7);
+    background: $overlay-darker;
     color: $Primary-white-color;
     font-size: 12px;
     font-weight: 600;
-    border-radius: 4px;
+    border-radius: radius(4);
   }
 
   &__image {
@@ -214,7 +214,7 @@
     border: none;
     padding: $padding-2 $padding-3;
     cursor: pointer;
-    transition: color 0.2s;
+    @include transition(color);
 
     @include mobile {
       @include typo-body-4;

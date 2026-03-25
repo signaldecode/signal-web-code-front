@@ -117,7 +117,7 @@
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: background 0.2s ease;
+    @include transition(background);
 
     &:hover {
       background: $Bg-Primary-bg-color;
@@ -146,7 +146,7 @@
     @include typo-body-3;
     font-weight: 500;
     padding: $padding-1 $padding-2;
-    border-radius: 4px;
+    border-radius: radius(4);
 
     @include mobile {
       height: 20px;
@@ -282,7 +282,7 @@
     @include typo-body-3;
     font-weight: 500;
     padding: $padding-1 $padding-2;
-    border-radius: 4px;
+    border-radius: radius(4);
 
     &--pinned {
       background: $Primary-color;
@@ -398,7 +398,7 @@
     img {
       max-width: 100%;
       height: auto;
-      border-radius: 8px;
+      border-radius: radius(8);
       margin: $padding-4 0;
     }
 
@@ -424,12 +424,12 @@
       padding: $padding-4;
       background: $Bg-Primary-bg-color;
       border-left: 4px solid $Primary-color;
-      border-radius: 0 8px 8px 0;
+      border-radius: 0 radius(8) radius(8) 0;
     }
 
     pre, code {
       background: $Bg-Secondary-bg-color;
-      border-radius: 4px;
+      border-radius: radius(4);
     }
 
     code {

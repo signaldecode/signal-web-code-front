@@ -18,7 +18,7 @@
   &__backdrop {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: $overlay-medium;
   }
 
   &__container {
@@ -30,7 +30,7 @@
     max-height: calc(100vh - space(40));
     background-color: $Primary-white-color;
     // border-radius: space(8);
-    box-shadow: 0 space(8) space(32) rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-2xl;
     overflow: hidden;
 
     @include mobile {
@@ -72,7 +72,7 @@
     color: $Text-Thirty-text-color;
     cursor: pointer;
     // border-radius: space(4);
-    transition: background-color 0.2s, color 0.2s;
+    @include transition(background-color, color);
 
     &:hover {
       background-color: $Bg-Primary-bg-color;

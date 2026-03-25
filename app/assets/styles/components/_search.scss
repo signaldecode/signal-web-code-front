@@ -52,7 +52,7 @@
     border: none;
     cursor: pointer;
     color: $Text-Secondary-text-color;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Text-Primary-text-color;
@@ -69,7 +69,7 @@
     border: none;
     cursor: pointer;
     color: $Text-Secondary-text-color;
-    transition: color 0.2s ease;
+    @include transition(color);
 
     &:hover {
       color: $Text-Primary-text-color;
@@ -135,7 +135,7 @@
     z-index: 2;
     padding: $padding-6 $padding-4;
     background: $Primary-white-color;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: $shadow-lg;
 
     .base-search-input__form {
       border-bottom-color: $Border-Border-line-100;
@@ -149,17 +149,17 @@
     right: 0;
     bottom: 0;
     z-index: 1;
-    background: rgba(0, 0, 0, 0.5);
+    background: $overlay-medium;
   }
 }
 
 // Mobile popup animation
 .search-popup-enter-active,
 .search-popup-leave-active {
-  transition: opacity 0.3s ease;
+  @include transition-slow(opacity);
 
   .header__search-mobile-inner {
-    transition: transform 0.3s ease;
+    @include transition-slow(transform);
   }
 }
 

@@ -41,7 +41,7 @@
     justify-content: space-between;
     padding: $padding-6 $padding-8;
     background: $Bg-Primary-bg-color;
-    border-radius: 12px;
+    border-radius: radius(12);
 
     @include mobile {
       padding: $padding-3 $padding-4;
@@ -84,7 +84,7 @@
     padding: $padding-2 $padding-4;
     padding-right: $padding-8;
     border: 1px solid $Border-Border-line-100;
-    border-radius: 6px;
+    border-radius: radius(6);
     @include typo-body-3;
     color: $Text-Primary-text-color;
     background: $Primary-white-color;
@@ -214,7 +214,7 @@
   &__status-badge {
     display: inline-block;
     padding: $padding-1 $padding-2;
-    border-radius: 4px;
+    border-radius: radius(4);
     @include typo-body-4;
     font-weight: 500;
 
@@ -285,6 +285,6 @@
     @include typo-body-3;
     color: $Error-color;
     background: rgba($Error-color, 0.05);
-    border-radius: 8px;
+    border-radius: radius(8);
   }
 }
