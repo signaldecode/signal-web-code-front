@@ -1,16 +1,16 @@
 {
   "seo": {
-    "title": "Brand Name",
-    "description": "",
+    "title": "SignalKit — Build Your Online Store in Minutes",
+    "description": "1,200+ professionally designed website templates. Launch your business online with enterprise-grade e-commerce solutions.",
     "ogImage": "/images/og-main.jpg"
   },
   "header": {
     "logo": {
-      "alt": "브랜드 로고",
+      "alt": "SignalKit 로고",
       "src": "/images/hero/logo.svg",
       "menuLabel": "카테고리",
       "searchLabel": "검색",
-      "searchPlaceholder": "검색어를 입력하세요",
+      "searchPlaceholder": "템플릿, 업종, 키워드로 검색",
       "searchCloseLabel": "검색 닫기",
       "userLabel": "마이페이지",
       "loginLabel": "로그인",
@@ -30,7 +30,7 @@
     "navAriaLabel": "메인 네비게이션",
     "nav": [
       { "label": "베스트", "href": "/best" },
-      { "label": "쿠폰", "href": "/coupons" },
+      { "label": "신규", "href": "/category?sort=newest" },
       { "label": "공지사항", "href": "/notice" },
       { "label": "리뷰", "href": "/review" },
       { "label": "Q&A", "href": "/qna" },
@@ -48,40 +48,49 @@
     },
     "slides": [
       {
-        "title": "POWER OF RADIANCE",
-        "subtitle": "Signal Decode",
-        "description": "피부 속에서부터 채워지는 깊은 광채를 느껴보세요.",
+        "title": "YOUR WEBSITE, YOUR BUSINESS",
+        "subtitle": "SignalKit Templates",
+        "description": "전문가가 설계한 고성능 웹사이트로 비즈니스를 시작하세요.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "메인 히어로 이미지 1"
+        "imageAlt": "웹사이트 템플릿 쇼케이스"
       },
       {
-        "title": "NATURAL GLOW",
-        "subtitle": "Skin Care",
-        "description": "피부 속에서부터 채워지는 깊은 광채를 느껴보세요.",
+        "title": "READY TO LAUNCH",
+        "subtitle": "E-Commerce Solution",
+        "description": "결제, 재고, 배송까지 올인원 쇼핑몰 솔루션을 만나보세요.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "메인 히어로 이미지 2"
+        "imageAlt": "이커머스 솔루션 소개"
       },
       {
-        "title": "PURE BEAUTY",
-        "subtitle": "Make Up",
-        "description": "피부 속에서부터 채워지는 깊은 광채를 느껴보세요.",
+        "title": "DESIGN MEETS CONVERSION",
+        "subtitle": "Performance First",
+        "description": "SEO 최적화와 모바일 퍼스트 설계로 전환율을 높이세요.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "메인 히어로 이미지 3"
+        "imageAlt": "퍼포먼스 중심 디자인"
       },
       {
-        "title": "HYDRATION BOOST",
-        "subtitle": "Moisture Care",
-        "description": "피부 속에서부터 채워지는 깊은 광채를 느껴보세요.",
+        "title": "ENTERPRISE GRADE",
+        "subtitle": "Scalable & Secure",
+        "description": "보안 인증과 무제한 확장이 가능한 엔터프라이즈급 인프라.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "메인 히어로 이미지 4"
+        "imageAlt": "엔터프라이즈 보안 인프라"
       },
       {
-        "title": "ANTI-AGING",
-        "subtitle": "Time Reverse",
-        "description": "피부 속에서부터 채워지는 깊은 광채를 느껴보세요.",
+        "title": "CUSTOMIZE EVERYTHING",
+        "subtitle": "No-Code Builder",
+        "description": "코드 없이 드래그 앤 드롭으로 나만의 사이트를 완성하세요.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "메인 히어로 이미지 5"
+        "imageAlt": "노코드 빌더 소개"
       }
+    ]
+  },
+  "trustBar": {
+    "ariaLabel": "SignalKit 핵심 지표",
+    "items": [
+      { "value": "1,200+", "label": "검증된 템플릿" },
+      { "value": "3,500+", "label": "비즈니스 고객사" },
+      { "value": "99.9%", "label": "서비스 가동률" },
+      { "value": "4.8", "label": "고객 만족도", "suffix": "/ 5.0" }
     ]
   },
   "categories": {
@@ -89,60 +98,84 @@
     "prevAriaLabel": "이전 카테고리",
     "nextAriaLabel": "다음 카테고리",
     "items": [
-      { "label": "모든 제품", "href": "/category", "image": "/images/categories/all.svg",  "imageAlt": "모든 제품 카테고리" },
-      { "label": "스킨케어", "href": "/category?tab=skincare","image": "/images/categories/best.svg", "imageAlt": "스킨케어 카테고리" },
-      { "label": "메이크업", "href": "/category?tab=makeup", "image": "/images/categories/category-1.png", "imageAlt": "메이크업 카테고리" },
-      { "label": "앰플·세럼", "href": "/category?tab=ampoule", "image": "/images/categories/category-2.png", "imageAlt": "앰플 세럼 카테고리" },
-      { "label": "클렌징", "href": "/category?tab=cleansing", "image": "/images/categories/category-3.png", "imageAlt": "클렌징 카테고리" }
+      { "label": "전체 템플릿", "href": "/category", "image": "/images/categories/all.svg", "imageAlt": "전체 템플릿 카테고리" },
+      { "label": "쇼핑몰", "href": "/category?tab=ecommerce", "image": "/images/categories/best.svg", "imageAlt": "쇼핑몰 카테고리" },
+      { "label": "기업 홈페이지", "href": "/category?tab=corporate", "image": "/images/categories/category-1.png", "imageAlt": "기업 홈페이지 카테고리" },
+      { "label": "포트폴리오", "href": "/category?tab=portfolio", "image": "/images/categories/category-2.png", "imageAlt": "포트폴리오 카테고리" },
+      { "label": "랜딩페이지", "href": "/category?tab=landing", "image": "/images/categories/category-3.png", "imageAlt": "랜딩페이지 카테고리" }
     ]
   },
   "bestItems": {
-    "title": "Best Item",
-    "subtitle": "가장 사랑받는 인기 제품",
+    "title": "Best Templates",
+    "subtitle": "가장 많이 선택된 인기 템플릿",
     "viewAllLabel": "전체보기",
     "viewAllHref": "/best",
     "arrowLabels": {
-      "prev": "이전 상품",
-      "next": "다음 상품"
+      "prev": "이전 템플릿",
+      "next": "다음 템플릿"
     }
   },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "3단계로 완성하는 나만의 웹사이트",
+    "steps": [
+      {
+        "step": "01",
+        "title": "템플릿 선택",
+        "description": "업종과 목적에 맞는 템플릿을 골라보세요. 모든 템플릿은 실시간 미리보기를 지원합니다.",
+        "icon": "search"
+      },
+      {
+        "step": "02",
+        "title": "맞춤 커스터마이징",
+        "description": "로고, 컬러, 콘텐츠를 자유롭게 수정하세요. 코딩 없이 드래그 앤 드롭으로 완성합니다.",
+        "icon": "edit"
+      },
+      {
+        "step": "03",
+        "title": "런칭 & 운영",
+        "description": "도메인 연결부터 결제 설정까지. 원클릭으로 사이트를 오픈하고 바로 비즈니스를 시작하세요.",
+        "icon": "rocket"
+      }
+    ]
+  },
   "newItems": {
-    "title": "New Arrival",
-    "subtitle": "새롭게 출시된 신상품",
+    "title": "New Templates",
+    "subtitle": "최신 트렌드를 반영한 신규 템플릿",
     "viewAllLabel": "전체보기",
     "viewAllHref": "/category?sort=newest",
     "arrowLabels": {
-      "prev": "이전 상품",
-      "next": "다음 상품"
+      "prev": "이전 템플릿",
+      "next": "다음 템플릿"
     }
   },
   "mdPick": {
-    "title": "MD's Pick",
-    "subtitle": "MD가 추천하는 제품",
+    "title": "Editor's Pick",
+    "subtitle": "에디터가 엄선한 프리미엄 템플릿",
     "brandName": "",
-    "recommendTitle": "MD 추천 아이템",
+    "recommendTitle": "이 달의 추천 템플릿",
     "mainImage": "/images/banners/md.png",
-    "mainImageAlt": "MD 추천 메인 이미지",
+    "mainImageAlt": "에디터 추천 템플릿 메인 이미지",
     "arrowLabels": {
-      "prev": "이전 상품",
-      "next": "다음 상품"
+      "prev": "이전 템플릿",
+      "next": "다음 템플릿"
     }
   },
   "categoryItems": {
     "title": "Category Item",
-    "subtitle": "카테고리별 추천 제품",
+    "subtitle": "카테고리별 추천 템플릿",
     "tabsAriaLabel": "카테고리 탭",
     "tabs": [
-      { "label": "스킨케어", "value": "skincare" },
-      { "label": "메이크업", "value": "makeup" },
-      { "label": "앰플·세럼", "value": "ampoule" },
-      { "label": "클렌징", "value": "cleansing" }
+      { "label": "쇼핑몰", "value": "ecommerce" },
+      { "label": "기업 홈페이지", "value": "corporate" },
+      { "label": "포트폴리오", "value": "portfolio" },
+      { "label": "랜딩페이지", "value": "landing" }
     ],
     "arrowLabels": {
-      "prev": "이전 상품",
-      "next": "다음 상품"
+      "prev": "이전 템플릿",
+      "next": "다음 템플릿"
     },
-    "emptyMessage": "리스트가 비었습니다."
+    "emptyMessage": "해당 카테고리에 템플릿이 없습니다."
   },
   "slideBanner": {
     "prevLabel": "이전 슬라이드",
@@ -150,61 +183,46 @@
   },
   "banners": {
     "full": {
-      "title": "새로운이벤트 애플워치를 드립니다",
-      "subtitle": "10% 추가 할인 혜택 온라인 단독 신상 할인 20%",
+      "title": "첫 구매 고객 특별 혜택",
+      "subtitle": "지금 가입하면 첫 템플릿 20% 할인 + 무료 도메인 1년 제공",
       "image": "/images/banner-full.jpg",
-      "imageAlt": "전체 배너 이미지",
-      "href": "/event/apple-watch"
+      "imageAlt": "신규 가입 프로모션 배너",
+      "href": "/event/welcome"
     },
     "mdPickBanner": {
       "title": "",
       "subtitle": "",
       "image": "/images/banners/half-banner-1.png",
-      "imageAlt": "MD Pick 프로모션 배너"
+      "imageAlt": "에디터 추천 프로모션 배너"
     },
     "slide": [
-      { "image": "/images/banners/banner_slide.png", "imageAlt": "슬라이드 배너 1", "href": "/event" },
-      { "image": "/images/slide-2.jpg", "imageAlt": "슬라이드 배너 2", "href": "/event" },
-      { "image": "/images/slide-3.jpg", "imageAlt": "슬라이드 배너 3", "href": "/event" }
+      { "image": "/images/banners/banner_slide.png", "imageAlt": "프로모션 슬라이드 1", "href": "/event" },
+      { "image": "/images/slide-2.jpg", "imageAlt": "프로모션 슬라이드 2", "href": "/event" },
+      { "image": "/images/slide-3.jpg", "imageAlt": "프로모션 슬라이드 3", "href": "/event" }
     ],
     "half": [
       { "title": "SPRING SALE", "subtitle": "최대 50% 할인", "image": "/images/banners/half-banner-1.png", "imageAlt": "하프 배너 1", "href": "/event", "buttonLabel": "더 알아보기" },
-      { "title": "NEW ARRIVAL", "subtitle": "신상품 입고", "image": "/images/banners/half-banner-2.png", "imageAlt": "하프 배너 2", "href": "/products", "buttonLabel": "더 알아보기" }
+      { "title": "NEW ARRIVAL", "subtitle": "신규 템플릿 입고", "image": "/images/banners/half-banner-2.png", "imageAlt": "하프 배너 2", "href": "/category?sort=newest", "buttonLabel": "더 알아보기" }
     ],
     "halfLabels": {
       "buttonLabel": "더 알아보기"
     }
   },
   "reviews": {
-    "title": "REVIEWS",
-    "subtitle": "고객님들의 생생한 후기"
+    "title": "CLIENT REVIEWS",
+    "subtitle": "실제 고객사의 생생한 도입 후기"
   },
   "bestReviews": {
-    "title": "BEST REVIEW",
-    "subtitle": "가장 도움이 된 후기",
-    "viewAllLabel": "전체 리뷰 보기",
+    "title": "SUCCESS STORIES",
+    "subtitle": "SignalKit으로 성공한 비즈니스",
+    "viewAllLabel": "전체 후기 보기",
     "viewAllHref": "/review"
-  },
-  "instagram": {
-    "title": "Instagram",
-    "subtitle": "@findmystyle___",
-    "profileUrl": "https://www.instagram.com/findmystyle___/",
-    "arrowLabels": {
-      "prev": "이전 이미지",
-      "next": "다음 이미지"
-    },
-    "items": [
-      { "imageAlt": "인스타그램 1", "href": "https://www.instagram.com/findmystyle___/" },
-      { "imageAlt": "인스타그램 2", "href": "https://www.instagram.com/findmystyle___/" },
-      { "imageAlt": "인스타그램 3", "href": "https://www.instagram.com/findmystyle___/" },
-      { "imageAlt": "인스타그램 4", "href": "https://www.instagram.com/findmystyle___/" }
-    ]
   },
   "footer": {
     "logo": {
       "src": "/images/hero/logo.svg",
-      "alt": "logo",
-      "text": "logo"
+      "alt": "SignalKit 로고",
+      "text": "SignalKit"
     },
     "nav": [
       { "label": "베스트", "href": "/best" },
@@ -238,6 +256,6 @@
       { "type": "x", "href": "https://x.com", "label": "X (트위터)" }
     ],
     "infoToggleLabel": "정보 더보기",
-    "copyright": "HEALTHPRO LAB ALL RIGHTS RESERVED."
+    "copyright": "SIGNALKIT ALL RIGHTS RESERVED."
   }
 }

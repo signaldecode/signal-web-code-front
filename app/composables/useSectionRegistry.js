@@ -157,6 +157,24 @@ export const useSectionRegistry = () => {
         images: mainData.instagram.items
       }),
       isEmpty: () => false
+    },
+
+    trust_bar: {
+      component: 'SectionTrustBar',
+      clientOnly: false,
+      props: () => ({
+        data: mainData.trustBar
+      }),
+      isEmpty: () => false
+    },
+
+    how_it_works: {
+      component: 'SectionHowItWorks',
+      clientOnly: false,
+      props: () => ({
+        data: mainData.howItWorks
+      }),
+      isEmpty: () => false
     }
   }
 

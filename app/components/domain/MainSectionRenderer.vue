@@ -18,7 +18,9 @@ const componentMap = {
   SectionInstagram: resolveComponent('SectionInstagram'),
   BannerFull: resolveComponent('BannerFull'),
   BannerSlide: resolveComponent('BannerSlide'),
-  SectionHalfBanners: resolveComponent('SectionHalfBanners')
+  SectionHalfBanners: resolveComponent('SectionHalfBanners'),
+  SectionTrustBar: resolveComponent('SectionTrustBar'),
+  SectionHowItWorks: resolveComponent('SectionHowItWorks')
 }
 
 /**
@@ -35,7 +37,9 @@ const sectionAnimationMap = {
   slide_banner: false,
   half_banner: false,
   review: { animation: 'fade-in' },
-  instagram: { animation: 'blur-in' }
+  instagram: { animation: 'blur-in' },
+  trust_bar: { animation: 'fade-in' },
+  how_it_works: { animation: 'fade-up', stagger: true }
 }
 
 /**

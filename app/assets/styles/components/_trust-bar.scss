@@ -1,0 +1,76 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+@use '../tokens/breakpoints' as *;
+
+.section-trust-bar {
+  padding: $padding-11 0;
+  background: $Bg-Primary-bg-color;
+  border-top: 1px solid $Border-Border-line-100;
+  border-bottom: 1px solid $Border-Border-line-100;
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $padding-12;
+    margin: 0;
+
+    @include tablet {
+      gap: $padding-11;
+    }
+
+    @include mobile {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $padding-8 $padding-4;
+    }
+  }
+
+  &__item {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  &__value {
+    @include typo-display-2;
+    color: $Primary-color;
+    margin: 0 0 $padding-2;
+    display: block;
+
+    @include tablet {
+      @include typo-headline-1;
+    }
+
+    @include mobile {
+      @include typo-headline-2;
+    }
+  }
+
+  &__suffix {
+    @include typo-body-1;
+    color: $Text-Thirty-text-color;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__label {
+    @include typo-body-1;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+}

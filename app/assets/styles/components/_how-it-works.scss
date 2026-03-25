@@ -1,0 +1,127 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+@use '../tokens/breakpoints' as *;
+
+.section-how-it-works {
+  padding: $padding-section 0;
+  background: $Primary-white-color;
+
+  @include tablet {
+    padding: $padding-10 0;
+  }
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $padding-11;
+
+    @include mobile {
+      margin-bottom: $padding-8;
+    }
+  }
+
+  &__title {
+    @include typo-headline-1;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-3;
+
+    @include mobile {
+      @include typo-headline-4;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-1;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $padding-10;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: none;
+
+    @include tablet {
+      gap: $padding-6;
+    }
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $padding-8;
+    }
+  }
+
+  &__step {
+    text-align: center;
+    padding: $padding-10 $padding-6;
+    border: 1px solid $Border-Border-line-100;
+    border-radius: $padding-4;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-$padding-1);
+      box-shadow: 0 $padding-2 $padding-6 rgba(0, 0, 0, 0.06);
+    }
+
+    @include tablet {
+      padding: $padding-8 $padding-4;
+    }
+
+    @include mobile {
+      padding: $padding-6 $padding-4;
+    }
+  }
+
+  &__step-number {
+    @include typo-display-2;
+    color: $Primary-color;
+    display: block;
+    margin-bottom: $padding-5;
+    font-variant-numeric: tabular-nums;
+
+    @include mobile {
+      @include typo-headline-1;
+      margin-bottom: $padding-4;
+    }
+  }
+
+  &__step-title {
+    @include typo-headline-3;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-4;
+
+    @include mobile {
+      @include typo-headline-5;
+      margin-bottom: $padding-3;
+    }
+  }
+
+  &__step-description {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+}

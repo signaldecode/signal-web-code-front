@@ -29,12 +29,12 @@ useSeoMeta({
   ogImage: () => seoInfo.value?.ogImage || mainData.seo.ogImage
 })
 
-// 활성 섹션 목록 (best 뒤에 best_review 자동 삽입)
+// 활성 섹션 목록 (best 뒤에 how_it_works 자동 삽입)
 const activeSections = computed(() => {
   const list = Array.isArray(sections.value) ? [...sections.value] : []
   const bestIndex = list.findIndex(s => s.keyword === 'best')
   if (bestIndex !== -1) {
-    list.splice(bestIndex + 1, 0, { keyword: 'best_review', isActive: true })
+    list.splice(bestIndex + 1, 0, { keyword: 'how_it_works', isActive: true })
   }
   return list
 })
@@ -96,6 +96,9 @@ watch(
         </div>
       </template>
     </ClientOnly>
+
+    <!-- Trust Bar (항상 표시 - Hero 직후 신뢰 지표) -->
+    <SectionTrustBar :data="mainData.trustBar" />
 
     <main>
       <!-- 카테고리 (항상 표시) -->
