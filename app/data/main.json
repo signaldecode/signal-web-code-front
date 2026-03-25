@@ -10,7 +10,7 @@
       "src": "/images/hero/logo.svg",
       "menuLabel": "카테고리",
       "searchLabel": "검색",
-      "searchPlaceholder": "템플릿, 업종, 키워드로 검색",
+      "searchPlaceholder": "검색어를 입력하세요",
       "searchCloseLabel": "검색 닫기",
       "userLabel": "마이페이지",
       "loginLabel": "로그인",
@@ -46,41 +46,55 @@
       "prev": "이전 슬라이드",
       "next": "다음 슬라이드"
     },
+    "ctaLabel": "자세히 보기",
     "slides": [
       {
-        "title": "YOUR WEBSITE, YOUR BUSINESS",
-        "subtitle": "SignalKit Templates",
-        "description": "전문가가 설계한 고성능 웹사이트로 비즈니스를 시작하세요.",
+        "title": "모던 커머스 프로",
+        "subtitle": "BEST SELLER",
+        "description": "세련된 미니멀 디자인의 쇼핑몰 템플릿. 모바일 최적화와 빠른 로딩 속도를 자랑합니다.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "웹사이트 템플릿 쇼케이스"
+        "imageAlt": "모던 커머스 프로 템플릿 미리보기",
+        "ctaHref": "/product/mock-1",
+        "price": "89,000원",
+        "originalPrice": "120,000원"
       },
       {
-        "title": "READY TO LAUNCH",
-        "subtitle": "E-Commerce Solution",
-        "description": "결제, 재고, 배송까지 올인원 쇼핑몰 솔루션을 만나보세요.",
+        "title": "브랜드 스토리",
+        "subtitle": "NEW ARRIVAL",
+        "description": "브랜드 아이덴티티를 강조하는 풀스크린 레이아웃. 감성적인 비주얼 중심 구성.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "이커머스 솔루션 소개"
+        "imageAlt": "브랜드 스토리 템플릿 미리보기",
+        "ctaHref": "/product/mock-2",
+        "price": "69,000원"
       },
       {
-        "title": "DESIGN MEETS CONVERSION",
-        "subtitle": "Performance First",
-        "description": "SEO 최적화와 모바일 퍼스트 설계로 전환율을 높이세요.",
+        "title": "심플 마켓",
+        "subtitle": "EDITOR'S PICK",
+        "description": "깔끔한 그리드 기반 상품 진열. 카테고리가 많은 종합몰에 최적화.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "퍼포먼스 중심 디자인"
+        "imageAlt": "심플 마켓 템플릿 미리보기",
+        "ctaHref": "/product/mock-3",
+        "price": "59,000원",
+        "originalPrice": "79,000원"
       },
       {
-        "title": "ENTERPRISE GRADE",
-        "subtitle": "Scalable & Secure",
-        "description": "보안 인증과 무제한 확장이 가능한 엔터프라이즈급 인프라.",
+        "title": "럭셔리 부티크",
+        "subtitle": "PREMIUM",
+        "description": "프리미엄 감성의 부티크 쇼핑몰. 대형 이미지와 여백 활용으로 고급스러운 인상.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "엔터프라이즈 보안 인프라"
+        "imageAlt": "럭셔리 부티크 템플릿 미리보기",
+        "ctaHref": "/product/mock-4",
+        "price": "129,000원",
+        "originalPrice": "159,000원"
       },
       {
-        "title": "CUSTOMIZE EVERYTHING",
-        "subtitle": "No-Code Builder",
-        "description": "코드 없이 드래그 앤 드롭으로 나만의 사이트를 완성하세요.",
+        "title": "크리에이터 포트폴리오",
+        "subtitle": "TRENDING",
+        "description": "크리에이터를 위한 포트폴리오형 쇼핑몰. 작품과 상품을 동시에 전시.",
         "image": "/images/hero/main-hero.png",
-        "imageAlt": "노코드 빌더 소개"
+        "imageAlt": "크리에이터 포트폴리오 템플릿 미리보기",
+        "ctaHref": "/product/mock-5",
+        "price": "99,000원"
       }
     ]
   },
@@ -116,8 +130,7 @@
     }
   },
   "showroom": {
-    "title": "Best Templates",
-    "subtitle": "가장 많이 선택된 인기 템플릿",
+    "title": "Best",
     "viewAllLabel": "전체보기",
     "viewAllHref": "/best",
     "ctaLabel": "템플릿 미리보기",

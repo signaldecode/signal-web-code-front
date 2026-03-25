@@ -191,7 +191,21 @@ onUnmounted(() => {
     <!-- 콘텐츠 오버레이 -->
     <div class="section-hero__content">
       <p v-if="activeSlide.subtitle" class="section-hero__subtitle">{{ activeSlide.subtitle }}</p>
+      <h2 v-if="activeSlide.title" class="section-hero__title">{{ activeSlide.title }}</h2>
       <p v-if="activeSlide.description" class="section-hero__description">{{ activeSlide.description }}</p>
+      <div v-if="activeSlide.price" class="section-hero__price-wrap">
+        <span v-if="activeSlide.originalPrice" class="section-hero__price-original">
+          {{ activeSlide.originalPrice }}
+        </span>
+        <span class="section-hero__price-current">{{ activeSlide.price }}</span>
+      </div>
+      <NuxtLink
+        v-if="activeSlide.ctaHref"
+        :to="activeSlide.ctaHref"
+        class="section-hero__cta"
+      >
+        {{ data.ctaLabel }}
+      </NuxtLink>
       <SlideIndicator
         v-if="totalSlides > 1"
         :current="currentIndex + 1"

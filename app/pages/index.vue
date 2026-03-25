@@ -29,9 +29,13 @@ useSeoMeta({
   ogImage: () => seoInfo.value?.ogImage || mainData.seo.ogImage
 })
 
-// 활성 섹션 목록 (how_it_works는 TrustBar와 함께 고정 배치)
+// 고정 배치 섹션 키워드 (index.vue에서 직접 배치)
+const fixedSections = ['best', 'trust_bar', 'how_it_works']
+
+// 동적 섹션 목록 (고정 배치 제외)
 const activeSections = computed(() => {
-  return Array.isArray(sections.value) ? [...sections.value] : []
+  if (!Array.isArray(sections.value)) return []
+  return sections.value.filter(s => !fixedSections.includes(s.keyword))
 })
 
 // Hero 슬라이드
@@ -93,18 +97,24 @@ watch(
     </ClientOnly>
 
     <main>
-      <!-- 카테고리 (항상 표시 - Hero 직후 자연스러운 탐색 유도) -->
+      <!-- 1. 인기 상품 쇼룸 (Hero 직후 즉시 상품 노출 - 목데이터) -->
+      <SectionShowroom
+        :data="mainData.showroom"
+        :products="mainData.showroom.mockProducts"
+      />
+
+      <!-- 2. 카테고리 탐색 -->
       <SectionCategories
         :data="mainData.categories"
         :categories="categoryItems"
       />
 
-      <!-- Trust + HowItWorks 블록 (신뢰 → 사용법 연속 전달) -->
+      <!-- 3. 동적 섹션 (best/trust_bar/how_it_works 제외) -->
+      <MainSectionRenderer :sections="activeSections" />
+
+      <!-- 4. Trust + HowItWorks (하단 신뢰 보강) -->
       <SectionTrustBar :data="mainData.trustBar" />
       <SectionHowItWorks :data="mainData.howItWorks" />
-
-      <!-- 섹션 동적 렌더링 -->
-      <MainSectionRenderer :sections="activeSections" />
     </main>
 
     <Footer :data="mainData.footer" />
