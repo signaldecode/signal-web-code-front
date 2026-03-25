@@ -176,7 +176,7 @@
 // --------------------------------------------
 
 .section-categories {
-  padding: 120px 0 $padding-section 0;
+  padding: $padding-section 0;
 
   @include tablet {
     padding: $padding-10 0;
