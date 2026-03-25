@@ -97,24 +97,26 @@ watch(
     </ClientOnly>
 
     <main>
-      <!-- 1. 인기 상품 쇼룸 (Hero 직후 즉시 상품 노출 - 목데이터) -->
+      <!-- 1. HowItWorks (Hero 직후 사용법 전달) -->
+      <SectionHowItWorks :data="mainData.howItWorks" />
+
+      <!-- 2. 인기 상품 쇼룸 (상품 즉시 노출 - 목데이터) -->
       <SectionShowroom
         :data="mainData.showroom"
         :products="mainData.showroom.mockProducts"
       />
 
-      <!-- 2. 카테고리 탐색 -->
+      <!-- 3. 카테고리 탐색 -->
       <SectionCategories
         :data="mainData.categories"
         :categories="categoryItems"
       />
 
-      <!-- 3. 동적 섹션 (best/trust_bar/how_it_works 제외) -->
+      <!-- 4. 동적 섹션 (best/trust_bar/how_it_works 제외) -->
       <MainSectionRenderer :sections="activeSections" />
 
-      <!-- 4. Trust + HowItWorks (하단 신뢰 보강) -->
+      <!-- 5. TrustBar (하단 신뢰 보강) -->
       <SectionTrustBar :data="mainData.trustBar" />
-      <SectionHowItWorks :data="mainData.howItWorks" />
     </main>
 
     <Footer :data="mainData.footer" />
