@@ -20,7 +20,8 @@ const componentMap = {
   BannerSlide: resolveComponent('BannerSlide'),
   SectionHalfBanners: resolveComponent('SectionHalfBanners'),
   SectionTrustBar: resolveComponent('SectionTrustBar'),
-  SectionHowItWorks: resolveComponent('SectionHowItWorks')
+  SectionHowItWorks: resolveComponent('SectionHowItWorks'),
+  SectionShowroom: resolveComponent('SectionShowroom')
 }
 
 /**

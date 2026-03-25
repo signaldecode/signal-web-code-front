@@ -37,17 +37,17 @@ export const useSectionRegistry = () => {
    */
   const registry = {
     best: {
-      component: 'SectionBestItems',
+      component: 'SectionShowroom',
       clientOnly: false,
       props: () => ({
         data: {
-          title: bestMeta.value?.title || mainData.bestItems.title,
-          subtitle: bestMeta.value?.subtitle || bestMeta.value?.description || mainData.bestItems.subtitle,
-          arrowLabels: mainData.bestItems.arrowLabels
+          ...mainData.showroom,
+          title: bestMeta.value?.title || mainData.showroom.title,
+          subtitle: bestMeta.value?.subtitle || bestMeta.value?.description || mainData.showroom.subtitle
         },
-        products: bestProducts.value || []
+        products: mainData.showroom.mockProducts
       }),
-      isEmpty: () => !bestProducts.value?.length
+      isEmpty: () => false
     },
 
     best_review: {

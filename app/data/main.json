@@ -115,6 +115,69 @@
       "next": "다음 템플릿"
     }
   },
+  "showroom": {
+    "title": "Best Templates",
+    "subtitle": "가장 많이 선택된 인기 템플릿",
+    "viewAllLabel": "전체보기",
+    "viewAllHref": "/best",
+    "ctaLabel": "템플릿 미리보기",
+    "expandHint": "마우스를 올려 상세보기",
+    "mockProducts": [
+      {
+        "id": "mock-1",
+        "name": "모던 커머스 프로",
+        "summary": "세련된 미니멀 디자인의 쇼핑몰 템플릿. 모바일 최적화와 빠른 로딩 속도를 자랑합니다.",
+        "image": "/images/instagram/1.png",
+        "imageAlt": "모던 커머스 프로 템플릿 미리보기",
+        "price": 89000,
+        "originalPrice": 120000,
+        "currency": "원",
+        "rating": 4.9,
+        "reviewCount": 328,
+        "href": "/product/mock-1",
+        "isBest": true
+      },
+      {
+        "id": "mock-2",
+        "name": "브랜드 스토리",
+        "summary": "브랜드 아이덴티티를 강조하는 풀스크린 레이아웃. 감성적인 비주얼 중심 구성.",
+        "image": "/images/instagram/2.png",
+        "imageAlt": "브랜드 스토리 템플릿 미리보기",
+        "price": 69000,
+        "currency": "원",
+        "rating": 4.7,
+        "reviewCount": 156,
+        "href": "/product/mock-2"
+      },
+      {
+        "id": "mock-3",
+        "name": "심플 마켓",
+        "summary": "깔끔한 그리드 기반 상품 진열. 카테고리가 많은 종합몰에 최적화.",
+        "image": "/images/instagram/3.png",
+        "imageAlt": "심플 마켓 템플릿 미리보기",
+        "price": 59000,
+        "originalPrice": 79000,
+        "currency": "원",
+        "rating": 4.8,
+        "reviewCount": 241,
+        "href": "/product/mock-3",
+        "isBest": true
+      },
+      {
+        "id": "mock-4",
+        "name": "럭셔리 부티크",
+        "summary": "프리미엄 감성의 부티크 쇼핑몰. 대형 이미지와 여백 활용으로 고급스러운 인상.",
+        "image": "/images/instagram/4.png",
+        "imageAlt": "럭셔리 부티크 템플릿 미리보기",
+        "price": 129000,
+        "originalPrice": 159000,
+        "currency": "원",
+        "rating": 4.9,
+        "reviewCount": 97,
+        "href": "/product/mock-4"
+      }
+    ]
+  },
   "howItWorks": {
     "title": "How It Works",
     "subtitle": "3단계로 완성하는 나만의 웹사이트",

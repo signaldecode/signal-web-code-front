@@ -1,0 +1,293 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+@use '../tokens/breakpoints' as *;
+@use '../tokens/animation' as *;
+
+.section-showroom {
+  padding: $padding-section 0;
+  background: $Primary-white-color;
+
+  @include tablet {
+    padding: $padding-10 0;
+  }
+
+  @include mobile {
+    padding: $padding-8 0;
+  }
+
+  &__inner {
+    @include container;
+  }
+
+  // Header
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: $padding-10;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $padding-4;
+      margin-bottom: $padding-6;
+    }
+  }
+
+  &__titles {
+    display: flex;
+    align-items: flex-end;
+    gap: $padding-6;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $padding-2;
+    }
+  }
+
+  &__title {
+    @include typo-headline-1;
+    color: $Text-Primary-text-color;
+    margin: 0;
+
+    @include mobile {
+      @include typo-headline-4;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-1;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+
+    @include mobile {
+      @include typo-body-3;
+    }
+  }
+
+  &__view-all {
+    @include typo-body-2;
+    color: $Text-Thirty-text-color;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color $duration-fast ease;
+
+    &:hover {
+      color: $Primary-color;
+    }
+  }
+
+  // Grid (데스크톱 쇼룸)
+  &__grid {
+    display: grid;
+    gap: $padding-3;
+    transition: grid-template-columns 0.6s $ease-out-expo;
+    height: space(160) * 2 + $padding-3;
+    align-items: stretch;
+
+    @include tablet {
+      height: $padding-13 * 2;
+    }
+  }
+
+  // 모바일 ProductCard 그리드
+  &__mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $padding-4;
+
+    @include mobile-xs {
+      gap: $padding-3;
+    }
+  }
+
+  // Item
+  &__item {
+    position: relative;
+    border-radius: $padding-3;
+    overflow: hidden;
+    cursor: pointer;
+    background: $Bg-Primary-bg-color;
+    transition:
+      background 0.4s $ease-out,
+      box-shadow 0.4s $ease-out,
+      border-color 0.4s $ease-out;
+    outline: none;
+    border: 1px solid transparent;
+
+    &:hover {
+      background: $Black-Primary-black-200;
+      box-shadow: 0 $padding-2 $padding-8 rgba(0, 0, 0, 0.06);
+    }
+
+    &.is-active {
+      background: $Primary-white-color;
+      box-shadow: 0 $padding-3 $padding-10 rgba(0, 0, 0, 0.08);
+      border-color: $Border-Border-line-100;
+    }
+
+    &:focus-visible {
+      border-color: $Primary-color;
+    }
+  }
+
+  // Compact state
+  &__compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: $padding-4;
+    gap: $padding-3;
+    opacity: 1;
+    transition: opacity 0.4s $ease-out-expo;
+
+    .is-active & {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  &__compact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $padding-1;
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+
+  &__thumb {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border-radius: $padding-2;
+    overflow: hidden;
+  }
+
+  &__thumb-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s $ease-out-expo;
+
+    .section-showroom__item:hover & {
+      transform: scale(1.04);
+    }
+  }
+
+  &__compact-name {
+    @include typo-title-5;
+    color: $Text-Primary-text-color;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  &__compact-hint {
+    @include typo-body-4;
+    color: $Text-Disabled-color;
+    flex-shrink: 0;
+
+    .has-active & {
+      display: none;
+    }
+  }
+
+  // Expanded state (데스크톱 전용)
+  &__expanded {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    gap: $padding-8;
+    padding: $padding-5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s $ease-out-expo 0.1s;
+
+    @include tablet {
+      gap: $padding-4;
+      padding: $padding-4;
+    }
+
+    .is-active & {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &__expanded-image {
+    flex: 1;
+    min-width: 0;
+    border-radius: $padding-2;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__expanded-info {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: $padding-3;
+
+    @include tablet {
+      flex: 0 0 220px;
+    }
+  }
+
+  &__expanded-name {
+    @include typo-headline-3;
+    color: $Text-Primary-text-color;
+    margin: 0;
+  }
+
+  &__expanded-summary {
+    @include typo-body-2;
+    color: $Text-Secondary-text-color;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__expanded-price {
+    display: flex;
+    align-items: center;
+    gap: $padding-2;
+  }
+
+  &__price-current {
+    @include typo-title-2;
+    color: $Text-Primary-text-color;
+  }
+
+  &__cta {
+    @include typo-button-1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $padding-3 $padding-6;
+    background: $Primary-color;
+    color: $Primary-white-color;
+    border-radius: $padding-2;
+    text-decoration: none;
+    transition: opacity $duration-fast ease;
+    align-self: flex-start;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
