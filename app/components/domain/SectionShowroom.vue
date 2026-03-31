@@ -1,6 +1,4 @@
 <script setup>
-import uiData from '~/data/ui.json'
-
 const props = defineProps({
   data: {
     type: Object,
@@ -14,49 +12,43 @@ const props = defineProps({
 
 const activeIndex = ref(null)
 const isMobile = ref(false)
-let hoverTimer = null
+let enterTimer = null
+let leaveTimer = null
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
-  if (isMobile.value) {
-    activeIndex.value = null
-  }
+  if (isMobile.value) activeIndex.value = null
 }
 
 const activate = (index) => {
   if (isMobile.value) return
-  clearTimeout(hoverTimer)
-  hoverTimer = setTimeout(() => {
+  clearTimeout(leaveTimer)
+  clearTimeout(enterTimer)
+  if (activeIndex.value !== null) {
     activeIndex.value = index
-  }, 80)
+    return
+  }
+  enterTimer = setTimeout(() => {
+    activeIndex.value = index
+  }, 30)
 }
 
 const deactivate = () => {
   if (isMobile.value) return
-  clearTimeout(hoverTimer)
-  hoverTimer = setTimeout(() => {
+  clearTimeout(enterTimer)
+  clearTimeout(leaveTimer)
+  leaveTimer = setTimeout(() => {
     activeIndex.value = null
-  }, 300)
-}
-
-const toggle = (index) => {
-  if (isMobile.value) return
-  activeIndex.value = activeIndex.value === index ? null : index
-}
-
-const close = () => {
-  activeIndex.value = null
+  }, 120)
 }
 
 const handleKeydown = (e, index) => {
   if (isMobile.value) return
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault()
-    toggle(index)
+    activeIndex.value = activeIndex.value === index ? null : index
   }
-  if (e.key === 'Escape' && activeIndex.value !== null) {
-    close()
-  }
+  if (e.key === 'Escape') activeIndex.value = null
 }
 
 let resizeTimer = null
@@ -71,7 +63,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  clearTimeout(hoverTimer)
+  clearTimeout(enterTimer)
+  clearTimeout(leaveTimer)
   clearTimeout(resizeTimer)
   window.removeEventListener('resize', debouncedCheck)
 })
@@ -127,7 +120,6 @@ const displayProducts = computed(() => {
       <div
         v-if="!isMobile"
         class="section-showroom__grid"
-        :class="{ 'has-active': activeIndex !== null }"
         :style="gridStyle"
       >
         <div
@@ -141,9 +133,9 @@ const displayProducts = computed(() => {
           :aria-label="product.name"
           @mouseenter="activate(i)"
           @mouseleave="deactivate"
-          @click="toggle(i)"
           @keydown="handleKeydown($event, i)"
         >
+          <!-- Compact: 썸네일 + 이름 -->
           <div class="section-showroom__compact">
             <div class="section-showroom__thumb">
               <img
@@ -153,26 +145,17 @@ const displayProducts = computed(() => {
                 loading="lazy"
               />
             </div>
-            <div class="section-showroom__compact-info">
-              <span class="section-showroom__compact-name">{{ product.name }}</span>
-              <span class="section-showroom__compact-hint">{{ data.expandHint }}</span>
-            </div>
+            <span class="section-showroom__compact-name">{{ product.name }}</span>
           </div>
 
+          <!-- Expanded: 이미지 + 상세 info -->
           <div class="section-showroom__expanded">
             <div class="section-showroom__expanded-image">
-              <img
-                :src="product.image"
-                :alt="product.imageAlt"
-                loading="lazy"
-              />
+              <img :src="product.image" :alt="product.imageAlt" loading="lazy" />
             </div>
             <div class="section-showroom__expanded-info">
               <h3 class="section-showroom__expanded-name">{{ product.name }}</h3>
-              <p
-                v-if="product.summary"
-                class="section-showroom__expanded-summary"
-              >
+              <p v-if="product.summary" class="section-showroom__expanded-summary">
                 {{ product.summary }}
               </p>
               <div class="section-showroom__expanded-price">
@@ -205,7 +188,7 @@ const displayProducts = computed(() => {
         </div>
       </div>
 
-      <!-- 모바일: 기존 ProductCard 그리드 -->
+      <!-- 모바일: ProductCard 그리드 -->
       <div v-else class="section-showroom__mobile-grid">
         <ProductCard
           v-for="product in displayProducts"

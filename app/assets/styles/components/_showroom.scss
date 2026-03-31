@@ -20,7 +20,6 @@
     @include container;
   }
 
-  // Header
   &__header {
     display: flex;
     justify-content: space-between;
@@ -61,13 +60,8 @@
     margin: 0;
     letter-spacing: -0.02em;
 
-    @include tablet {
-      @include typo-headline-2;
-    }
-
-    @include mobile {
-      @include typo-headline-4;
-    }
+    @include tablet { @include typo-headline-2; }
+    @include mobile { @include typo-headline-4; }
   }
 
   &__subtitle {
@@ -75,13 +69,8 @@
     color: $Text-Secondary-text-color;
     margin: 0;
 
-    @include tablet {
-      @include typo-body-2;
-    }
-
-    @include mobile {
-      @include typo-body-3;
-    }
+    @include tablet { @include typo-body-2; }
+    @include mobile { @include typo-body-3; }
   }
 
   &__view-all {
@@ -102,103 +91,81 @@
 
     &:hover {
       color: $Primary-color;
-
-      &::after {
-        transform: translateX($padding-1);
-      }
+      &::after { transform: translateX($padding-1); }
     }
 
-    @include mobile {
-      @include typo-body-3;
-    }
+    @include mobile { @include typo-body-3; }
   }
 
-  // Grid (데스크톱 쇼룸)
+  // ===== Grid =====
   &__grid {
     display: grid;
     gap: $padding-4;
-    transition: grid-template-columns 0.6s $ease-out-expo;
-    height: space(160) * 2 + $padding-4;
+    transition: grid-template-columns 0.5s $ease-out-expo;
+    height: 480px;
     align-items: stretch;
 
     @include tablet {
-      height: $padding-13 * 2;
+      height: 400px;
       gap: $padding-3;
     }
   }
 
-  // 모바일 ProductCard 그리드
   &__mobile-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: $padding-4;
-
-    @include mobile-xs {
-      gap: $padding-3;
-    }
+    @include mobile-xs { gap: $padding-3; }
   }
 
-  // Item
+  // ===== Item =====
   &__item {
     position: relative;
     border-radius: radius(16);
     overflow: hidden;
     cursor: pointer;
     background: $Primary-white-color;
-    transition:
-      box-shadow 0.4s $ease-out,
-      border-color 0.4s $ease-out;
     outline: none;
     border: 1px solid $Border-Border-line-100;
+    transition: box-shadow 0.5s $ease-out;
 
-    @include tablet {
-      border-radius: radius(12);
-    }
+    @include tablet { border-radius: radius(12); }
 
-    &:hover {
-      box-shadow: $shadow-xl;
-      border-color: var(--theme-primary-200);
-    }
-
-    &.is-active {
-      box-shadow: $shadow-2xl;
-      border-color: var(--theme-primary-300);
-    }
-
-    &:focus-visible {
-      border-color: $Primary-color;
-    }
+    &:hover { box-shadow: $shadow-lg; }
+    &.is-active { box-shadow: $shadow-xl; }
+    &:focus-visible { border-color: $Primary-color; }
   }
 
-  // Compact state
+  // ===== Compact =====
+  // 잔상 해결 핵심: visibility를 사용
+  // visibility는 transition-delay로 "나타날 때만 딜레이" 가능
   &__compact {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
     padding: $padding-5;
-    gap: $padding-4;
+    gap: $padding-3;
+    // 기본(비활성): 보임
+    visibility: visible;
     opacity: 1;
-    transition: opacity 0.4s $ease-out-expo;
+    transition:
+      visibility 0s linear 0s,
+      opacity 0.3s $ease-out 0.25s; // 그리드 축소 후 페이드인
 
     @include tablet {
       padding: $padding-4;
-      gap: $padding-3;
+      gap: $padding-2;
     }
 
     .is-active & {
+      // 활성: 즉시 숨김 — 잔상 0
+      visibility: hidden;
       opacity: 0;
-      pointer-events: none;
+      transition:
+        visibility 0s linear 0s,
+        opacity 0s linear 0s;
     }
-  }
-
-  &__compact-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $padding-1;
-    flex-shrink: 0;
-    max-width: 100%;
   }
 
   &__thumb {
@@ -207,21 +174,15 @@
     min-height: 0;
     border-radius: radius(10);
     overflow: hidden;
-
-    @include tablet {
-      border-radius: radius(8);
-    }
+    @include tablet { border-radius: radius(8); }
   }
 
   &__thumb-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s $ease-out-expo;
-
-    .section-showroom__item:hover & {
-      transform: scale(1.05);
-    }
+    transition: transform 0.5s $ease-out-expo;
+    .section-showroom__item:hover & { transform: scale(1.03); }
   }
 
   &__compact-name {
@@ -233,6 +194,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+    flex-shrink: 0;
 
     @include tablet {
       @include typo-title-6;
@@ -240,34 +202,29 @@
     }
   }
 
-  &__compact-hint {
-    @include typo-body-4;
-    color: $Text-Disabled-color;
-    flex-shrink: 0;
-
-    .has-active & {
-      display: none;
-    }
-  }
-
-  // Expanded state (데스크톱 전용)
+  // ===== Expanded =====
   &__expanded {
     position: absolute;
     inset: 0;
     display: flex;
     gap: 0;
     padding: $padding-5;
+    // 기본(비활성): 즉시 숨김
+    visibility: hidden;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s $ease-out-expo 0.1s;
+    transition:
+      visibility 0s linear 0s,
+      opacity 0s linear 0s;
 
-    @include tablet {
-      padding: $padding-4;
-    }
+    @include tablet { padding: $padding-4; }
 
     .is-active & {
+      // 활성: 그리드 확장 후 페이드인
+      visibility: visible;
       opacity: 1;
-      pointer-events: auto;
+      transition:
+        visibility 0s linear 0s,
+        opacity 0.3s $ease-out 0.25s;
     }
   }
 
@@ -276,10 +233,7 @@
     min-width: 0;
     border-radius: radius(10);
     overflow: hidden;
-
-    @include tablet {
-      border-radius: radius(8);
-    }
+    @include tablet { border-radius: radius(8); }
 
     img {
       width: 100%;
@@ -308,10 +262,7 @@
     color: $Text-Primary-text-color;
     margin: 0;
     letter-spacing: -0.01em;
-
-    @include tablet {
-      @include typo-headline-4;
-    }
+    @include tablet { @include typo-headline-5; }
   }
 
   &__expanded-summary {
@@ -358,15 +309,11 @@
     border-radius: $radius-full;
     text-decoration: none;
     font-weight: get-weight('SemiBold');
-    transition:
-      transform $duration-moderate $ease-out-back,
-      opacity $duration-ui ease;
+    transition: opacity $duration-ui ease;
     align-self: flex-start;
+    white-space: nowrap;
 
-    &:hover {
-      transform: translateY(-1px);
-      opacity: 0.9;
-    }
+    &:hover { opacity: 0.85; }
 
     @include tablet {
       @include typo-button-2;
