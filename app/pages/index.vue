@@ -97,12 +97,7 @@ watch(
     </ClientOnly>
 
     <main>
-      <!-- 1. TrustBar (Hero 직후 — 신뢰 지표로 즉시 설득) -->
-      <!-- <div v-scroll-animate="{ animation: 'fade-in' }">
-        <SectionTrustBar :data="mainData.trustBar" />
-      </div> -->
-
-      <!-- 2. 인기 상품 쇼룸 (핵심 상품 즉시 노출) -->
+      <!-- 1. 인기 상품 쇼룸 -->
       <div v-scroll-animate="{ animation: 'fade-up' }">
         <SectionShowroom
           :data="mainData.showroom"
@@ -110,7 +105,7 @@ watch(
         />
       </div>
 
-      <!-- 3. 카테고리 탐색 -->
+      <!-- 2. 카테고리 탐색 -->
       <div v-scroll-animate="{ animation: 'fade-up' }">
         <SectionCategories
           :data="mainData.categories"
@@ -118,15 +113,15 @@ watch(
         />
       </div>
 
-      <!-- 4. 동적 섹션 (best/trust_bar/how_it_works 제외) -->
+      <!-- 3. 동적 섹션 -->
       <MainSectionRenderer :sections="activeSections" />
 
-      <!-- 5. HowItWorks (하단 — 구매 프로세스 안내) -->
+      <!-- 4. HowItWorks -->
       <div v-scroll-animate="{ animation: 'fade-up', stagger: true }">
         <SectionHowItWorks :data="mainData.howItWorks" />
       </div>
 
-      <!-- 6. Newsletter CTA (전환 유도) -->
+      <!-- 5. Newsletter CTA -->
       <div v-scroll-animate="{ animation: 'scale-in' }">
         <SectionNewsletter :data="mainData.newsletter" />
       </div>
