@@ -1,0 +1,165 @@
+@use '../tokens/colors' as *;
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as *;
+@use '../tokens/breakpoints' as *;
+@use '../tokens/animation' as *;
+
+.section-newsletter {
+  padding: $padding-section 0;
+  background: $Bg-Primary-bg-color;
+  position: relative;
+  overflow: hidden;
+
+  // 장식적 그라데이션 오브
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    border-radius: $radius-full;
+    background: radial-gradient(circle, var(--theme-primary-100) 0%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+
+    @include mobile {
+      width: 300px;
+      height: 300px;
+      top: -20%;
+      right: -15%;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    border-radius: $radius-full;
+    background: radial-gradient(circle, var(--theme-primary-50) 0%, transparent 70%);
+    opacity: 0.6;
+    pointer-events: none;
+
+    @include mobile {
+      width: 250px;
+      height: 250px;
+      bottom: -15%;
+    }
+  }
+
+  @include tablet {
+    padding: $padding-11 0;
+  }
+
+  @include mobile {
+    padding: $padding-10 0;
+  }
+
+  &__inner {
+    @include container;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__content {
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+  }
+
+  &__title {
+    @include typo-headline-2;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-4;
+    letter-spacing: -0.02em;
+
+    @include tablet {
+      @include typo-headline-3;
+    }
+
+    @include mobile {
+      @include typo-headline-4;
+    }
+  }
+
+  &__subtitle {
+    @include typo-body-1;
+    color: $Text-Secondary-text-color;
+    margin: 0 0 $padding-9;
+    line-height: 1.7;
+
+    @include tablet {
+      @include typo-body-2;
+      margin-bottom: $padding-7;
+    }
+
+    @include mobile {
+      @include typo-body-2;
+      margin-bottom: $padding-6;
+    }
+  }
+
+  &__form {
+    display: flex;
+    gap: $padding-3;
+    margin-bottom: $padding-5;
+    background: $Primary-white-color;
+    padding: $padding-2;
+    border-radius: $radius-full;
+    box-shadow: $shadow-md;
+    border: 1px solid $Border-Border-line-100;
+
+    @include mobile {
+      flex-direction: column;
+      border-radius: radius(12);
+      padding: $padding-3;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+
+    // 폼 내부 인풋 — 보더 제거
+    .base-input__field {
+      border: none;
+      background: transparent;
+      padding-left: $padding-4;
+      box-shadow: none;
+
+      &:focus {
+        box-shadow: none;
+        border: none;
+      }
+    }
+  }
+
+  &__submit {
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-radius: $radius-full !important;
+
+    @include mobile {
+      border-radius: radius(8) !important;
+    }
+  }
+
+  &__success {
+    @include typo-body-1;
+    color: $Primary-color;
+    margin: 0 0 $padding-4;
+    font-weight: get-weight('Medium');
+  }
+
+  &__disclaimer {
+    @include typo-body-4;
+    color: $Text-Disabled-color;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+}

@@ -2,12 +2,16 @@
 @use '../tokens/spacing' as *;
 @use '../tokens/typography' as *;
 @use '../tokens/breakpoints' as *;
+@use '../tokens/animation' as *;
 
 .section-trust-bar {
-  padding: $padding-11 0;
-  background: $Bg-Primary-bg-color;
-  border-top: 1px solid $Border-Border-line-100;
-  border-bottom: 1px solid $Border-Border-line-100;
+  padding: $padding-12 0;
+  background: $Black-Primary-black-900;
+  color: $Primary-white-color;
+
+  @include tablet {
+    padding: $padding-11 0;
+  }
 
   @include mobile {
     padding: $padding-8 0;
@@ -21,43 +25,71 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: $padding-12;
+    gap: 0;
     margin: 0;
-
-    @include tablet {
-      gap: $padding-11;
-    }
 
     @include mobile {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: $padding-8 $padding-4;
+      gap: $padding-8 0;
     }
   }
 
   &__item {
     text-align: center;
-    flex-shrink: 0;
+    flex: 1;
+    position: relative;
+
+    // 구분선
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: $padding-10;
+      background: rgba(255, 255, 255, 0.15);
+
+      @include mobile {
+        height: $padding-8;
+      }
+    }
+
+    // 모바일 2열 - 짝수 아이템 구분선 제거
+    @include mobile {
+      &:nth-child(2)::after {
+        display: none;
+      }
+
+      &:nth-child(4)::after {
+        display: none;
+      }
+    }
   }
 
   &__value {
-    @include typo-display-2;
-    color: $Primary-color;
+    @include typo-display-1;
+    color: $Primary-white-color;
     margin: 0 0 $padding-2;
     display: block;
+    font-weight: get-weight('Bold');
+    letter-spacing: -0.03em;
 
     @include tablet {
-      @include typo-headline-1;
+      @include typo-display-2;
+      font-weight: get-weight('Bold');
     }
 
     @include mobile {
-      @include typo-headline-2;
+      @include typo-headline-1;
     }
   }
 
   &__suffix {
     @include typo-body-1;
-    color: $Text-Thirty-text-color;
+    color: $Primary-white-color-op70;
+    font-weight: get-weight('Light');
 
     @include mobile {
       @include typo-body-3;
@@ -65,9 +97,10 @@
   }
 
   &__label {
-    @include typo-body-1;
-    color: $Text-Secondary-text-color;
+    @include typo-body-2;
+    color: $Primary-white-color-op70;
     margin: 0;
+    letter-spacing: 0.02em;
 
     @include mobile {
       @include typo-body-3;

@@ -150,6 +150,11 @@
     align-items: center;
     min-height: 100vh;
   }
+
+  // 섹션 간 부드러운 시각적 흐름
+  > main > [class*="scroll-animate"] + [class*="scroll-animate"] {
+    margin-top: 0;
+  }
 }
 
 // --------------------------------------------

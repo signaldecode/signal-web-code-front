@@ -6,10 +6,10 @@
 
 .section-showroom {
   padding: $padding-section 0;
-  background: $Primary-white-color;
+  background: $Bg-Primary-bg-color;
 
   @include tablet {
-    padding: $padding-10 0;
+    padding: $padding-11 0;
   }
 
   @include mobile {
@@ -27,10 +27,14 @@
     align-items: flex-end;
     margin-bottom: $padding-10;
 
+    @include tablet {
+      margin-bottom: $padding-8;
+    }
+
     @include mobile {
       flex-direction: column;
       align-items: flex-start;
-      gap: $padding-4;
+      gap: $padding-3;
       margin-bottom: $padding-6;
     }
   }
@@ -39,6 +43,10 @@
     display: flex;
     align-items: flex-end;
     gap: $padding-6;
+
+    @include tablet {
+      gap: $padding-4;
+    }
 
     @include mobile {
       flex-direction: column;
@@ -51,6 +59,11 @@
     @include typo-headline-1;
     color: $Text-Primary-text-color;
     margin: 0;
+    letter-spacing: -0.02em;
+
+    @include tablet {
+      @include typo-headline-2;
+    }
 
     @include mobile {
       @include typo-headline-4;
@@ -62,6 +75,10 @@
     color: $Text-Secondary-text-color;
     margin: 0;
 
+    @include tablet {
+      @include typo-body-2;
+    }
+
     @include mobile {
       @include typo-body-3;
     }
@@ -72,23 +89,41 @@
     color: $Text-Thirty-text-color;
     text-decoration: none;
     white-space: nowrap;
-    transition: color $duration-fast ease;
+    display: inline-flex;
+    align-items: center;
+    gap: $padding-1;
+    transition: color $duration-ui ease;
+    font-weight: get-weight('Medium');
+
+    &::after {
+      content: '\2192';
+      transition: transform $duration-ui ease;
+    }
 
     &:hover {
       color: $Primary-color;
+
+      &::after {
+        transform: translateX($padding-1);
+      }
+    }
+
+    @include mobile {
+      @include typo-body-3;
     }
   }
 
   // Grid (데스크톱 쇼룸)
   &__grid {
     display: grid;
-    gap: $padding-3;
+    gap: $padding-4;
     transition: grid-template-columns 0.6s $ease-out-expo;
-    height: space(160) * 2 + $padding-3;
+    height: space(160) * 2 + $padding-4;
     align-items: stretch;
 
     @include tablet {
       height: $padding-13 * 2;
+      gap: $padding-3;
     }
   }
 
@@ -106,26 +141,28 @@
   // Item
   &__item {
     position: relative;
-    border-radius: $padding-3;
+    border-radius: radius(16);
     overflow: hidden;
     cursor: pointer;
-    background: $Bg-Primary-bg-color;
+    background: $Primary-white-color;
     transition:
-      background 0.4s $ease-out,
       box-shadow 0.4s $ease-out,
       border-color 0.4s $ease-out;
     outline: none;
-    border: 1px solid transparent;
+    border: 1px solid $Border-Border-line-100;
+
+    @include tablet {
+      border-radius: radius(12);
+    }
 
     &:hover {
-      background: $Black-Primary-black-200;
-      box-shadow: $shadow-2xl;
+      box-shadow: $shadow-xl;
+      border-color: var(--theme-primary-200);
     }
 
     &.is-active {
-      background: $Primary-white-color;
       box-shadow: $shadow-2xl;
-      border-color: $Border-Border-line-100;
+      border-color: var(--theme-primary-300);
     }
 
     &:focus-visible {
@@ -139,10 +176,15 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
-    padding: $padding-4;
-    gap: $padding-3;
+    padding: $padding-5;
+    gap: $padding-4;
     opacity: 1;
     transition: opacity 0.4s $ease-out-expo;
+
+    @include tablet {
+      padding: $padding-4;
+      gap: $padding-3;
+    }
 
     .is-active & {
       opacity: 0;
@@ -163,29 +205,39 @@
     flex: 1;
     width: 100%;
     min-height: 0;
-    border-radius: $padding-2;
+    border-radius: radius(10);
     overflow: hidden;
+
+    @include tablet {
+      border-radius: radius(8);
+    }
   }
 
   &__thumb-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s $ease-out-expo;
+    transition: transform 0.6s $ease-out-expo;
 
     .section-showroom__item:hover & {
-      transform: scale(1.04);
+      transform: scale(1.05);
     }
   }
 
   &__compact-name {
     @include typo-title-5;
     color: $Text-Primary-text-color;
+    font-weight: get-weight('SemiBold');
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+
+    @include tablet {
+      @include typo-title-6;
+      font-weight: get-weight('SemiBold');
+    }
   }
 
   &__compact-hint {
@@ -203,14 +255,13 @@
     position: absolute;
     inset: 0;
     display: flex;
-    gap: $padding-8;
+    gap: 0;
     padding: $padding-5;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s $ease-out-expo 0.1s;
 
     @include tablet {
-      gap: $padding-4;
       padding: $padding-4;
     }
 
@@ -223,8 +274,12 @@
   &__expanded-image {
     flex: 1;
     min-width: 0;
-    border-radius: $padding-2;
+    border-radius: radius(10);
     overflow: hidden;
+
+    @include tablet {
+      border-radius: radius(8);
+    }
 
     img {
       width: 100%;
@@ -238,10 +293,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: $padding-3;
+    gap: $padding-4;
+    padding: $padding-8 $padding-6;
 
     @include tablet {
-      flex: 0 0 220px;
+      flex: 0 0 200px;
+      padding: $padding-5 $padding-4;
+      gap: $padding-3;
     }
   }
 
@@ -249,16 +307,27 @@
     @include typo-headline-3;
     color: $Text-Primary-text-color;
     margin: 0;
+    letter-spacing: -0.01em;
+
+    @include tablet {
+      @include typo-headline-4;
+    }
   }
 
   &__expanded-summary {
     @include typo-body-2;
     color: $Text-Secondary-text-color;
     margin: 0;
+    line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+
+    @include tablet {
+      @include typo-body-3;
+      -webkit-line-clamp: 2;
+    }
   }
 
   &__expanded-price {
@@ -270,6 +339,12 @@
   &__price-current {
     @include typo-title-2;
     color: $Text-Primary-text-color;
+    font-weight: get-weight('Bold');
+
+    @include tablet {
+      @include typo-title-3;
+      font-weight: get-weight('Bold');
+    }
   }
 
   &__cta {
@@ -280,14 +355,22 @@
     padding: $padding-3 $padding-6;
     background: $Primary-color;
     color: $Primary-white-color;
-    border-radius: $padding-2;
+    border-radius: $radius-full;
     text-decoration: none;
-    transition: opacity $duration-fast ease;
+    font-weight: get-weight('SemiBold');
+    transition:
+      transform $duration-moderate $ease-out-back,
+      opacity $duration-ui ease;
     align-self: flex-start;
 
     &:hover {
-      opacity: 0.85;
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    @include tablet {
+      @include typo-button-2;
+      padding: $padding-2 $padding-5;
     }
   }
 }
-

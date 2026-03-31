@@ -294,6 +294,15 @@
     "viewAllLabel": "전체 후기 보기",
     "viewAllHref": "/review"
   },
+  "newsletter": {
+    "title": "특별한 혜택을 가장 먼저 받아보세요",
+    "subtitle": "신규 템플릿 출시, 할인 이벤트, 비즈니스 운영 팁을 이메일로 전해드립니다.",
+    "placeholder": "이메일 주소를 입력하세요",
+    "inputAriaLabel": "뉴스레터 구독 이메일",
+    "buttonLabel": "구독하기",
+    "successMessage": "구독이 완료되었습니다. 감사합니다!",
+    "disclaimer": "언제든 구독을 해지할 수 있습니다. 개인정보는 안전하게 보호됩니다."
+  },
   "footer": {
     "logo": {
       "src": "/images/hero/logo.svg",

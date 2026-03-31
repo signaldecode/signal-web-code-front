@@ -16,52 +16,53 @@
 .section-hero {
   // CSS 변수: 슬라이드 폭 & 간격 (vw 단위로 통일)
   --hero-slide-width: 82vw;
-  --hero-gap: #{$padding-4};
+  --hero-gap: #{$padding-3};
   --hero-slide-step: calc(var(--hero-slide-width) + var(--hero-gap));
 
   position: relative;
   width: 100%;
   margin-top: $header-total-height;
   overflow: hidden;
-  padding: $padding-8 0;
+  padding: $padding-10 0 $padding-12;
 
   @include tablet {
     --hero-slide-width: 85vw;
     --hero-gap: #{$padding-3};
+    padding: $padding-8 0 $padding-10;
   }
 
   @include mobile {
     --hero-slide-width: 92vw;
     --hero-gap: #{$padding-2};
     margin-top: $header-total-height-mobile;
-    padding: $padding-4 0;
+    padding: $padding-4 0 $padding-8;
   }
 
-  // 트랙 래퍼: overflow hidden으로 양쪽 잘림 처리
   &__track-wrapper {
     position: relative;
     overflow: hidden;
   }
 
-  // 트랙: 5개 슬라이드 윈도우, translateX로 중앙 슬라이드 배치 + 애니메이션
   &__track {
     display: flex;
     gap: var(--hero-gap);
-    // transition은 JS에서 skipTransition 여부에 따라 제어
-    // 기본값: 0.6s ease-out 전환
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.7s $ease-out-expo;
     will-change: transform;
   }
 
-  // 공통 슬라이드 스타일
   &__slide {
     width: var(--hero-slide-width);
     flex-shrink: 0;
-    border-radius: $padding-4;
+    border-radius: radius(20);
     overflow: hidden;
     aspect-ratio: $hero-aspect-ratio;
+
+    @include tablet {
+      border-radius: radius(16);
+    }
+
     @include mobile {
-      border-radius: $padding-2;
+      border-radius: radius(12);
       aspect-ratio: $hero-aspect-ratio-mobile;
     }
   }
@@ -70,6 +71,9 @@
     display: block;
     width: 100%;
     height: 100%;
+    position: relative;
+
+    // 오버레이 없음 — 이미지 원본 노출
   }
 
   &__image {
@@ -78,10 +82,10 @@
     object-fit: cover;
   }
 
-  // 콘텐츠 오버레이
+  // 콘텐츠 오버레이 — 하단 60% 영역 중심
   &__content {
     position: absolute;
-    bottom: $padding-11;
+    bottom: $padding-10;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -92,106 +96,223 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 $container-padding;
 
     @include tablet {
-      bottom: $padding-10;
+      bottom: $padding-8;
+      padding: 0 $padding-6;
     }
 
     @include mobile {
       bottom: $padding-6;
+      padding: 0 $padding-4;
     }
   }
 
+  // 텍스트 그룹 — stagger 자식 애니메이션 컨테이너
+  &__text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // stagger: 자식 요소 순차 등장
+    > * {
+      animation: hero-stagger-in 0.6s $ease-out both;
+    }
+
+    > *:nth-child(1) { animation-delay: 0.05s; }
+    > *:nth-child(2) { animation-delay: 0.15s; }
+    > *:nth-child(3) { animation-delay: 0.25s; }
+    > *:nth-child(4) { animation-delay: 0.35s; }
+    > *:nth-child(5) { animation-delay: 0.45s; }
+  }
+
   &__subtitle {
-    @include typo-body-2;
+    @include typo-body-4;
+    display: inline-block;
     margin: 0 0 $padding-4;
-    opacity: 0.7;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: get-weight('SemiBold');
+    padding: $padding-1 $padding-3;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border-radius: $radius-full;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     @include mobile {
-      @include typo-body-3;
-      margin-bottom: $padding-2;
+      @include typo-body-5;
+      margin-bottom: $padding-3;
+      letter-spacing: 0.15em;
     }
   }
 
   &__title {
-    @include typo-headline-2;
-    margin: 0 0 $padding-2;
-    font-weight: 700;
+    @include typo-display-2;
+    margin: 0 0 $padding-4;
+    font-weight: get-weight('Bold');
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 
     @include tablet {
-      @include typo-headline-3;
+      @include typo-headline-1;
     }
 
     @include mobile {
-      @include typo-body-1;
-      font-weight: 700;
+      @include typo-headline-2;
     }
   }
 
   &__description {
-    @include typo-body-2;
-    margin: 0 0 $padding-4;
+    @include typo-body-1;
+    margin: 0 0 $padding-7;
     opacity: 0.9;
-    max-width: 400px;
+    max-width: 520px;
+    line-height: 1.7;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+
+    @include tablet {
+      @include typo-body-2;
+      max-width: 440px;
+    }
 
     @include mobile {
       @include typo-body-3;
-      margin-bottom: $padding-3;
+      margin-bottom: $padding-5;
       max-width: 100%;
     }
   }
 
-  // 상품 가격 영역
+  // 가격
   &__price-wrap {
     display: flex;
-    align-items: center;
-    gap: $padding-2;
-    margin-bottom: $padding-4;
+    align-items: baseline;
+    gap: $padding-3;
+    margin-bottom: $padding-5;
 
     @include mobile {
       margin-bottom: $padding-3;
+      gap: $padding-2;
     }
   }
 
   &__price-original {
-    @include typo-body-3;
+    @include typo-body-2;
     text-decoration: line-through;
     opacity: 0.5;
   }
 
   &__price-current {
-    @include typo-headline-3;
-    font-weight: 700;
+    @include typo-headline-2;
+    font-weight: get-weight('Bold');
+    letter-spacing: -0.02em;
+
+    @include mobile {
+      @include typo-headline-3;
+    }
   }
 
-  // 상품 CTA 버튼
+  // CTA 버튼 — 글라스모피즘 + 프라이머리 액센트
   &__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: $padding-3 $padding-8;
-    background-color: $Primary-white-color;
-    color: $Primary-black-color-op3;
-    border-radius: $padding-8;
-    @include typo-body-2;
-    font-weight: 600;
+    gap: $padding-2;
+    padding: $padding-3 $padding-7;
+    background: $Primary-white-color;
+    color: $Text-Primary-text-color;
+    border-radius: $radius-full;
+    @include typo-button-1;
+    font-weight: get-weight('SemiBold');
     text-decoration: none;
-    @include transition(opacity, transform);
-    margin-bottom: $padding-6;
+    transition:
+      transform $duration-moderate $ease-out-back,
+      box-shadow $duration-moderate $ease-out,
+      background $duration-ui ease;
+    margin-bottom: $padding-5;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 
     &:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      background: $Primary-white-color;
+    }
+
+    &:active {
+      transform: translateY(0) scale(1);
     }
 
     @include mobile {
-      padding: $padding-2 $padding-6;
-      @include typo-body-3;
+      padding: $padding-3 $padding-6;
+      @include typo-button-2;
       margin-bottom: $padding-4;
     }
   }
 
-  // 화살표 네비게이션
+  // Dot 인디케이터 — 이미지 바깥 하단
+  &__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $padding-2;
+    padding-top: $padding-5;
+
+    @include mobile {
+      padding-top: $padding-3;
+    }
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: $radius-full;
+    border: none;
+    padding: 0;
+    background: $Black-Primary-black-400;
+    cursor: pointer;
+    transition:
+      background $duration-ui ease,
+      width $duration-moderate $ease-out,
+      transform $duration-moderate $ease-out;
+
+    &.is-active {
+      width: 32px;
+      background: $Black-Primary-black-900;
+    }
+
+    &:hover:not(.is-active) {
+      background: $Black-Primary-black-700;
+      transform: scale(1.2);
+    }
+
+    @include mobile {
+      width: 8px;
+      height: 8px;
+
+      &.is-active {
+        width: 24px;
+      }
+    }
+  }
+
+  // Vue <Transition name="hero-text"> — out-in 모드
+  .hero-text-enter-active {
+    transition: opacity 0.4s $ease-out;
+  }
+
+  .hero-text-leave-active {
+    transition: opacity 0.25s ease-in;
+  }
+
+  .hero-text-enter-from {
+    opacity: 0;
+  }
+
+  .hero-text-leave-to {
+    opacity: 0;
+  }
+
+  // 화살표
   &__arrows {
     position: absolute;
     top: 50%;
@@ -219,15 +340,28 @@
   }
 }
 
+// Hero stagger 키프레임
+@keyframes hero-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 // --------------------------------------------
 // Section Categories
 // --------------------------------------------
 
 .section-categories {
   padding: $padding-section 0;
+  background: $Primary-white-color;
 
   @include tablet {
-    padding: $padding-10 0;
+    padding: $padding-11 0;
   }
 
   @include mobile {
@@ -238,19 +372,33 @@
     @include container;
   }
 
-  &__title {
-    @include typo-headline-3;
-    color: $Text-Primary-text-color;
+  &__header {
     text-align: center;
-    margin: 0 0 $padding-10;
+    margin-bottom: $padding-10;
 
     @include tablet {
       margin-bottom: $padding-8;
     }
 
     @include mobile {
-      @include typo-headline-4;
       margin-bottom: $padding-6;
+    }
+  }
+
+  &__title {
+    @include typo-headline-1;
+    color: $Text-Primary-text-color;
+    margin: 0 0 $padding-2;
+    letter-spacing: 0.06em;
+
+    @include tablet {
+      @include typo-headline-2;
+      letter-spacing: 0.05em;
+    }
+
+    @include mobile {
+      @include typo-headline-4;
+      letter-spacing: 0.04em;
     }
   }
 
@@ -279,7 +427,7 @@
   &__track {
     display: inline-flex;
     align-items: flex-start;
-    gap: $padding-6;
+    gap: $padding-5;
 
     @include tablet {
       gap: $padding-4;
@@ -515,9 +663,10 @@
     display: flex;
     gap: $padding-12;
     justify-content: space-between;
+    align-items: center;
 
     @include tablet {
-      gap: $padding-4;
+      gap: $padding-6;
     }
 
     @include mobile {
@@ -527,17 +676,22 @@
   }
 
   &__image-card {
-    flex: 0 1 50%;
+    flex: 0 0 auto;
+    width: 40%;
     max-width: 500px;
-    height: auto;
     aspect-ratio: 1 / 1;
     border-radius: radius(16);
     overflow: hidden;
 
+    @include tablet {
+      width: 36%;
+      border-radius: radius(12);
+    }
+
     @include mobile {
-      flex: none;
       width: 100%;
       max-width: none;
+      aspect-ratio: 4 / 3;
     }
   }
 
@@ -550,28 +704,32 @@
   &__info {
     flex: 1;
     min-width: 0;
-    max-width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-
-    @include mobile {
-      max-width: none;
-    }
   }
 
   &__brand {
     @include typo-title-5;
     color: $Text-Thirty-text-color;
     margin: 0 0 $padding-1;
+
+    @include tablet {
+      @include typo-title-6;
+    }
   }
 
   &__recommend-title {
     @include typo-headline-2;
     color: $Text-Primary-text-color;
     margin: 0 0 $padding-5;
+
+    @include tablet {
+      @include typo-headline-3;
+      margin-bottom: $padding-4;
+    }
 
     @include mobile {
       @include typo-headline-4;
@@ -599,8 +757,7 @@
 
   &__slider {
     display: flex;
-    gap: $padding-7;
-    transition: transform 0.5s ease;
+    gap: $padding-6;
 
     @include mobile {
       gap: $padding-4;
@@ -609,6 +766,11 @@
 
   &__item {
     flex: none;
+    width: calc((100% - #{$padding-6}) / 2);
+
+    @include mobile {
+      width: calc((100% - #{$padding-4}) / 2);
+    }
   }
 
   &__arrow {

@@ -115,6 +115,9 @@ watch(() => props.categories, () => {
 <template>
   <section class="section-categories">
     <div class="section-categories__inner">
+      <div class="section-categories__header">
+        <h2 class="section-categories__title">{{ data.title }}</h2>
+      </div>
       <div class="section-categories__slider-wrap">
         <IconSlideButton
           v-if="needsLoop"

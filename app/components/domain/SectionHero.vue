@@ -188,28 +188,19 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- 콘텐츠 오버레이 -->
-    <div class="section-hero__content">
-      <p v-if="activeSlide.subtitle" class="section-hero__subtitle">{{ activeSlide.subtitle }}</p>
-      <h2 v-if="activeSlide.title" class="section-hero__title">{{ activeSlide.title }}</h2>
-      <p v-if="activeSlide.description" class="section-hero__description">{{ activeSlide.description }}</p>
-      <div v-if="activeSlide.price" class="section-hero__price-wrap">
-        <span v-if="activeSlide.originalPrice" class="section-hero__price-original">
-          {{ activeSlide.originalPrice }}
-        </span>
-        <span class="section-hero__price-current">{{ activeSlide.price }}</span>
-      </div>
-      <NuxtLink
-        v-if="activeSlide.ctaHref"
-        :to="activeSlide.ctaHref"
-        class="section-hero__cta"
-      >
-        {{ data.ctaLabel }}
-      </NuxtLink>
-      <SlideIndicator
-        v-if="totalSlides > 1"
-        :current="currentIndex + 1"
-        :total="totalSlides"
+    <!-- 콘텐츠 오버레이 (텍스트 비노출) -->
+
+    <!-- Dot 인디케이터 — 이미지 바깥 -->
+    <div v-if="totalSlides > 1" class="section-hero__dots" role="tablist">
+      <button
+        v-for="n in totalSlides"
+        :key="n"
+        class="section-hero__dot"
+        :class="{ 'is-active': currentIndex === n - 1 }"
+        :aria-label="`${n} / ${totalSlides}`"
+        :aria-selected="currentIndex === n - 1"
+        role="tab"
+        @click="goToSlide(n - 1)"
       />
     </div>
 

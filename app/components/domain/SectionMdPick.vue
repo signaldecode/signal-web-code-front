@@ -12,65 +12,109 @@ const props = defineProps({
   }
 })
 
+const VISIBLE = 2
+const BUFFER = 2
 const currentIndex = ref(0)
-const visibleItems = 2
 const containerRef = ref(null)
-const itemWidth = ref(0)
-const gap = 24
+const trackRef = ref(null)
+const itemStep = ref(0)
+const animOffset = ref(0)
+const skipTransition = ref(false)
 
-// Touch/Swipe
-const { swipeEvents: sliderSwipeEvents } = useSwipe({
-  onSwipeLeft: () => nextSlide(),
-  onSwipeRight: () => prevSlide()
+const total = computed(() => props.products.length)
+
+const getCircularIndex = (i) => {
+  const n = total.value
+  return ((i % n) + n) % n
+}
+
+// 무한 순환 윈도우: currentIndex 기준으로 BUFFER 양쪽 여유 포함
+const displayItems = computed(() => {
+  const n = total.value
+  if (n === 0) return []
+  const count = n + BUFFER * 2
+  return Array.from({ length: count }, (_, i) => {
+    const idx = getCircularIndex(currentIndex.value + i - BUFFER)
+    return { product: props.products[idx], index: idx }
+  })
 })
 
-const maxIndex = computed(() => {
-  return Math.max(0, props.products.length - visibleItems)
+const measureItemStep = () => {
+  if (!trackRef.value) return
+  const items = trackRef.value.children
+  if (items.length < 2) return
+  itemStep.value = items[1].offsetLeft - items[0].offsetLeft
+}
+
+const trackStyle = computed(() => {
+  if (!itemStep.value) return undefined
+  const base = BUFFER * itemStep.value
+  const anim = animOffset.value * itemStep.value
+  return {
+    transform: `translateX(-${base + anim}px)`,
+    transition: skipTransition.value ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+  }
 })
-
-const canGoPrev = computed(() => currentIndex.value > 0)
-const canGoNext = computed(() => currentIndex.value < maxIndex.value)
-
-const sliderStyle = computed(() => ({
-  transform: `translateX(-${currentIndex.value * (itemWidth.value + gap)}px)`
-}))
 
 const nextSlide = () => {
-  if (canGoNext.value) {
-    currentIndex.value++
-  }
+  if (animOffset.value !== 0 || total.value <= VISIBLE) return
+  animOffset.value = 1
 }
 
 const prevSlide = () => {
-  if (canGoPrev.value) {
-    currentIndex.value--
-  }
+  if (animOffset.value !== 0 || total.value <= VISIBLE) return
+  animOffset.value = -1
 }
 
-const calculateItemWidth = () => {
+const onTransitionEnd = (event) => {
+  if (event.propertyName !== 'transform') return
+  skipTransition.value = true
+  currentIndex.value = getCircularIndex(currentIndex.value + animOffset.value)
+  animOffset.value = 0
   nextTick(() => {
-    if (containerRef.value) {
-      const containerWidth = containerRef.value.offsetWidth
-      itemWidth.value = (containerWidth - gap) / visibleItems
-    }
+    trackRef.value?.getBoundingClientRect()
+    skipTransition.value = false
+  })
+}
+
+// Touch/Swipe
+const { swipeEvents: sliderSwipeEvents } = useSwipe({
+  onSwipeLeft: nextSlide,
+  onSwipeRight: prevSlide
+})
+
+const init = () => {
+  skipTransition.value = true
+  currentIndex.value = 0
+  animOffset.value = 0
+  nextTick(() => {
+    measureItemStep()
+    nextTick(() => {
+      trackRef.value?.getBoundingClientRect()
+      skipTransition.value = false
+    })
   })
 }
 
 let resizeTimer = null
-const debouncedCalculate = () => {
+const debouncedInit = () => {
   clearTimeout(resizeTimer)
-  resizeTimer = setTimeout(calculateItemWidth, 150)
+  resizeTimer = setTimeout(init, 150)
 }
 
 onMounted(() => {
-  calculateItemWidth()
-  window.addEventListener('resize', debouncedCalculate, { passive: true })
+  nextTick(init)
+  window.addEventListener('resize', debouncedInit, { passive: true })
 })
 
 onUnmounted(() => {
   clearTimeout(resizeTimer)
-  window.removeEventListener('resize', debouncedCalculate)
+  window.removeEventListener('resize', debouncedInit)
 })
+
+watch(() => props.products, () => {
+  nextTick(init)
+}, { deep: true })
 </script>
 
 <template>
@@ -116,30 +160,36 @@ onUnmounted(() => {
 
           <div
             class="section-md-pick__slider-wrap"
-            v-on="sliderSwipeEvents"
+            @touchstart="sliderSwipeEvents.touchstart"
+            @touchmove="sliderSwipeEvents.touchmove"
+            @touchend="sliderSwipeEvents.touchend"
           >
             <IconSlideButton
+              v-if="total > VISIBLE"
               direction="prev"
               class="section-md-pick__arrow section-md-pick__arrow--prev"
-              :disabled="!canGoPrev"
               :aria-label="data.arrowLabels?.prev"
               @click="prevSlide"
             />
             <div ref="containerRef" class="section-md-pick__slider-container">
-              <div class="section-md-pick__slider" :style="sliderStyle">
+              <div
+                ref="trackRef"
+                class="section-md-pick__slider"
+                :style="trackStyle"
+                @transitionend="onTransitionEnd"
+              >
                 <ProductCardSmall
-                  v-for="product in products"
-                  :key="product.id"
-                  :product="product"
+                  v-for="(item, i) in displayItems"
+                  :key="i"
+                  :product="item.product"
                   class="section-md-pick__item"
-                  :style="{ width: itemWidth > 0 ? `${itemWidth}px` : undefined }"
                 />
               </div>
             </div>
             <IconSlideButton
+              v-if="total > VISIBLE"
               direction="next"
               class="section-md-pick__arrow section-md-pick__arrow--next"
-              :disabled="!canGoNext"
               :aria-label="data.arrowLabels?.next"
               @click="nextSlide"
             />

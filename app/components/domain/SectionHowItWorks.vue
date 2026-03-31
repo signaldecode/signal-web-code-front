@@ -21,8 +21,10 @@ defineProps({
           class="section-how-it-works__step"
         >
           <span class="section-how-it-works__step-number">{{ step.step }}</span>
-          <h3 class="section-how-it-works__step-title">{{ step.title }}</h3>
-          <p class="section-how-it-works__step-description">{{ step.description }}</p>
+          <div class="section-how-it-works__step-body">
+            <h3 class="section-how-it-works__step-title">{{ step.title }}</h3>
+            <p class="section-how-it-works__step-description">{{ step.description }}</p>
+          </div>
         </li>
       </ol>
     </div>

@@ -2,13 +2,15 @@
 @use '../tokens/spacing' as *;
 @use '../tokens/typography' as *;
 @use '../tokens/breakpoints' as *;
+@use '../tokens/animation' as *;
 
 .section-how-it-works {
   padding: $padding-section 0;
   background: $Primary-white-color;
+  position: relative;
 
   @include tablet {
-    padding: $padding-10 0;
+    padding: $padding-11 0;
   }
 
   @include mobile {
@@ -21,7 +23,11 @@
 
   &__header {
     text-align: center;
-    margin-bottom: $padding-11;
+    margin-bottom: $padding-12;
+
+    @include tablet {
+      margin-bottom: $padding-10;
+    }
 
     @include mobile {
       margin-bottom: $padding-8;
@@ -32,6 +38,11 @@
     @include typo-headline-1;
     color: $Text-Primary-text-color;
     margin: 0 0 $padding-3;
+    letter-spacing: -0.02em;
+
+    @include tablet {
+      @include typo-headline-2;
+    }
 
     @include mobile {
       @include typo-headline-4;
@@ -42,6 +53,10 @@
     @include typo-body-1;
     color: $Text-Secondary-text-color;
     margin: 0;
+
+    @include tablet {
+      @include typo-body-2;
+    }
 
     @include mobile {
       @include typo-body-3;
@@ -56,6 +71,32 @@
     padding: 0;
     margin: 0;
     counter-reset: none;
+    position: relative;
+
+    // 수평 타임라인 라인 (스텝 상단 넘버 중심을 관통)
+    &::before {
+      content: '';
+      position: absolute;
+      top: $padding-10 + 28px; // 패딩 + 넘버 반지름
+      left: calc(100% / 6); // 첫 번째 컬럼 중심
+      right: calc(100% / 6); // 마지막 컬럼 중심
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        var(--theme-primary-200),
+        var(--theme-primary-400),
+        var(--theme-primary-200)
+      );
+      z-index: 0;
+
+      @include tablet {
+        top: $padding-8 + 24px;
+      }
+
+      @include mobile {
+        display: none;
+      }
+    }
 
     @include tablet {
       gap: $padding-6;
@@ -63,52 +104,94 @@
 
     @include mobile {
       grid-template-columns: 1fr;
-      gap: $padding-8;
+      gap: $padding-5;
     }
   }
 
   &__step {
     text-align: center;
     padding: $padding-10 $padding-6;
-    border: 1px solid $Border-Border-line-100;
-    border-radius: $padding-4;
-    @include transition(transform, box-shadow);
-
-    &:hover {
-      transform: translateY(-$padding-1);
-      box-shadow: $shadow-xl;
-    }
+    position: relative;
+    z-index: 1;
 
     @include tablet {
       padding: $padding-8 $padding-4;
     }
 
     @include mobile {
-      padding: $padding-6 $padding-4;
+      padding: $padding-5;
+      display: flex;
+      align-items: flex-start;
+      gap: $padding-5;
+      text-align: left;
+      background: $Bg-Primary-bg-color;
+      border-radius: radius(12);
     }
   }
 
   &__step-number {
-    @include typo-display-2;
-    color: $Primary-color;
-    display: block;
-    margin-bottom: $padding-5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-full;
+    background: $Black-Primary-black-900;
+    color: $Primary-white-color;
+    @include typo-headline-3;
+    font-weight: get-weight('Bold');
+    margin: 0 auto $padding-7;
     font-variant-numeric: tabular-nums;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    transition:
+      background $duration-moderate $ease-out,
+      transform $duration-moderate $ease-out-back;
+
+    .section-how-it-works__step:hover & {
+      background: $Primary-color;
+      transform: scale(1.1);
+    }
+
+    @include tablet {
+      width: 48px;
+      height: 48px;
+      @include typo-title-3;
+      font-weight: get-weight('Bold');
+      margin-bottom: $padding-6;
+    }
 
     @include mobile {
-      @include typo-headline-1;
-      margin-bottom: $padding-4;
+      width: $padding-10;
+      height: $padding-10;
+      @include typo-title-4;
+      font-weight: get-weight('Bold');
+      margin: 0;
+      flex-shrink: 0;
     }
+  }
+
+  &__step-body {
+    flex: 1;
+    min-width: 0;
   }
 
   &__step-title {
     @include typo-headline-3;
     color: $Text-Primary-text-color;
-    margin: 0 0 $padding-4;
+    margin: 0 0 $padding-3;
+    letter-spacing: -0.01em;
+
+    @include tablet {
+      @include typo-headline-4;
+      margin-bottom: $padding-2;
+    }
 
     @include mobile {
-      @include typo-headline-5;
-      margin-bottom: $padding-3;
+      @include typo-title-4;
+      font-weight: get-weight('SemiBold');
+      margin-bottom: $padding-1;
     }
   }
 
@@ -119,9 +202,17 @@
     max-width: 320px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.7;
+
+    @include tablet {
+      @include typo-body-3;
+      max-width: 280px;
+    }
 
     @include mobile {
       @include typo-body-3;
+      margin-left: 0;
+      max-width: none;
     }
   }
 }
