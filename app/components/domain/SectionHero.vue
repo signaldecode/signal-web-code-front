@@ -73,14 +73,19 @@ const trackStyle = computed(() => {
 
 let autoPlayTimer = null
 
+// dot용 선행 인덱스 — 슬라이드 시작 시점에 즉시 반영
+const dotIndex = ref(0)
+
 const goToSlide = (index) => {
   currentIndex.value = getCircularIndex(index)
+  dotIndex.value = currentIndex.value
 }
 
 const nextSlide = () => {
   if (isTransitioning.value || totalSlides.value <= 1) return
   isTransitioning.value = true
   animOffset.value = 1
+  dotIndex.value = getCircularIndex(currentIndex.value + 1)
   restartAutoPlay()
 }
 
@@ -88,6 +93,7 @@ const prevSlide = () => {
   if (isTransitioning.value || totalSlides.value <= 1) return
   isTransitioning.value = true
   animOffset.value = -1
+  dotIndex.value = getCircularIndex(currentIndex.value - 1)
   restartAutoPlay()
 }
 
@@ -196,11 +202,11 @@ onUnmounted(() => {
         v-for="n in totalSlides"
         :key="n"
         class="section-hero__dot"
-        :class="{ 'is-active': currentIndex === n - 1 }"
+        :class="{ 'is-active': dotIndex === n - 1 }"
         :aria-label="`${n} / ${totalSlides}`"
-        :aria-selected="currentIndex === n - 1"
+        :aria-selected="dotIndex === n - 1"
         role="tab"
-        @click="goToSlide(n - 1)"
+        @click="dotIndex = n - 1; goToSlide(n - 1)"
       />
     </div>
 
